@@ -1,58 +1,925 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geoconsult AI Platform</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geoconsult AI — منصة استشارات جغرافية ذكية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ===== GLOBAL ===== */
+:root{--bg:#060d1a;--surface:#0d1829;--card:#111f33;--border:#1a3a5c;--green:#00d4a4;--gdim:#00d4a415;--gmed:#00d4a430;--text:#e2e8f0;--muted:#64748b;--gold:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,164,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,164,.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0}
+
+/* ===== SCREENS ===== */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ===== HEADER ===== */
+.header{position:sticky;top:0;z-index:50;background:rgba(6,13,26,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-size:19px;font-weight:900;cursor:pointer;text-decoration:none;color:var(--text)}.logo span{color:var(--green)}
+.back-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 13px;font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer}
+
+/* ===== HOME SCREEN ===== */
+#screen-home{position:relative;z-index:1;align-items:center;justify-content:center;padding:40px 20px}
+.home-glow{position:fixed;top:20%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:var(--green);filter:blur(120px);opacity:.06;pointer-events:none}
+.home-logo-big{font-size:36px;font-weight:900;text-align:center;margin-bottom:8px}.home-logo-big span{color:var(--green)}
+.home-sub{font-size:14px;color:var(--muted);text-align:center;line-height:1.8;margin-bottom:40px}
+.home-cards{display:flex;flex-direction:column;gap:12px;width:100%;max-width:420px}
+.home-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px}
+.home-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,212,164,.12)}
+.hc-icon{width:48px;height:48px;background:var(--gdim);border:1px solid var(--gmed);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.hc-info{flex:1}.hc-title{font-size:16px;font-weight:800;margin-bottom:3px}.hc-desc{font-size:12px;color:var(--muted)}
+.hc-price{background:var(--gdim);border:1px solid var(--green);color:var(--green);border-radius:14px;padding:3px 10px;font-size:12px;font-weight:800;flex-shrink:0}
+.annual-home{background:linear-gradient(135deg,#0d2a1f,#0a1f2e);border:1px solid var(--green);border-radius:16px;padding:18px;text-align:center;width:100%;max-width:420px;margin-top:4px;cursor:pointer}
+.ah-badge{display:inline-block;background:var(--gold);color:#000;border-radius:14px;padding:2px 12px;font-size:11px;font-weight:800;margin-bottom:8px}
+.ah-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.ah-price{font-size:26px;font-weight:900;color:var(--green);margin:6px 0 12px}
+.ah-price span{font-size:13px;color:var(--muted)}
+.ah-btn{width:100%;padding:11px;background:var(--green);border:none;border-radius:10px;color:var(--bg);font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.wa-support{margin-top:20px;text-align:center;font-size:13px;color:var(--muted)}
+.wa-support a{color:var(--green);text-decoration:none;font-weight:700}
+
+/* ===== PAYMENT SCREEN ===== */
+#screen-pay{position:relative;z-index:1}
+.pay-body{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.pay-hero{text-align:center;padding:10px 0 4px}
+.pay-icon-big{font-size:44px;margin-bottom:8px}
+.pay-name{font-size:18px;font-weight:800;margin-bottom:6px}
+.pay-amount{font-size:32px;font-weight:900;color:var(--green)}
+.steps{display:flex;flex-direction:column;gap:11px}
+.step{display:flex;align-items:flex-start;gap:10px;direction:rtl}
+.step-num{width:28px;height:28px;background:var(--gdim);border:1px solid var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--green);flex-shrink:0;margin-top:2px}
+.step-text{font-size:13px;color:var(--muted);line-height:1.7;padding-top:3px}
+.iban-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.iban-lbl{font-size:11px;color:var(--muted);margin-bottom:4px}
+.iban-val{color:var(--green);font-size:15px;font-weight:800;letter-spacing:1.5px;display:block;margin-bottom:6px;word-break:break-all}
+.iban-info{font-size:12px;color:var(--muted);line-height:1.8}
+.copy-iban{background:var(--gmed);border:1px solid var(--green);color:var(--green);border-radius:8px;padding:5px 14px;font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;margin-top:8px;transition:all .2s}
+.copy-iban:hover{background:var(--green);color:var(--bg)}
+.wa-pay-btn{display:block;width:100%;padding:14px;background:var(--green);border:none;border-radius:12px;color:var(--bg);font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;transition:all .2s}
+.wa-pay-btn:hover{background:#00ffcc}
+.close-pay-btn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);border-radius:11px;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:14px;cursor:pointer}
+
+/* ===== CHAT SCREEN ===== */
+#screen-chat{height:100vh;overflow:hidden}
+.chat-wrap{display:flex;flex-direction:column;height:100vh}
+.svc-badge{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:8px 13px;margin:8px 13px 0;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sb-ic{width:32px;height:32px;background:var(--gdim);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.sb-t{font-size:13px;font-weight:700}.sb-s{font-size:10px;color:var(--muted)}
+.sb-p{margin-right:auto;background:var(--gdim);border:1px solid var(--green);color:var(--green);border-radius:14px;padding:2px 9px;font-size:11px;font-weight:800}
+.ctr{font-size:12px;padding:3px 10px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
+.ctr.warn{border-color:#f59e0b;color:#f59e0b}.ctr.danger{border-color:#f87171;color:#f87171}
+.chat-msgs{flex:1;overflow-y:auto;padding:10px 13px;display:flex;flex-direction:column;gap:9px}
+.msg{display:flex;gap:7px;animation:up .25s ease}
+@keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse}
+.av{width:29px;height:29px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
+.av.ai{background:var(--gdim);border:1px solid var(--green)}.av.user{background:var(--card);border:1px solid var(--border)}
+.bubble{max-width:84%;padding:9px 12px;border-radius:13px;font-size:13px;line-height:1.75}
+.msg.ai .bubble{background:var(--card);border:1px solid var(--border);border-top-right-radius:2px}
+.msg.user .bubble{background:#1a2f4a;border:1px solid #2a4a6a;border-top-left-radius:2px;text-align:right}
+.typing{display:flex;gap:4px;padding:2px 0}
+.typing span{width:6px;height:6px;background:var(--green);border-radius:50%;animation:b 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes b{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
+.quick{padding:0 13px 6px;display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0}
+.qbtn{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:5px 10px;font-size:11px;font-family:'Tajawal',sans-serif;cursor:pointer;transition:all .2s}
+.qbtn:hover{border-color:var(--green);color:var(--green)}
+.chat-input{padding:8px 13px 14px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0}
+.input-row{display:flex;gap:7px;align-items:flex-end}
+.ibox{flex:1;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:9px 12px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;resize:none;outline:none;min-height:40px;max-height:90px;transition:border-color .2s;direction:rtl}
+.ibox:focus{border-color:var(--green)}.ibox::placeholder{color:var(--muted)}
+.sbtn{width:40px;height:40px;background:var(--green);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--bg);transition:all .2s;flex-shrink:0}
+.sbtn:hover{background:#00ffcc}.sbtn:disabled{opacity:.4;cursor:not-allowed}
+.chat-note{font-size:10px;color:var(--muted);text-align:center;margin-top:5px}
+.pay-wall{margin:8px 13px;background:linear-gradient(135deg,#0d2a1f,#0a1f2e);border:1px solid var(--green);border-radius:13px;padding:18px;text-align:center;display:none;flex-shrink:0}
+.pw-title{font-size:15px;font-weight:800;color:var(--green);margin-bottom:5px}
+.pw-sub{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.7}
+.pw-iban{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:10px;font-size:12px;text-align:right}
+.pw-iban-num{color:var(--green);font-size:13px;font-weight:800;letter-spacing:1px;display:block;word-break:break-all}
+.pw-wa-btn{display:inline-block;background:var(--green);color:var(--bg);border-radius:9px;padding:9px 20px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:800;text-decoration:none}
+
+/* ===== PDF SCREEN ===== */
+#screen-pdf{position:relative;z-index:1}
+.pdf-body{flex:1;padding:12px 14px 20px;display:flex;flex-direction:column;gap:13px;overflow-y:auto}
+.upload-zone{border:2px dashed var(--border);border-radius:13px;padding:32px 16px;text-align:center;cursor:pointer;transition:all .3s;background:var(--card)}
+.upload-zone:hover,.upload-zone.over{border-color:var(--green);background:var(--gdim)}
+.uz-icon{font-size:40px;margin-bottom:8px}.uz-title{font-size:16px;font-weight:700;margin-bottom:4px}.uz-sub{font-size:12px;color:var(--muted)}
+.file-sel{background:var(--card);border:1px solid var(--green);border-radius:11px;padding:11px 14px;display:none;align-items:center;gap:9px}
+.file-name{font-size:13px;font-weight:600;flex:1}.file-size{font-size:11px;color:var(--muted)}
+.rm-btn{background:#2a1a1a;border:1px solid #7f1d1d;color:#fca5a5;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Tajawal',sans-serif}
+.action-btn{width:100%;padding:13px;background:var(--green);border:none;border-radius:11px;color:var(--bg);font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s}
+.action-btn:hover{background:#00ffcc}.action-btn:disabled{opacity:.4;cursor:not-allowed}
+.loading-box{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:30px;text-align:center;display:none}
+.spinner{width:46px;height:46px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-text{font-size:14px;color:var(--muted)}.load-step{margin-top:8px;font-size:12px;color:var(--green)}
+.result-box{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden;display:none}
+.res-hd{background:var(--gdim);border-bottom:1px solid var(--border);padding:12px 15px;font-size:14px;font-weight:700;color:var(--green)}
+.res-body{padding:14px;display:flex;flex-direction:column;gap:11px}
+.sec{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.sec-t{padding:8px 13px;font-size:12px;font-weight:700;border-bottom:1px solid var(--border)}
+.sec-t.s1{color:#60a5fa}.sec-t.s2{color:#f87171}.sec-t.s3{color:var(--green)}
+.sec-c{padding:12px 13px;font-size:13px;line-height:1.8;white-space:pre-wrap}
+.pay-after{background:linear-gradient(135deg,#1a2a1a,#0f2a1f);border:1px solid var(--green);border-radius:13px;padding:16px;text-align:center;display:none}
+.pa-title{font-size:15px;font-weight:800;color:var(--green);margin-bottom:5px}
+.pa-sub{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.7}
+.pa-iban{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:10px;font-size:12px;text-align:right}
+.pa-iban-num{color:var(--green);font-size:13px;font-weight:800;letter-spacing:1px;display:block;word-break:break-all}
+.pa-btn{display:inline-block;background:var(--green);color:var(--bg);border-radius:9px;padding:9px 20px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:800;text-decoration:none}
+
+/* ===== REPORT SCREEN ===== */
+#screen-report{position:relative;z-index:1}
+.report-body{flex:1;padding:10px 14px 20px;display:flex;flex-direction:column;gap:11px;overflow-y:auto}
+.sbar{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:2px}
+.si{flex:1;padding:8px 4px;text-align:center;font-size:10px;color:var(--muted);border-left:1px solid var(--border);transition:all .3s;line-height:1.4;cursor:pointer}
+.si:last-child{border-left:none}.si.active{color:var(--green);background:var(--gdim);font-weight:700}.si.done{color:var(--green);opacity:.5}
+.snum{font-size:14px;display:block;margin-bottom:1px}
+.fs{display:none;flex-direction:column;gap:10px;animation:up .3s ease}.fs.active{display:flex}
+.slbl{font-size:14px;font-weight:700;color:var(--green);padding-bottom:3px;border-bottom:1px solid var(--border)}
+.sdesc{font-size:11px;color:var(--muted)}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fl{font-size:12px;color:var(--muted)}.req{color:#f87171}
+.fi,.fsel,.fta{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%;direction:rtl}
+.fi:focus,.fsel:focus,.fta:focus{border-color:var(--green)}.fi::placeholder,.fta::placeholder{color:var(--muted)}
+.fsel option{background:var(--surface)}.fta{resize:none;min-height:65px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cg{display:flex;flex-wrap:wrap;gap:6px}
+.ci{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:5px 10px;font-size:11px;cursor:pointer;transition:all .2s;user-select:none}
+.ci.sel{border-color:var(--green);color:var(--green);background:var(--gdim)}
+.bp{width:100%;padding:12px;background:var(--green);border:none;border-radius:10px;color:var(--bg);font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s}
+.bp:hover{background:#00ffcc}.bp:disabled{opacity:.4;cursor:not-allowed}
+.bs{width:100%;padding:9px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer}
+
+/* ===== MAP SCREEN ===== */
+#screen-map{position:relative;z-index:1}
+.map-body{flex:1;padding:12px 14px 20px;display:flex;flex-direction:column;gap:13px;overflow-y:auto}
+
+/* ===== SVCBADGE shared ===== */
+.svc-badge-bar{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:9px 13px;margin:9px 13px 0;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sbb-icon{width:34px;height:34px;background:var(--gdim);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.sbb-title{font-size:13px;font-weight:700}.sbb-sub{font-size:10px;color:var(--muted)}
+.sbb-price{margin-right:auto;background:var(--gdim);border:1px solid var(--green);color:var(--green);border-radius:14px;padding:2px 9px;font-size:11px;font-weight:800}
+</style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Geoconsult AI Platform</h1>
-        <nav>
-            <ul>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section id="services">
-            <h2>Our Services</h2>
-            <p>We offer mapping services, surveys, and analysis tools.</p>
-        </section>
-        <section id="chat">
-            <h2>Chat with Support</h2>
-            <div id="chat-box"></div>
-            <input type="text" id="chat-input" placeholder="Type a message...">
-            <button id="send-button">Send</button>
-        </section>
-        <section id="payment">
-            <h2>Payment System</h2>
-            <button id="pay-button">Pay Now</button>
-        </section>
-        <section id="pdf-analysis">
-            <h2>PDF Analysis</h2>
-            <input type="file" id="pdf-upload">
-            <button id="analyze-button">Analyze PDF</button>
-        </section>
-        <section id="survey-reports">
-            <h2>Survey Reports</h2>
-            <button id="generate-report">Generate Report</button>
-        </section>
-        <section id="service-mapping">
-            <h2>Service Mapping</h2>
-            <p>Map your services easily with our tools.</p>
-        </section>
-        <section id="admin-panel">
-            <h2>Admin Panel</h2>
-            <p>Manage your services and view analytics.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Geoconsult AI. All rights reserved.</p>
-    </footer>
+
+<!-- ==================== HOME ==================== -->
+<div class="screen active" id="screen-home">
+  <div class="home-glow"></div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;padding:40px 16px 30px">
+    <div class="home-logo-big">Geoconsult <span>AI</span> 🌐</div>
+    <div class="home-sub">منصة استشارات جغرافية ذكية مدعومة بالذكاء الاصطناعي<br>الرياض، المملكة العربية السعودية</div>
+    <div class="home-cards">
+      <div class="home-card" onclick="goToPay('gis','استشارة GIS الذكية','49','🌐')">
+        <div class="hc-icon">🌐</div>
+        <div class="hc-info"><div class="hc-title">استشارة GIS الذكية</div><div class="hc-desc">10 ردود متخصصة · QGIS · ArcGIS · GPS</div></div>
+        <div class="hc-price">49 ر.س</div>
+      </div>
+      <div class="home-card" onclick="goToPay('pdf','تحليل ملفات PDF','49','📄')">
+        <div class="hc-icon">📄</div>
+        <div class="hc-info"><div class="hc-title">تحليل ملفات PDF</div><div class="hc-desc">تحليل ذكي للتقارير والعقود الجغرافية</div></div>
+        <div class="hc-price">49 ر.س</div>
+      </div>
+      <div class="home-card" onclick="goToPay('report','تقرير مساحي احترافي','99','📍')">
+        <div class="hc-icon">📍</div>
+        <div class="hc-info"><div class="hc-title">تقرير مساحي احترافي</div><div class="hc-desc">6 أقسام · جاهز للطباعة والتسليم</div></div>
+        <div class="hc-price">99 ر.س</div>
+      </div>
+      <div class="home-card" onclick="goToPay('map','خرائط الخدمات والشبكات','99','🗺️')">
+        <div class="hc-icon">🗺️</div>
+        <div class="hc-info"><div class="hc-title">خرائط الخدمات والشبكات</div><div class="hc-desc">تحليل توزيع الخدمات العامة والمناطق</div></div>
+        <div class="hc-price">99 ر.س</div>
+      </div>
+    </div>
+    <div class="annual-home" onclick="goToPay('annual','اشتراك سنوي غير محدود','200','⭐')" style="max-width:420px;width:100%;margin-top:12px">
+      <div class="ah-badge">⭐ الأوفر والأشمل</div>
+      <div class="ah-title">اشتراك سنوي غير محدود</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">جميع الخدمات بلا حدود لمدة سنة كاملة</div>
+      <div class="ah-price">200 ر.س <span>/ سنة</span></div>
+      <button class="ah-btn">ادفع واشترك الآن ←</button>
+    </div>
+    <div class="wa-support">الدعم الفني: <a href="https://wa.me/966508410082" target="_blank">واتساب 0508410082</a></div>
+    <div style="margin-top:8px"><button onclick="openAdmin()" style="background:transparent;border:none;color:var(--border);font-size:10px;cursor:pointer;font-family:'Tajawal',sans-serif">⚙</button></div>
+  </div>
+</div>
+
+<!-- ==================== PAYMENT ==================== -->
+<div class="screen" id="screen-pay">
+  <div class="header">
+    <button class="back-btn" onclick="goHome()">← رجوع</button>
+    <div class="logo">Geoconsult <span>AI</span></div>
+    <div style="width:60px"></div>
+  </div>
+  <div class="pay-body">
+    <div class="pay-hero">
+      <div class="pay-icon-big" id="payIcon">🌐</div>
+      <div class="pay-name" id="payName">استشارة GIS الذكية</div>
+      <div class="pay-amount" id="payAmount">49 ر.س</div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-text">انسخ رقم الآيبان وأرسل المبلغ من تطبيق البنك</div><div class="step-num">١</div></div>
+      <div class="step"><div class="step-text">اضغط "أرسل الإيصال" وأرسله على واتساب</div><div class="step-num">٢</div></div>
+      <div class="step"><div class="step-text">بعد التأكيد سيُرسَل لك رابط الخدمة مباشرة</div><div class="step-num">٣</div></div>
+    </div>
+    <div class="iban-box">
+      <div class="iban-lbl">رقم الآيبان</div>
+      <span class="iban-val">SA0430100991100864564620</span>
+      <div class="iban-info">البنك: الأول &nbsp;|&nbsp; المستفيد: حسام حسين</div>
+      <button class="copy-iban" id="copyIbanBtn" onclick="copyIban()">نسخ الآيبان 📋</button>
+    </div>
+    <a class="wa-pay-btn" id="waPayBtn" href="#" target="_blank">أرسل الإيصال على واتساب ✓</a>
+    <button class="close-pay-btn" onclick="goToActivate()" style="border-color:var(--green);color:var(--green);margin-bottom:8px">عندي كود تفعيل 🔑</button>
+    <button class="close-pay-btn" onclick="goHome()">إغلاق</button>
+  </div>
+</div>
+
+<!-- ==================== ACTIVATE ==================== -->
+<div class="screen" id="screen-activate">
+  <div class="header">
+    <button class="back-btn" onclick="showScreen('pay')">← رجوع</button>
+    <div class="logo">Geoconsult <span>AI</span></div>
+    <div style="width:60px"></div>
+  </div>
+  <div style="padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:18px;position:relative;z-index:1">
+    <div style="font-size:48px">🔑</div>
+    <div style="font-size:18px;font-weight:800;text-align:center" id="activateTitle"></div>
+    <div style="font-size:13px;color:var(--muted);text-align:center;line-height:1.7">أدخل كود التفعيل الذي أرسلناه على واتساب بعد تأكيد دفعك</div>
+    <input style="width:100%;max-width:300px;background:var(--card);border:2px solid var(--green);border-radius:12px;padding:14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:20px;font-weight:800;text-align:center;outline:none;letter-spacing:4px;direction:ltr"
+      id="activateCode" placeholder="ABC123" maxlength="8" oninput="this.value=this.value.toUpperCase()">
+    <div style="color:#f87171;font-size:13px;display:none;text-align:center;max-width:300px" id="activateError"></div>
+    <button onclick="activateService()" style="width:100%;max-width:300px;padding:14px;background:var(--green);border:none;border-radius:12px;color:var(--bg);font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;cursor:pointer">تفعيل الخدمة ✓</button>
+    <div style="font-size:12px;color:var(--muted);text-align:center">لم تستلم الكود؟ <a href="https://wa.me/966508410082" target="_blank" style="color:var(--green);font-weight:700">تواصل معنا على واتساب</a></div>
+  </div>
+</div>
+
+<!-- ==================== ADMIN ==================== -->
+<div class="screen" id="screen-admin">
+  <div class="header">
+    <button class="back-btn" onclick="goHome()">← رجوع</button>
+    <div class="logo">Geoconsult <span>AI</span></div>
+    <div style="width:60px"></div>
+  </div>
+  <div style="padding:16px;display:flex;flex-direction:column;gap:14px;position:relative;z-index:1">
+    <div style="font-size:16px;font-weight:800;color:var(--green)">🔐 لوحة التحكم</div>
+    <!-- إضافة كود جديد -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:14px;font-weight:700">إضافة كود جديد</div>
+      <select id="adminNewSvc" style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;outline:none;width:100%;direction:rtl">
+        <option value="gis">استشارة GIS — 49 ر.س</option>
+        <option value="pdf">تحليل PDF — 49 ر.س</option>
+        <option value="report">تقرير مساحي — 99 ر.س</option>
+        <option value="map">خرائط الخدمات — 99 ر.س</option>
+        <option value="all">كل الخدمات (سنوي)</option>
+      </select>
+      <div style="display:flex;gap:8px">
+        <input id="adminNewCode" placeholder="اكتب الكود أو اضغط توليد" style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;letter-spacing:2px;direction:ltr" maxlength="10" oninput="this.value=this.value.toUpperCase()">
+        <button onclick="adminGenCode()" style="background:var(--gdim);border:1px solid var(--green);color:var(--green);border-radius:9px;padding:9px 14px;font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;white-space:nowrap">توليد 🎲</button>
+      </div>
+      <button onclick="adminAddCode()" style="width:100%;padding:12px;background:var(--green);border:none;border-radius:10px;color:var(--bg);font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;cursor:pointer">إضافة الكود ✓</button>
+    </div>
+    <!-- قائمة الأكواد -->
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:14px;font-weight:700">الأكواد الحالية</div>
+      <button onclick="adminClearUsed()" style="background:transparent;border:1px solid #f87171;color:#f87171;border-radius:8px;padding:4px 12px;font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer">حذف المستخدمة</button>
+    </div>
+    <div id="adminCodesList"></div>
+  </div>
+</div>
+
+<!-- ==================== CHAT ==================== -->
+<div class="screen" id="screen-chat">
+  <div class="chat-wrap">
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">← رجوع</button>
+      <div class="logo">Geoconsult <span>AI</span></div>
+      <div class="ctr" id="chatCtr">10 / 10</div>
+    </div>
+    <div class="svc-badge">
+      <div class="sb-ic">🌐</div>
+      <div><div class="sb-t">استشارة GIS الذكية</div><div class="sb-s">مساعد متخصص في نظم المعلومات الجغرافية</div></div>
+      <div class="sb-p">49 ر.س</div>
+    </div>
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="msg ai">
+        <div class="av ai">🤖</div>
+        <div class="bubble">مرحباً! أنا مساعد Geoconsult AI المتخصص في نظم المعلومات الجغرافية والمساحة.<br><br>يمكنني مساعدتك في <strong>QGIS، ArcGIS، GPS، التحليل المكاني</strong>، وكل ما يتعلق بمجال المساحة والـ GIS.<br><br>عندك 10 ردود في هذه الجلسة. كيف يمكنني مساعدتك؟ 🗺️</div>
+      </div>
+    </div>
+    <div class="quick" id="chatQuick">
+      <button class="qbtn" onclick="sq(this)">الفرق بين QGIS وArcGIS؟</button>
+      <button class="qbtn" onclick="sq(this)">نظام الإحداثيات للسعودية؟</button>
+      <button class="qbtn" onclick="sq(this)">كيف أبدأ في GIS؟</button>
+      <button class="qbtn" onclick="sq(this)">تحويل GPS لخريطة؟</button>
+    </div>
+    <div class="pay-wall" id="chatPayWall">
+      <div class="pw-title">💬 انتهت رسائلك العشر</div>
+      <div class="pw-sub">لمواصلة الاستشارة، حوّل <strong style="color:var(--green)">49 ر.س</strong> وأرسل الإيصال على واتساب.</div>
+      <div class="pw-iban">رقم الآيبان:<br><span class="pw-iban-num">SA0430100991100864564620</span>البنك: الأول — المستفيد: حسام حسين</div>
+      <a class="pw-wa-btn" href="https://wa.me/966508410082?text=مرحباً، أرسلت إيصال دفع استشارة GIS - 49 ر.س" target="_blank">أرسل الإيصال على واتساب ✓</a>
+    </div>
+    <div class="chat-input" id="chatInput">
+      <div class="input-row">
+        <textarea class="ibox" id="chatInp" placeholder="اكتب سؤالك في GIS أو المساحة..." rows="1" onkeydown="chatHk(event)" oninput="chatAr(this)"></textarea>
+        <button class="sbtn" id="chatSbtn" onclick="chatSend()">➤</button>
+      </div>
+      <div class="chat-note">الاستشارة متخصصة في GIS والمساحة فقط</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PDF ==================== -->
+<div class="screen" id="screen-pdf">
+  <div class="header">
+    <button class="back-btn" onclick="goHome()">← رجوع</button>
+    <div class="logo">Geoconsult <span>AI</span></div>
+    <div style="width:60px"></div>
+  </div>
+  <div class="svc-badge-bar">
+    <div class="sbb-icon">📄</div>
+    <div><div class="sbb-title">تحليل ملفات PDF</div><div class="sbb-sub">تحليل ذكي للتقارير والعقود الجغرافية</div></div>
+    <div class="sbb-price">49 ر.س</div>
+  </div>
+  <div class="pdf-body">
+    <div class="upload-zone" id="pdfZone" onclick="document.getElementById('pdfFi').click()" ondragover="pdfDov(event)" ondragleave="pdfDol()" ondrop="pdfDdr(event)">
+      <div class="uz-icon">📂</div>
+      <div class="uz-title">ارفع ملف PDF</div>
+      <div class="uz-sub">اسحب الملف هنا أو اضغط للاختيار • PDF فقط • حد أقصى 10MB</div>
+      <input type="file" id="pdfFi" style="display:none" accept=".pdf" onchange="pdfHf(this.files[0])">
+    </div>
+    <div class="file-sel" id="pdfFsel">
+      <div style="font-size:24px">📄</div>
+      <div style="flex:1"><div class="file-name" id="pdfFname"></div><div class="file-size" id="pdfFsize"></div></div>
+      <button class="rm-btn" onclick="pdfRmf()">إزالة</button>
+    </div>
+    <button class="action-btn" id="pdfAbtn" onclick="pdfAnalyze()" disabled>🔍 تحليل الملف بالذكاء الاصطناعي</button>
+    <div class="loading-box" id="pdfLoading">
+      <div class="spinner"></div>
+      <div class="load-text">جارٍ تحليل الملف...</div>
+      <div class="load-step" id="pdfLstep">قراءة الملف...</div>
+    </div>
+    <div class="result-box" id="pdfResult">
+      <div class="res-hd">✅ اكتمل التحليل</div>
+      <div class="res-body">
+        <div class="sec"><div class="sec-t s1">📋 ملخص المحتوى</div><div class="sec-c" id="pdfR1"></div></div>
+        <div class="sec"><div class="sec-t s2">⚠️ النقاط الحساسة والمخاطر</div><div class="sec-c" id="pdfR2"></div></div>
+        <div class="sec"><div class="sec-t s3">✅ التوصيات</div><div class="sec-c" id="pdfR3"></div></div>
+      </div>
+    </div>
+    <div class="pay-after" id="pdfPayAfter">
+      <div class="pa-title">📄 لتحليل ملف جديد</div>
+      <div class="pa-sub">أرسل <strong style="color:var(--green)">49 ر.س</strong> وأرسل الإيصال على واتساب لإعادة التفعيل.</div>
+      <div class="pa-iban">رقم الآيبان:<br><span class="pa-iban-num">SA0430100991100864564620</span>البنك: الأول — المستفيد: حسام حسين</div>
+      <a class="pa-btn" href="https://wa.me/966508410082?text=مرحباً، أرسلت إيصال دفع تحليل PDF - 49 ر.س" target="_blank">أرسل الإيصال على واتساب ✓</a>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REPORT ==================== -->
+<div class="screen" id="screen-report">
+  <div class="header">
+    <button class="back-btn" onclick="goHome()">← رجوع</button>
+    <div class="logo">Geoconsult <span>AI</span></div>
+    <div style="font-size:12px;color:var(--muted)" id="repStepLbl">الخطوة 1 من 5</div>
+  </div>
+  <div class="svc-badge-bar">
+    <div class="sbb-icon">📍</div>
+    <div><div class="sbb-title">تقرير مساحي احترافي</div><div class="sbb-sub">تقرير متكامل بمعايير شركات المساحة الكبرى</div></div>
+    <div class="sbb-price">99 ر.س</div>
+  </div>
+  <div class="sbar" style="margin:8px 13px 0">
+    <div class="si active" id="rb1"><span class="snum">①</span>المشروع</div>
+    <div class="si" id="rb2"><span class="snum">②</span>نوع المسح</div>
+    <div class="si" id="rb3"><span class="snum">③</span>المعدات</div>
+    <div class="si" id="rb4"><span class="snum">④</span>الموقع</div>
+    <div class="si" id="rb5"><span class="snum">⑤</span>التفاصيل</div>
+  </div>
+  <div class="report-body">
+    <!-- STEP 1 -->
+    <div class="fs active" id="rs1">
+      <div class="slbl">📋 معلومات المشروع</div>
+      <div class="sdesc">البيانات الرسمية للمشروع والجهة المستفيدة</div>
+      <div class="fg"><div class="fl">اسم المشروع <span class="req">*</span></div><input class="fi" id="rpname" placeholder="مثال: مشروع تطوير أرض سكنية — حي النرجس، الرياض"/></div>
+      <div class="r2">
+        <div class="fg"><div class="fl">رقم المشروع</div><input class="fi" id="rpnum" placeholder="HGS-2026-001"/></div>
+        <div class="fg"><div class="fl">تاريخ المسح <span class="req">*</span></div><input class="fi" id="rsdate" type="date"/></div>
+      </div>
+      <div class="fg"><div class="fl">اسم العميل / الجهة <span class="req">*</span></div><input class="fi" id="rclient" placeholder="اسم العميل أو الشركة"/></div>
+      <div class="fg"><div class="fl">الموقع التفصيلي <span class="req">*</span></div><input class="fi" id="rloc" placeholder="مثال: الرياض، حي النرجس، المربع D7، قطعة 15"/></div>
+      <div class="fg"><div class="fl">الغرض من المسح</div>
+        <select class="fsel" id="rpurpose">
+          <option value="">اختر الغرض</option>
+          <option>تطوير عقاري وبناء</option><option>تقسيم أراضي وتخطيط</option>
+          <option>توثيق ملكية وحدود</option><option>دراسة جدوى مشروع</option>
+          <option>تصميم بنية تحتية</option><option>تقييم بيئي</option><option>أغراض قانونية ونزاعات</option>
+        </select>
+      </div>
+      <button class="bp" onclick="repGo(2)">التالي ←</button>
+    </div>
+    <!-- STEP 2 -->
+    <div class="fs" id="rs2">
+      <div class="slbl">🗺️ نوع وطبيعة المسح</div>
+      <div class="fg"><div class="fl">نوع المشروع <span class="req">*</span></div>
+        <select class="fsel" id="rptype">
+          <option value="">اختر النوع</option>
+          <option>مساحة مساحية / تقسيم أراضي</option><option>مسح طبوغرافي</option>
+          <option>طرق وبنية تحتية</option><option>طاقة شمسية</option>
+          <option>صرف صحي وتصريف</option><option>موقع إنشاء</option>
+          <option>تخطيط موقع / Setting Out</option><option>مسح شبكات مياه وكهرباء</option>
+        </select>
+      </div>
+      <div class="r2">
+        <div class="fg"><div class="fl">المساحة الإجمالية <span class="req">*</span></div><input class="fi" id="rarea" placeholder="مثال: 5,200 م²"/></div>
+        <div class="fg"><div class="fl">الطول × العرض</div><input class="fi" id="rdims" placeholder="مثال: 80م × 65م"/></div>
+      </div>
+      <div class="fg"><div class="fl">الأعمال المنجزة</div>
+        <div class="cg" id="rworks">
+          <div class="ci" onclick="tc(this)">ضبط شبكة تحكم جيوديزية</div>
+          <div class="ci" onclick="tc(this)">رفع مساحي شامل</div>
+          <div class="ci" onclick="tc(this)">تحديد حدود القطعة</div>
+          <div class="ci" onclick="tc(this)">رسم مخطط طبوغرافي</div>
+          <div class="ci" onclick="tc(this)">حساب مساحات وإحداثيات</div>
+          <div class="ci" onclick="tc(this)">إعداد مخططات AutoCAD</div>
+          <div class="ci" onclick="tc(this)">تحليل GIS وخرائط</div>
+        </div>
+      </div>
+      <button class="bp" onclick="repGo(3)">التالي ←</button>
+      <button class="bs" onclick="repGo(1)">→ رجوع</button>
+    </div>
+    <!-- STEP 3 -->
+    <div class="fs" id="rs3">
+      <div class="slbl">🔧 المعدات والمنهجية</div>
+      <div class="fg"><div class="fl">الجهاز الرئيسي <span class="req">*</span></div>
+        <select class="fsel" id="requip">
+          <option value="">اختر الجهاز</option>
+          <option>RTK-GPS (دقة ±2 سم)</option><option>Total Station</option>
+          <option>Auto Level</option><option>GPS/GNSS</option>
+          <option>RTK-GPS + Total Station</option><option>Drone / UAV</option>
+        </select>
+      </div>
+      <div class="r2">
+        <div class="fg"><div class="fl">نظام الإحداثيات</div>
+          <select class="fsel" id="rcrs">
+            <option>WGS84 / EPSG:4326</option>
+            <option>UTM Zone 37N — الرياض</option>
+            <option>UTM Zone 38N — الشرقية</option>
+            <option>UTM Zone 36N — الحجاز</option>
+          </select>
+        </div>
+        <div class="fg"><div class="fl">دقة القياس</div><input class="fi" id="racc" placeholder="مثال: ±2 سم"/></div>
+      </div>
+      <div class="r2">
+        <div class="fg"><div class="fl">عدد نقاط القياس</div><input class="fi" id="rpts" type="number" placeholder="مثال: 250"/></div>
+        <div class="fg"><div class="fl">برنامج المعالجة</div>
+          <select class="fsel" id="rsw">
+            <option>QGIS 3.x</option><option>ArcGIS Online</option>
+            <option>ArcGIS Pro</option><option>AutoCAD Civil 3D</option>
+            <option>AutoCAD 2D</option><option>QGIS + AutoCAD</option>
+          </select>
+        </div>
+      </div>
+      <button class="bp" onclick="repGo(4)">التالي ←</button>
+      <button class="bs" onclick="repGo(2)">→ رجوع</button>
+    </div>
+    <!-- STEP 4 -->
+    <div class="fs" id="rs4">
+      <div class="slbl">🏔️ ظروف الموقع</div>
+      <div class="fg"><div class="fl">طبيعة التضاريس</div>
+        <select class="fsel" id="rterrain">
+          <option>أرض مستوية</option><option>أرض منحدرة خفيفة</option>
+          <option>أرض وعرة ومتكسرة</option><option>أرض صحراوية رملية</option>
+          <option>منطقة حضرية مبنية</option><option>منطقة زراعية</option>
+        </select>
+      </div>
+      <div class="fg"><div class="fl">حالة الطقس</div>
+        <select class="fsel" id="rweather">
+          <option>مشمس وصافي</option><option>غائم جزئياً</option>
+          <option>رياح متوسطة</option><option>حرارة شديدة</option><option>ضباب خفيف</option>
+        </select>
+      </div>
+      <div class="fg"><div class="fl">العوائق الميدانية</div>
+        <div class="cg" id="robstacles">
+          <div class="ci" onclick="tc(this)">تداخل بنايات وجدران</div>
+          <div class="ci" onclick="tc(this)">أشجار وغطاء نباتي</div>
+          <div class="ci" onclick="tc(this)">حركة مرور كثيفة</div>
+          <div class="ci" onclick="tc(this)">ضعف إشارة GPS</div>
+          <div class="ci" onclick="tc(this)">لا توجد عوائق</div>
+        </div>
+      </div>
+      <button class="bp" onclick="repGo(5)">التالي ←</button>
+      <button class="bs" onclick="repGo(3)">→ رجوع</button>
+    </div>
+    <!-- STEP 5 -->
+    <div class="fs" id="rs5">
+      <div class="slbl">📝 نتائج وملاحظات</div>
+      <div class="fg"><div class="fl">نتائج بارزة من المسح</div><textarea class="fta" id="rfindings" placeholder="مثال: تم اكتشاف انحراف في حدود الجهة الشمالية بمقدار 0.8م..."></textarea></div>
+      <div class="fg"><div class="fl">ملاحظات ميدانية</div><textarea class="fta" id="rnotes" placeholder="مثال: الموقع يحتاج تسوية في الجزء الجنوبي الغربي قبل البناء..."></textarea></div>
+      <div class="r2">
+        <div class="fg"><div class="fl">مستوى التقرير</div>
+          <select class="fsel" id="rlevel">
+            <option>تقرير أولي مبدئي</option><option>تقرير فني تفصيلي</option><option>تقرير رسمي معتمد</option>
+          </select>
+        </div>
+        <div class="fg"><div class="fl">لغة التقرير</div>
+          <select class="fsel" id="rlang"><option>عربي</option><option>عربي + إنجليزي</option></select>
+        </div>
+      </div>
+      <button class="bp" id="repGenBtn" onclick="repGenerate()">🔍 توليد التقرير الاحترافي</button>
+      <button class="bs" onclick="repGo(4)">→ رجوع</button>
+    </div>
+    <!-- LOADING -->
+    <div class="loading-box" id="repLoading">
+      <div class="spinner"></div>
+      <div class="load-text">جارٍ إعداد التقرير المساحي الاحترافي...</div>
+      <div class="load-step" id="repLstep">تحليل البيانات...</div>
+    </div>
+    <!-- RESULT -->
+    <div class="result-box" id="repResult">
+      <div class="res-hd" style="background:linear-gradient(135deg,#0f2a1f,#1a3a2a)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:15px;font-weight:900;color:var(--green)">التقرير المساحي الفني</span>
+          <span style="background:var(--green);color:var(--bg);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">✅ معتمد</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted)" id="repMeta"></div>
+      </div>
+      <div class="res-body">
+        <div class="sec"><div class="sec-t" style="color:#60a5fa">١. معلومات المشروع والجهة المستفيدة</div><div class="sec-c" id="repR1"></div></div>
+        <div class="sec"><div class="sec-t" style="color:#f59e0b">٢. وصف الموقع والبيانات الجغرافية</div><div class="sec-c" id="repR2"></div></div>
+        <div class="sec"><div class="sec-t" style="color:var(--green)">٣. المنهجية والمعدات المستخدمة</div><div class="sec-c" id="repR3"></div></div>
+        <div class="sec"><div class="sec-t" style="color:#c084fc">٤. نتائج المسح الميداني</div><div class="sec-c" id="repR4"></div></div>
+        <div class="sec"><div class="sec-t" style="color:#f87171">٥. التحليل الفني والملاحظات</div><div class="sec-c" id="repR5"></div></div>
+        <div class="sec"><div class="sec-t" style="color:#2dd4bf">٦. التوصيات والخلاصة</div><div class="sec-c" id="repR6"></div></div>
+      </div>
+    </div>
+    <div class="pay-after" id="repPayAfter">
+      <div class="pa-title">📍 لإعداد تقرير جديد</div>
+      <div class="pa-sub">أرسل <strong style="color:var(--green)">99 ر.س</strong> وأرسل الإيصال على واتساب لإعادة التفعيل.</div>
+      <div class="pa-iban">رقم الآيبان:<br><span class="pa-iban-num">SA0430100991100864564620</span>البنك: الأول — المستفيد: حسام حسين</div>
+      <a class="pa-btn" href="https://wa.me/966508410082?text=مرحباً، أرسلت إيصال دفع تقرير مساحي - 99 ر.س" target="_blank">أرسل الإيصال على واتساب ✓</a>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MAP ==================== -->
+<div class="screen" id="screen-map">
+  <div class="header">
+    <button class="back-btn" onclick="goHome()">← رجوع</button>
+    <div class="logo">Geoconsult <span>AI</span></div>
+    <div style="width:60px"></div>
+  </div>
+  <div class="svc-badge-bar">
+    <div class="sbb-icon">🗺️</div>
+    <div><div class="sbb-title">خرائط الخدمات والشبكات</div><div class="sbb-sub">تحليل ذكي لتوزيع الخدمات العامة</div></div>
+    <div class="sbb-price">99 ر.س</div>
+  </div>
+  <div class="map-body">
+    <div class="fg"><div class="fl">اسم المنطقة / الحي <span class="req">*</span></div><input class="fi" id="mapRegion" placeholder="مثال: حي النرجس، الرياض"/></div>
+    <div class="fg"><div class="fl">نوع الخدمة <span class="req">*</span></div>
+      <select class="fsel" id="mapService">
+        <option value="">اختر نوع الخدمة</option>
+        <option value="schools">المدارس والتعليم</option>
+        <option value="hospitals">المستشفيات والصحة</option>
+        <option value="fuel">محطات الوقود</option>
+        <option value="shopping">مراكز التسوق</option>
+        <option value="parks">الحدائق والترفيه</option>
+        <option value="all">جميع الخدمات</option>
+      </select>
+    </div>
+    <div class="fg"><div class="fl">الغرض من التحليل <span class="req">*</span></div>
+      <select class="fsel" id="mapPurpose">
+        <option value="">اختر الغرض</option>
+        <option value="municipality">تقرير للبلدية</option>
+        <option value="developer">تقرير للمطور العقاري</option>
+        <option value="investor">دراسة للمستثمر</option>
+        <option value="research">بحث أكاديمي</option>
+      </select>
+    </div>
+    <div class="fg"><div class="fl">معلومات إضافية (اختياري)</div><textarea class="fta" id="mapExtra" placeholder="أي تفاصيل أخرى تساعد في التحليل..."></textarea></div>
+    <button class="action-btn" id="mapBtn" onclick="mapAnalyze()">ابدأ تحليل الخدمات 🗺️</button>
+    <div class="loading-box" id="mapLoading">
+      <div class="spinner"></div>
+      <div class="load-text">جاري تحليل توزيع الخدمات...</div>
+    </div>
+    <div class="result-box" id="mapResult">
+      <div class="res-hd">📊 نتائج تحليل الخدمات</div>
+      <div style="padding:14px;font-size:13px;line-height:1.9;white-space:pre-wrap" id="mapResultBody"></div>
+    </div>
+    <div class="pay-after" id="mapPayAfter">
+      <div class="pa-title">🗺️ لتحليل منطقة جديدة</div>
+      <div class="pa-sub">أرسل <strong style="color:var(--green)">99 ر.س</strong> وأرسل الإيصال على واتساب لإعادة التفعيل.</div>
+      <div class="pa-iban">رقم الآيبان:<br><span class="pa-iban-num">SA0430100991100864564620</span>البنك: الأول — المستفيد: حسام حسين</div>
+      <a class="pa-btn" href="https://wa.me/966508410082?text=مرحباً، أرسلت إيصال دفع تحليل خرائط - 99 ر.س" target="_blank">أرسل الإيصال على واتساب ✓</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== نظام الأكواد =====
+function getCodes(){ try{return JSON.parse(localStorage.getItem('gcodes')||'[]')}catch(e){return[]} }
+function saveCodes(c){ localStorage.setItem('gcodes', JSON.stringify(c)) }
+function addCode(code, service){
+  const codes = getCodes();
+  codes.push({ code: code.toUpperCase().trim(), service: service, used: false });
+  saveCodes(codes);
+}
+function checkCode(code, service){
+  const codes = getCodes();
+  const upper = code.toUpperCase().trim();
+  const idx = codes.findIndex(c => c.code===upper && !c.used && (c.service===service||c.service==='all'));
+  if(idx===-1) return false;
+  codes[idx].used = true;
+  saveCodes(codes);
+  return true;
+}
+
+// ===== NAVIGATION =====
+const SCREENS = ['home','pay','activate','chat','pdf','report','map','admin'];
+function showScreen(name){
+  SCREENS.forEach(s=>{ const el=document.getElementById('screen-'+s); if(el) el.classList.remove('active'); });
+  document.getElementById('screen-'+name).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome(){showScreen('home')}
+
+// ===== PAYMENT =====
+let pendingService='', pendingScreen='';
+function goToPay(type, name, price, icon){
+  pendingService = type;
+  if(type==='gis') pendingScreen='chat';
+  else if(type==='pdf') pendingScreen='pdf';
+  else if(type==='report') pendingScreen='report';
+  else if(type==='map') pendingScreen='map';
+  else pendingScreen='chat';
+  document.getElementById('payIcon').textContent = icon;
+  document.getElementById('payName').textContent = name;
+  document.getElementById('payAmount').textContent = price + ' ر.س';
+  const msg = encodeURIComponent('مرحباً، أرسلت إيصال دفع خدمة "'+name+'" بقيمة '+price+' ر.س');
+  document.getElementById('waPayBtn').href = 'https://wa.me/966508410082?text='+msg;
+  showScreen('pay');
+}
+
+// ===== شاشة الكود =====
+function goToActivate(){
+  document.getElementById('activateTitle').textContent = document.getElementById('payName').textContent;
+  document.getElementById('activateCode').value='';
+  document.getElementById('activateError').style.display='none';
+  showScreen('activate');
+}
+function activateService(){
+  const code = document.getElementById('activateCode').value.trim();
+  if(!code){ document.getElementById('activateError').textContent='يرجى إدخال الكود'; document.getElementById('activateError').style.display='block'; return; }
+  if(checkCode(code, pendingService)){ document.getElementById('activateError').style.display='none'; showScreen(pendingScreen); }
+  else { document.getElementById('activateError').textContent='الكود غير صحيح أو مستخدم مسبقاً'; document.getElementById('activateError').style.display='block'; }
+}
+
+// ===== لوحة التحكم =====
+const adminPass='hossam2026';
+function openAdmin(){
+  const p=prompt('كلمة السر:');
+  if(p===adminPass){ renderAdmin(); showScreen('admin'); }
+  else alert('كلمة السر غير صحيحة');
+}
+function renderAdmin(){
+  const codes=getCodes();
+  const svcNames={gis:'استشارة GIS',pdf:'تحليل PDF',report:'تقرير مساحي',map:'خرائط',all:'كل الخدمات'};
+  let html='';
+  if(codes.length===0) html='<div style="text-align:center;color:var(--muted);padding:20px">لا توجد أكواد بعد</div>';
+  else codes.slice().reverse().forEach(c=>{
+    html+=`<div style="background:var(--card);border:1px solid ${c.used?'#f87171':'var(--green)'};border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div><div style="font-size:16px;font-weight:800;letter-spacing:2px;color:${c.used?'var(--muted)':'var(--text)'}">${c.code}</div>
+      <div style="font-size:11px;color:var(--muted)">${svcNames[c.service]||c.service}</div></div>
+      <div style="font-size:12px;padding:3px 10px;border-radius:10px;background:${c.used?'#2a1a1a':'var(--gdim)'};color:${c.used?'#f87171':'var(--green)'};border:1px solid ${c.used?'#f87171':'var(--green)'}">
+        ${c.used?'مستخدم':'متاح'}</div></div>`;
+  });
+  document.getElementById('adminCodesList').innerHTML=html;
+}
+function adminAddCode(){
+  const code=document.getElementById('adminNewCode').value.trim().toUpperCase();
+  const svc=document.getElementById('adminNewSvc').value;
+  if(!code){alert('أدخل الكود');return;}
+  addCode(code,svc);
+  document.getElementById('adminNewCode').value='';
+  renderAdmin();
+}
+function adminGenCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code='';
+  for(let i=0;i<6;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('adminNewCode').value=code;
+}
+function adminClearUsed(){ saveCodes(getCodes().filter(c=>!c.used)); renderAdmin(); }
+function copyIban(){
+  navigator.clipboard.writeText('SA0430100991100864564620').then(()=>{
+    const b=document.getElementById('copyIbanBtn');
+    b.textContent='تم النسخ ✓';b.style.background='var(--green)';b.style.color='var(--bg)';
+    setTimeout(()=>{b.textContent='نسخ الآيبان 📋';b.style.background='';b.style.color=''},2000);
+  });
+}
+
+// ===== CHAT =====
+const CHAT_SYS=`أنت مساعد ذكي متخصص في نظم المعلومات الجغرافية (GIS) والمساحة، تعمل لصالح منصة Geoconsult AI في الرياض، المملكة العربية السعودية.
+تخصصاتك: QGIS، ArcGIS Online، ArcGIS Pro، GPS/GNSS، RTK-GPS، Total Station، Auto Level، التحليل المكاني، WGS84، UTM، AutoCAD Map 3D، مشاريع رؤية 2030.
+أسلوبك: ردود واضحة ومباشرة باللغة العربية، لا تتجاوز 300 كلمة، استخدم أمثلة من السياق السعودي.
+إذا سُئلت عن شيء خارج نطاق GIS والمساحة، اعتذر بأدب.`;
+let chatHist=[],chatLoading=false,chatCount=0;
+const CHAT_MAX=10;
+function chatAr(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px'}
+function chatHk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();chatSend()}}
+function sq(btn){document.getElementById('chatInp').value=btn.textContent;document.getElementById('chatQuick').style.display='none';chatSend()}
+function chatAddMsg(role,html){
+  const d=document.createElement('div');d.className='msg '+role;
+  d.innerHTML=`<div class="av ${role}">${role==='ai'?'🤖':'👤'}</div><div class="bubble">${html}</div>`;
+  document.getElementById('chatMsgs').appendChild(d);
+  document.getElementById('chatMsgs').scrollTop=9999;
+}
+function chatTyping(){
+  const d=document.createElement('div');d.className='msg ai';d.id='typ';
+  d.innerHTML='<div class="av ai">🤖</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  document.getElementById('chatMsgs').appendChild(d);document.getElementById('chatMsgs').scrollTop=9999;
+}
+function chatRmTyping(){const t=document.getElementById('typ');if(t)t.remove()}
+function chatUpdateCtr(){
+  const rem=CHAT_MAX-chatCount,el=document.getElementById('chatCtr');
+  el.textContent=rem+' / '+CHAT_MAX;
+  el.className='ctr'+(rem<=2?' danger':rem<=4?' warn':'');
+}
+async function chatSend(){
+  const text=document.getElementById('chatInp').value.trim();
+  if(!text||chatLoading||chatCount>=CHAT_MAX)return;
+  chatLoading=true;document.getElementById('chatSbtn').disabled=true;
+  document.getElementById('chatInp').value='';document.getElementById('chatInp').style.height='auto';
+  document.getElementById('chatQuick').style.display='none';
+  chatCount++;chatUpdateCtr();
+  chatAddMsg('user',text.replace(/\n/g,'<br>'));
+  chatHist.push({role:'user',content:text});
+  chatTyping();
+  try{
+    const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:CHAT_SYS,messages:chatHist})});
+    const d=await r.json();chatRmTyping();
+    if(d.content&&d.content[0]){
+      const reply=d.content[0].text;chatHist.push({role:'assistant',content:reply});
+      chatAddMsg('ai',reply.replace(/\n/g,'<br>'));
+    }else chatAddMsg('ai','عذراً، حدث خطأ. حاول مرة أخرى.');
+  }catch(e){chatRmTyping();chatAddMsg('ai','عذراً، تعذر الاتصال.');}
+  chatLoading=false;
+  if(chatCount>=CHAT_MAX){document.getElementById('chatInput').style.display='none';document.getElementById('chatPayWall').style.display='block';}
+  else{document.getElementById('chatSbtn').disabled=false;document.getElementById('chatInp').focus();}
+}
+
+// ===== PDF =====
+let pdfFile=null;
+function pdfDov(e){e.preventDefault();document.getElementById('pdfZone').classList.add('over')}
+function pdfDol(){document.getElementById('pdfZone').classList.remove('over')}
+function pdfDdr(e){e.preventDefault();pdfDol();const f=e.dataTransfer.files[0];if(f&&f.type==='application/pdf')pdfHf(f)}
+function pdfHf(f){
+  if(!f)return;
+  if(f.type!=='application/pdf'){alert('يرجى رفع ملف PDF فقط');return}
+  if(f.size>10*1024*1024){alert('حجم الملف يتجاوز 10MB');return}
+  pdfFile=f;
+  document.getElementById('pdfZone').style.display='none';
+  document.getElementById('pdfFsel').style.display='flex';
+  document.getElementById('pdfFname').textContent=f.name;
+  document.getElementById('pdfFsize').textContent=(f.size/1024).toFixed(0)+' KB';
+  document.getElementById('pdfAbtn').disabled=false;
+}
+function pdfRmf(){
+  pdfFile=null;document.getElementById('pdfFi').value='';
+  document.getElementById('pdfZone').style.display='block';
+  document.getElementById('pdfFsel').style.display='none';
+  document.getElementById('pdfAbtn').disabled=true;
+  document.getElementById('pdfResult').style.display='none';
+  document.getElementById('pdfPayAfter').style.display='none';
+}
+function pdfExsec(text,label){
+  const m=text.match(new RegExp('===\\s*'+label+'\\s*===\\s*([\\s\\S]*?)(?:===|$)'));
+  return m?m[1].trim():'لم يتم استخراج هذا القسم.';
+}
+async function pdfAnalyze(){
+  if(!pdfFile)return;
+  document.getElementById('pdfAbtn').disabled=true;
+  document.getElementById('pdfLoading').style.display='block';
+  document.getElementById('pdfResult').style.display='none';
+  const steps=['قراءة الملف...','استخراج النص...','تحليل البنود...','إعداد التقرير...'];
+  let si=0;
+  const iv=setInterval(()=>{si=(si+1)%steps.length;document.getElementById('pdfLstep').textContent=steps[si]},1500);
+  try{
+    const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(pdfFile)});
+    const resp=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:[
+        {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
+        {type:'text',text:'حلل هذا الملف وأعد تقريراً باللغة العربية بالتنسيق:\n\n===ملخص===\n[ملخص مختصر للمحتوى]\n\n===مخاطر===\n[النقاط الحساسة والمخاطر، كل نقطة تبدأ بـ •]\n\n===توصيات===\n[توصيات عملية، كل نقطة تبدأ بـ •]'}
+      ]}]})});
+    clearInterval(iv);
+    const d=await resp.json();
+    document.getElementById('pdfLoading').style.display='none';
+    if(d.content&&d.content[0]){
+      const t=d.content[0].text;
+      document.getElementById('pdfR1').textContent=pdfExsec(t,'ملخص');
+      document.getElementById('pdfR2').textContent=pdfExsec(t,'مخاطر');
+      document.getElementById('pdfR3').textContent=pdfExsec(t,'توصيات');
+      document.getElementById('pdfResult').style.display='block';
+      document.getElementById('pdfPayAfter').style.display='block';
+    }else throw new Error('no content');
+  }catch(e){
+    clearInterval(iv);
+    document.getElementById('pdfLoading').style.display='none';
+    document.getElementById('pdfAbtn').disabled=false;
+    alert('حدث خطأ. حاول مرة أخرى.');
+  }
+}
+
+// ===== REPORT =====
+function tc(el){el.classList.toggle('sel')}
+function rGetSel(id){return Array.from(document.querySelectorAll('#'+id+' .ci.sel')).map(e=>e.textContent).join('، ')||'—'}
+function rv(id){return document.getElementById(id).value.trim()}
+function repGo(n){
+  if(n===2&&(!rv('rpname')||!rv('rsdate')||!rv('rclient')||!rv('rloc'))){alert('يرجى تعبئة الحقول المطلوبة');return}
+  if(n===3&&(!rv('rptype')||!rv('rarea'))){alert('يرجى تعبئة نوع المشروع والمساحة');return}
+  if(n===4&&!rv('requip')){alert('يرجى اختيار الجهاز المستخدم');return}
+  for(let i=1;i<=5;i++){
+    document.getElementById('rs'+i).classList.remove('active');
+    document.getElementById('rb'+i).classList.remove('active','done');
+  }
+  document.getElementById('rs'+n).classList.add('active');
+  document.getElementById('rb'+n).classList.add('active');
+  for(let i=1;i<n;i++)document.getElementById('rb'+i).classList.add('done');
+  document.getElementById('repStepLbl').textContent='الخطوة '+n+' من 5';
+  window.scrollTo(0,0);
+}
+function repExsec(text,label){
+  const m=text.match(new RegExp('===\\s*'+label+'\\s*===\\s*([\\s\\S]*?)(?:===|$)'));
+  return m?m[1].trim():'لم يتم استخراج هذا القسم.';
+}
+async function repGenerate(){
+  document.getElementById('repGenBtn').disabled=true;
+  for(let i=1;i<=5;i++)document.getElementById('rs'+i).classList.remove('active');
+  document.getElementById('repLoading').style.display='block';
+  const steps=['تحليل البيانات الميدانية...','صياغة وصف الموقع...','إعداد النتائج الفنية...','كتابة التوصيات...','تنسيق التقرير النهائي...'];
+  let si=0;
+  const iv=setInterval(()=>{si=(si+1)%steps.length;document.getElementById('repLstep').textContent=steps[si]},1200);
+  const data={pname:rv('rpname'),pnum:rv('rpnum')||'—',sdate:rv('rsdate'),client:rv('rclient'),loc:rv('rloc'),purpose:rv('rpurpose'),ptype:rv('rptype'),area:rv('rarea'),dims:rv('rdims')||'—',works:rGetSel('rworks'),equip:rv('requip'),crs:rv('rcrs'),acc:rv('racc')||'±2 سم',pts:rv('rpts')||'—',sw:rv('rsw'),terrain:rv('rterrain'),weather:rv('rweather'),obstacles:rGetSel('robstacles'),findings:rv('rfindings')||'—',notes:rv('rnotes')||'—',level:rv('rlevel'),lang:rv('rlang')};
+  const prompt=`أنت مساح أرضي خبير. اكتب تقريراً مساحياً فنياً احترافياً رسمياً باللغة العربية بناءً على:\nالمشروع: ${data.pname}\nرقم الملف: ${data.pnum}\nالتاريخ: ${data.sdate}\nالعميل: ${data.client}\nالموقع: ${data.loc}\nالغرض: ${data.purpose}\nنوع المشروع: ${data.ptype}\nالمساحة: ${data.area} | الأبعاد: ${data.dims}\nالأعمال: ${data.works}\nالجهاز: ${data.equip}\nنظام الإحداثيات: ${data.crs}\nالدقة: ${data.acc}\nعدد النقاط: ${data.pts}\nالبرنامج: ${data.sw}\nالتضاريس: ${data.terrain}\nالطقس: ${data.weather}\nالعوائق: ${data.obstacles}\nالنتائج: ${data.findings}\nملاحظات: ${data.notes}\nالمستوى: ${data.level}\n\nبالتنسيق:\n===معلومات===\n[معلومات المشروع]\n===وصف===\n[وصف الموقع]\n===منهجية===\n[المنهجية والأجهزة]\n===نتائج===\n[نتائج المسح]\n===تحليل===\n[التحليل الفني]\n===توصيات===\n[التوصيات والخلاصة]`;
+  try{
+    const resp=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
+    clearInterval(iv);
+    const d=await resp.json();
+    document.getElementById('repLoading').style.display='none';
+    if(d.content&&d.content[0]){
+      const t=d.content[0].text;
+      document.getElementById('repR1').textContent=repExsec(t,'معلومات');
+      document.getElementById('repR2').textContent=repExsec(t,'وصف');
+      document.getElementById('repR3').textContent=repExsec(t,'منهجية');
+      document.getElementById('repR4').textContent=repExsec(t,'نتائج');
+      document.getElementById('repR5').textContent=repExsec(t,'تحليل');
+      document.getElementById('repR6').textContent=repExsec(t,'توصيات');
+      document.getElementById('repMeta').textContent='المشروع: '+data.pname+' | العميل: '+data.client+' | Geoconsult AI';
+      document.getElementById('repResult').style.display='block';
+      document.getElementById('repPayAfter').style.display='block';
+    }else throw new Error();
+  }catch(e){
+    clearInterval(iv);
+    document.getElementById('repLoading').style.display='none';
+    document.getElementById('rs5').classList.add('active');
+    document.getElementById('repGenBtn').disabled=false;
+    alert('حدث خطأ. حاول مرة أخرى.');
+  }
+}
+
+// ===== MAP =====
+const MAP_SYS=`أنت خبير GIS متخصص في تحليل توزيع الخدمات العامة في المملكة العربية السعودية. قدم تقريراً احترافياً يتضمن: تقييم الكثافة السكانية، تحديد مناطق الخدمة الجيدة والضعيفة، مقارنة بالمعايير السعودية، توصيات عملية، أولويات التدخل. الرد بالعربية بأسلوب احترافي.`;
+async function mapAnalyze(){
+  const region=document.getElementById('mapRegion').value.trim();
+  const service=document.getElementById('mapService').value;
+  const purpose=document.getElementById('mapPurpose').value;
+  const extra=document.getElementById('mapExtra').value.trim();
+  if(!region||!service||!purpose){alert('يرجى ملء جميع الحقول المطلوبة');return}
+  document.getElementById('mapBtn').disabled=true;
+  document.getElementById('mapLoading').style.display='block';
+  document.getElementById('mapResult').style.display='none';
+  const prompt=`قم بتحليل توزيع الخدمات:\nالمنطقة: ${region}\nنوع الخدمة: ${service}\nالغرض: ${purpose}${extra?'\nمعلومات إضافية: '+extra:''}\nقدم تقريراً احترافياً شاملاً.`;
+  try{
+    const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:MAP_SYS,messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    document.getElementById('mapLoading').style.display='none';
+    if(d.content&&d.content[0]){
+      document.getElementById('mapResultBody').textContent=d.content[0].text;
+      document.getElementById('mapResult').style.display='block';
+      document.getElementById('mapPayAfter').style.display='block';
+    }else throw new Error();
+  }catch(e){
+    document.getElementById('mapLoading').style.display='none';
+    document.getElementById('mapBtn').disabled=false;
+    alert('تعذر الاتصال. تحقق من الإنترنت.');
+  }
+}
+
+// ===== INIT =====
+// الشات يبدأ من الهوم
+document.querySelectorAll('.home-card').forEach(c=>{
+  const type = c.getAttribute('onclick');
+});
+</script>
 </body>
 </html>
