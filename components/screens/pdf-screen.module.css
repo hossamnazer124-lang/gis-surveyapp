@@ -1,0 +1,298 @@
+.screen {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.serviceBadge {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 9px 13px;
+  margin: 9px 13px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sbIcon {
+  width: 34px;
+  height: 34px;
+  background: var(--gdim);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.sbTitle {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sbSub {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.sbPrice {
+  margin-right: auto;
+  background: var(--gdim);
+  border: 1px solid var(--green);
+  color: var(--green);
+  border-radius: 14px;
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.body {
+  flex: 1;
+  padding: 12px 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  overflow-y: auto;
+}
+
+.uploadZone {
+  border: 2px dashed var(--border);
+  border-radius: 13px;
+  padding: 32px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: var(--card);
+}
+
+.uploadZone:hover,
+.uploadZone.over {
+  border-color: var(--green);
+  background: var(--gdim);
+}
+
+.uploadIcon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.uploadTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.uploadSub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.fileSelected {
+  background: var(--card);
+  border: 1px solid var(--green);
+  border-radius: 11px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.fileIcon {
+  font-size: 24px;
+}
+
+.fileInfo {
+  flex: 1;
+}
+
+.fileName {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fileSize {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.removeBtn {
+  background: #2a1a1a;
+  border: 1px solid #7f1d1d;
+  color: #fca5a5;
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.actionBtn {
+  width: 100%;
+  padding: 13px;
+  background: var(--green);
+  border: none;
+  border-radius: 11px;
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.actionBtn:hover {
+  background: #00ffcc;
+}
+
+.actionBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.loadingBox {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 30px;
+  text-align: center;
+}
+
+.spinner {
+  width: 46px;
+  height: 46px;
+  border: 3px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadText {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.loadStep {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--green);
+}
+
+.resultBox {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.resultHeader {
+  background: var(--gdim);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 15px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.resultBody {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.sectionTitle {
+  padding: 8px 13px;
+  font-size: 12px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionTitle.blue {
+  color: #60a5fa;
+}
+
+.sectionTitle.red {
+  color: #f87171;
+}
+
+.sectionTitle.green {
+  color: var(--green);
+}
+
+.sectionContent {
+  padding: 12px 13px;
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.payAfter {
+  background: linear-gradient(135deg, #1a2a1a, #0f2a1f);
+  border: 1px solid var(--green);
+  border-radius: 13px;
+  padding: 16px;
+  text-align: center;
+}
+
+.paTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 5px;
+}
+
+.paSub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+
+.paIban {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  text-align: right;
+}
+
+.paIbanNum {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  display: block;
+  word-break: break-all;
+}
+
+.paBtn {
+  display: inline-block;
+  background: var(--green);
+  color: var(--bg);
+  border-radius: 9px;
+  padding: 9px 20px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}

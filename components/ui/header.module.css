@@ -1,0 +1,42 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(6, 13, 26, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-size: 19px;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.logo span {
+  color: var(--green);
+}
+
+.backBtn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.rightSlot {
+  min-width: 60px;
+  display: flex;
+  justify-content: flex-end;
+}
