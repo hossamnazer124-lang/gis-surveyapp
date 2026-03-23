@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIS Area Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- ═══════════ CASE STUDY PAGE ═══════════ -->
+<div id="casePage">
+<div class="cs-wrap">
+  <button class="cs-back" onclick="showPage('homePage')">← الرئيسية</button>
+
+  <div class="cs-hero">
+    <div class="cs-tag">CASE STUDY · 2026</div>
+    <h1>تحويل العمل اليدوي<br>إلى <span>منصة GIS ذكية</span></h1>
+    <p>كيف ساعدنا مكتب مساحة في الرياض على التخلص من حسابات Excel اليدوية وتوليد تقارير احترافية في ثوانٍ.</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item"><span class="cs-meta-label">العميل</span><span class="cs-meta-val">مكتب مساحة — الرياض</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">المجال</span><span class="cs-meta-val">المساحة والـ GIS</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">المنصة</span><span class="cs-meta-val">Web App</span></div>
+      <div class="cs-meta-item"><span class="cs-meta-label">الموقع</span><span class="cs-meta-val" style="color:var(--accent);">Riyadh, KSA</span></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="cs-stats">
+    <div class="cs-stat"><span class="cs-stat-num">90%</span><div class="cs-stat-desc">توفير في وقت إعداد التقارير</div></div>
+    <div class="cs-stat"><span class="cs-stat-num">0</span><div class="cs-stat-desc">أخطاء حسابية بعد التطبيق</div></div>
+    <div class="cs-stat"><span class="cs-stat-num">5x</span><div class="cs-stat-desc">سرعة في إنجاز المشاريع</div></div>
+  </div>
+
+  <!-- 01 Problem -->
+  <div class="cs-section">
+    <div class="cs-section-hdr">
+      <span class="cs-section-num">01</span>
+      <h2>المشكلة</h2>
+      <div class="cs-line"></div>
+    </div>
+    <div class="cs-prob-grid">
+      <div class="cs-prob-card"><span class="cs-prob-icon">📊</span><h3>حسابات يدوية وبطيئة</h3><p>الفريق كان يعتمد على Excel وحسابات يدوية لاستخراج المساحات والإحداثيات مما يستغرق ساعات لكل مشروع.</p></div>
+      <div class="cs-prob-card"><span class="cs-prob-icon">❌</span><h3>أخطاء متكررة</h3><p>الإدخال اليدوي للإحداثيات كان مصدراً دائماً للأخطاء التي تؤثر على دقة التقارير النهائية.</p></div>
+      <div class="cs-prob-card"><span class="cs-prob-icon">📄</span><h3>تقارير غير احترافية</h3><p>لم يكن هناك نظام موحد لتوليد تقارير PDF بشكل سريع واحترافي قابل للتسليم للعملاء.</p></div>
+      <div class="cs-prob-card"><span class="cs-prob-icon">🔄</span><h3>تحويل الإحداثيات معقد</h3><p>التحويل بين UTM وWGS84 كان يتطلب أدوات خارجية متعددة وجهداً إضافياً في كل مشروع.</p></div>
+    </div>
+  </div>
+
+  <!-- 02 Solution -->
+  <div class="cs-section">
+    <div class="cs-section-hdr">
+      <span class="cs-section-num">02</span>
+      <h2>الحل</h2>
+      <div class="cs-line"></div>
+    </div>
+    <div class="cs-sol-list">
+      <div class="cs-sol-item"><div class="cs-sol-icon">🗺️</div><div class="cs-sol-content"><h3>حساب المساحات بدقة عالية</h3><p>منصة تحسب مساحات المضلعات فوراً بوحدات متعددة (م²، دونم، هكتار، قدم²) مع جدول الأضلاع والانحرافات تلقائياً.</p></div></div>
+      <div class="cs-sol-item"><div class="cs-sol-icon">🔄</div><div class="cs-sol-content"><h3>محوّل إحداثيات UTM ↔ WGS84</h3><p>تحويل فوري ودقيق مع دعم رفع ملفات Excel أو CSV مباشرة وتحويلها تلقائياً.</p></div></div>
+      <div class="cs-sol-item"><div class="cs-sol-icon">📄</div><div class="cs-sol-content"><h3>تقارير PDF احترافية في ثوانٍ</h3><p>تقارير جاهزة للتسليم تحمل شعار المكتب وبيانات المشروع الكاملة، قابلة للتصدير بصيغ PDF وExcel وCSV.</p></div></div>
+      <div class="cs-sol-item"><div class="cs-sol-icon">📐</div><div class="cs-sol-content"><h3>أدوات GIS متكاملة</h3><p>ترافيرس، شبكة ضبط، شبكة نقاط، تصدير DXF — كل أدوات المساحة في مكان واحد بدون برامج إضافية.</p></div></div>
+    </div>
+  </div>
+
+  <!-- 03 Results -->
+  <div class="cs-section">
+    <div class="cs-section-hdr">
+      <span class="cs-section-num">03</span>
+      <h2>النتائج</h2>
+      <div class="cs-line"></div>
+    </div>
+    <div class="cs-res-grid">
+      <div class="cs-res-card"><span class="cs-res-emoji">⚡</span><h3>وقت أقل بكثير</h3><p>ما كان يأخذ ساعات أصبح ينجز في دقائق معدودة.</p></div>
+      <div class="cs-res-card"><span class="cs-res-emoji">✅</span><h3>صفر أخطاء</h3><p>القضاء التام على أخطاء الحسابات اليدوية وضمان الدقة في كل مشروع.</p></div>
+      <div class="cs-res-card"><span class="cs-res-emoji">🏆</span><h3>تقارير احترافية</h3><p>تقارير PDF تعكس احترافية المكتب وتقوي الثقة مع العملاء.</p></div>
+    </div>
+    <div class="cs-quote">
+      <p class="cs-quote-text">الأداة غيّرت طريقة عملنا بالكامل — بدل ما نقضي وقتاً طويلاً في الحسابات، دلوقتي نركز على المشاريع نفسها.</p>
+      <div class="cs-quote-author">— مهندس مساحة، مكتب مساحة في الرياض</div>
+    </div>
+  </div>
+
+  <!-- 04 Tech -->
+  <div class="cs-section">
+    <div class="cs-section-hdr">
+      <span class="cs-section-num">04</span>
+      <h2>التقنيات المستخدمة</h2>
+      <div class="cs-line"></div>
+    </div>
+    <div class="cs-tech">
+      <span class="cs-tech-badge">JavaScript</span>
+      <span class="cs-tech-badge">Leaflet Maps</span>
+      <span class="cs-tech-badge">GIS Algorithms</span>
+      <span class="cs-tech-badge">UTM / WGS84</span>
+      <span class="cs-tech-badge">PDF Generation</span>
+      <span class="cs-tech-badge">DXF Export</span>
+      <span class="cs-tech-badge">Excel / CSV</span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cs-cta">
+    <h2>عندك مشكلة مشابهة؟</h2>
+    <p>أبني حلول رقمية مخصصة للمجالات الهندسية والطبية — سريعة، دقيقة، واحترافية.</p>
+    <button class="cs-cta-btn" onclick="showPage('homePage');openEnterModal()">🚀 جرب الأداة مجاناً</button>
+  </div>
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+:root{
+  --bg:#0a0f1e;--surface:#111827;--card:#1a2235;
+  --accent:#00d4ff;--accent2:#00ff88;--accent3:#ff6b35;--violet:#a78bfa;
+  --text:#e2e8f0;--muted:#64748b;--border:#1e3a5f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+
+/* ── SHARED ── */
+.btn{padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;transition:all .25s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:linear-gradient(135deg,#00d4ff,#0099cc);color:#0a0f1e;box-shadow:0 4px 14px rgba(0,212,255,.3);}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-success{background:linear-gradient(135deg,#00ff88,#00cc6a);color:#0a0f1e;box-shadow:0 4px 14px rgba(0,255,136,.3);}
+.btn-danger{background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.4);color:#ff6b35;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-violet{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;box-shadow:0 3px 10px rgba(124,58,237,.3);}
+input[type=number],input[type=text],input[type=password]{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;transition:border-color .3s;direction:ltr;}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,255,.1);}
+.ig{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+.il{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:900;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:20px;overflow-y:auto;}
+.overlay.show{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px;width:90%;max-width:380px;position:relative;margin:auto;}
+.modal-close{position:absolute;top:12px;left:12px;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.3);color:#ff6b35;border-radius:7px;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.msg-ok{font-size:11px;color:var(--accent2);margin-top:5px;display:none;}
+
+/* ── HOME ── */
+#homePage{min-height:100vh;min-height:100dvh;width:100%;display:none;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1;background:radial-gradient(ellipse at 50% 20%,#0d2a45 0%,#0a0f1e 65%);padding:24px 20px;}
+#homePage.active{display:flex;}
+.home-inner{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;}
+#homeLogo{width:80px;height:80px;border-radius:16px;object-fit:contain;display:none;border:2px solid rgba(0,212,255,.3);background:rgba(0,212,255,.05);padding:8px;margin-bottom:14px;box-shadow:0 0 28px rgba(0,212,255,.15);}
+#homeLogo.show{display:block;}
+.home-label{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:7px;}
+#homeCompanyName{font-size:clamp(20px,6vw,36px);font-weight:900;background:linear-gradient(135deg,#00d4ff,#00ff88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px;text-align:center;}
+.home-tagline{font-size:12px;color:var(--muted);margin-bottom:28px;text-align:center;line-height:1.6;}
+.home-btns{width:100%;display:flex;flex-direction:column;gap:10px;}
+.btn-enter{width:100%;padding:14px;background:linear-gradient(135deg,#00d4ff,#0099cc);color:#0a0f1e;border:none;border-radius:13px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 6px 22px rgba(0,212,255,.35);transition:all .3s;}
+.btn-wa{width:100%;padding:12px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;border:none;border-radius:13px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s;}
+.btn-admin-vis{width:100%;padding:9px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);border-radius:11px;font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;transition:all .3s;}
+.owner-ghost{width:100%;height:12px;background:transparent;cursor:default;border:none;outline:none;}
+.btn-case{width:100%;padding:11px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.25);color:var(--accent2);border-radius:13px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s;}
+.btn-case:hover{background:rgba(0,255,136,.14);border-color:var(--accent2);}
+
+/* ── CASE STUDY PAGE ── */
+#casePage{display:none;position:relative;z-index:1;min-height:100vh;background:var(--bg);}
+#casePage.active{display:block;}
+.cs-wrap{max-width:800px;margin:0 auto;padding:24px 20px 48px;}
+.cs-back{display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:12px;margin-bottom:28px;transition:all .3s;}
+.cs-back:hover{border-color:var(--accent);color:var(--accent);}
+.cs-tag{display:inline-block;background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.25);padding:4px 14px;border-radius:20px;font-size:11px;letter-spacing:2px;margin-bottom:18px;}
+.cs-hero h1{font-size:clamp(1.6rem,5vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:14px;}
+.cs-hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cs-hero p{font-size:14px;color:var(--muted);line-height:1.8;max-width:580px;margin-bottom:28px;}
+.cs-meta{display:flex;gap:24px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--border);}
+.cs-meta-item{display:flex;flex-direction:column;gap:3px;}
+.cs-meta-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.cs-meta-val{font-size:13px;font-weight:700;color:var(--text);}
+.cs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:32px 0;}
+.cs-stat{background:var(--card);padding:24px 16px;text-align:center;}
+.cs-stat-num{font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:6px;}
+.cs-stat-desc{font-size:12px;color:var(--muted);}
+.cs-section{margin:40px 0;}
+.cs-section-hdr{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+.cs-section-num{font-size:11px;color:var(--accent);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);padding:3px 9px;border-radius:4px;white-space:nowrap;}
+.cs-section h2{font-size:1.3rem;font-weight:700;}
+.cs-line{flex:1;height:1px;background:var(--border);}
+.cs-prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.cs-prob-grid{grid-template-columns:1fr;}.cs-stats{grid-template-columns:1fr;}}
+.cs-prob-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden;}
+.cs-prob-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ef4444,#f97316);}
+.cs-prob-icon{font-size:24px;margin-bottom:10px;display:block;}
+.cs-prob-card h3{font-size:14px;font-weight:700;margin-bottom:6px;}
+.cs-prob-card p{font-size:12px;color:var(--muted);line-height:1.7;}
+.cs-sol-list{display:flex;flex-direction:column;gap:12px;}
+.cs-sol-item{display:flex;align-items:flex-start;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;transition:border-color .3s,transform .3s;}
+.cs-sol-item:hover{border-color:rgba(0,212,255,.3);transform:translateX(-3px);}
+.cs-sol-icon{width:42px;height:42px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cs-sol-content h3{font-size:14px;font-weight:700;margin-bottom:5px;}
+.cs-sol-content p{font-size:12px;color:var(--muted);line-height:1.7;}
+.cs-res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.cs-res-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 16px;text-align:center;position:relative;overflow:hidden;transition:transform .3s;}
+.cs-res-card:hover{transform:translateY(-3px);}
+.cs-res-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#f59e0b);}
+.cs-res-emoji{font-size:32px;display:block;margin-bottom:10px;}
+.cs-res-card h3{font-size:14px;font-weight:700;margin-bottom:6px;color:var(--accent);}
+.cs-res-card p{font-size:12px;color:var(--muted);line-height:1.6;}
+.cs-quote{background:var(--card);border:1px solid var(--border);border-right:4px solid var(--accent);border-radius:10px;padding:24px;margin:28px 0;position:relative;}
+.cs-quote-text{font-size:14px;line-height:1.8;color:var(--text);font-style:italic;margin-bottom:12px;}
+.cs-quote-author{font-size:11px;color:var(--accent);}
+.cs-tech{display:flex;flex-wrap:wrap;gap:10px;}
+.cs-tech-badge{background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:7px;font-size:12px;transition:border-color .3s,color .3s;}
+.cs-tech-badge:hover{border-color:var(--accent);color:var(--accent);}
+.cs-cta{background:linear-gradient(135deg,rgba(0,212,255,.07),rgba(0,255,136,.07));border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:36px 24px;text-align:center;margin-top:40px;}
+.cs-cta h2{font-size:1.4rem;font-weight:900;margin-bottom:10px;}
+.cs-cta p{color:var(--muted);font-size:13px;margin-bottom:22px;}
+.cs-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#0a0f1e;font-family:'Tajawal',sans-serif;font-weight:900;font-size:14px;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.cs-cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,212,255,.3);}
+.home-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.2),transparent);margin:4px 0;}
+
+/* ── MAIN APP ── */
+#mainApp{display:none;position:relative;z-index:1;}
+#mainApp.active{display:block;}
+.container{max-width:1200px;margin:0 auto;padding:16px;}
+
+/* ── APP HEADER ── */
+.app-header{text-align:center;padding:16px 0 10px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+#appLogo{width:48px;height:48px;border-radius:10px;object-fit:contain;margin:0 auto 6px;display:none;border:1px solid var(--border);background:var(--surface);padding:4px;}
+#appLogo.show{display:block;}
+#appName{font-size:clamp(16px,4vw,26px);font-weight:900;background:linear-gradient(135deg,#00d4ff,#00ff88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px;}
+.app-sub{color:var(--muted);font-size:11px;}
+
+/* ── WORKFLOW TABS ── */
+.workflow-tabs{display:flex;background:var(--surface);border-radius:12px;padding:4px;gap:4px;margin-bottom:14px;border:1px solid var(--border);}
+.wf-tab{flex:1;padding:9px 6px;border:none;border-radius:9px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;transition:all .25s;background:transparent;color:var(--muted);text-align:center;}
+.wf-tab.active{background:linear-gradient(135deg,#00d4ff,#0099cc);color:#0a0f1e;box-shadow:0 2px 8px rgba(0,212,255,.3);}
+.wf-panel{display:none;}
+.wf-panel.active{display:block;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative;overflow:hidden;margin-bottom:12px;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.4;}
+.card-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:11px;display:flex;align-items:center;gap:6px;}
+.card-icon{width:24px;height:24px;background:rgba(0,212,255,.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;}
+
+/* ── INPUT PANEL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:500px){.two-col{grid-template-columns:1fr;}}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:all .3s;background:var(--surface);margin-bottom:8px;}
+.upload-zone:hover{border-color:var(--accent2);}
+.upload-icon{font-size:26px;margin-bottom:5px;}
+.upload-text{font-size:11px;color:var(--muted);}
+.upload-text strong{color:var(--accent);}
+.file-info{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);border-radius:7px;padding:7px 10px;font-size:11px;color:var(--accent2);margin-bottom:7px;display:none;}
+
+/* ── COORDS TABLE ── */
+.coords-header{display:grid;grid-template-columns:28px 1fr 1fr 28px;gap:5px;margin-bottom:4px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.coord-row{display:grid;grid-template-columns:28px 1fr 1fr 28px;gap:5px;margin-bottom:5px;align-items:center;}
+.point-num{width:24px;height:24px;background:rgba(0,212,255,.1);border:1px solid var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent);}
+.del-btn{width:24px;height:24px;background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.3);border-radius:5px;color:#ff6b35;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.coords-scroll{max-height:200px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.sample-btn{font-size:9px;padding:3px 8px;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);border-radius:5px;color:var(--accent2);cursor:pointer;}
+
+/* ── GIS TOOLS (inline) ── */
+.gis-tools-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;}
+.gis-tool-tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;}
+.gt-tab{padding:5px 10px;border:none;border-radius:6px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;transition:all .25s;background:rgba(167,139,250,.1);color:var(--violet);border:1px solid rgba(167,139,250,.2);}
+.gt-tab.active{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;border-color:transparent;}
+.gt-panel{display:none;}
+.gt-panel.active{display:block;}
+.gt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:480px){.gt-grid{grid-template-columns:1fr;}}
+.trav-row{display:grid;grid-template-columns:24px 1fr 1fr 1fr 24px;gap:4px;margin-bottom:5px;align-items:center;}
+.trav-row input{font-size:11px;padding:6px 7px;}
+.trav-hdr{display:grid;grid-template-columns:24px 1fr 1fr 1fr 24px;gap:4px;font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
+.ctrl-row{display:grid;grid-template-columns:26px 1fr 1fr 24px;gap:4px;margin-bottom:5px;align-items:center;}
+.ctrl-hdr{display:grid;grid-template-columns:26px 1fr 1fr 24px;gap:4px;font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
+
+/* ── MAP + RESULTS ── */
+#map{height:320px;border-radius:11px;overflow:hidden;border:1px solid var(--border);margin-bottom:12px;}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+@media(max-width:500px){.res-grid{grid-template-columns:1fr 1fr;}}
+.res-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 7px;text-align:center;}
+.res-item.hl{border-color:var(--accent);background:rgba(0,212,255,.05);}
+.res-item.hl2{border-color:var(--accent2);background:rgba(0,255,136,.05);}
+.res-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.res-val{font-size:clamp(11px,3vw,17px);font-weight:900;color:var(--accent);word-break:break-all;line-height:1.2;}
+.res-val.green{color:var(--accent2);}
+.res-unit{font-size:9px;color:var(--muted);margin-top:1px;}
+.status-bar{background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.2);border-radius:8px;padding:7px 11px;font-size:11px;color:var(--accent2);margin-bottom:10px;display:none;align-items:center;gap:6px;}
+.status-bar.show{display:flex;}
+
+/* ── UTM PANEL ── */
+.utm-tabs{display:flex;gap:5px;margin-bottom:12px;background:var(--surface);border-radius:9px;padding:3px;}
+.utm-tab{flex:1;padding:7px;border:none;border-radius:7px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;transition:all .3s;background:transparent;color:var(--muted);}
+.utm-tab.active{background:linear-gradient(135deg,#ff6b35,#e05522);color:#fff;}
+.utm-zone-row{display:flex;gap:7px;align-items:flex-end;}
+.utm-zone-row .ig{flex:1;margin-bottom:0;}
+.zone-auto-btn{padding:8px 11px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--accent);border-radius:7px;cursor:pointer;font-size:10px;font-family:'Tajawal',sans-serif;white-space:nowrap;}
+.utm-result-box{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px;margin-top:8px;display:none;}
+.utm-result-box.show{display:block;}
+.utm-result-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.utm-result-row:last-child{border-bottom:none;}
+.utm-result-label{font-size:10px;color:var(--muted);}
+.utm-result-val{font-size:12px;font-weight:700;color:var(--accent2);font-family:monospace;}
+.utm-copy-btn{padding:2px 7px;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.2);color:var(--accent2);border-radius:4px;cursor:pointer;font-size:9px;}
+.utm-err{color:#ff6b35;font-size:11px;margin-top:5px;display:none;}
+.hemisphere-toggle{display:flex;gap:5px;}
+.hemi-btn{flex:1;padding:6px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:11px;transition:all .3s;}
+.hemi-btn.active{background:rgba(0,212,255,.15);border-color:var(--accent);color:var(--accent);}
+
+/* ── REPORT PANEL ── */
+.report-info{background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.15);border-radius:9px;padding:10px 13px;font-size:11px;color:var(--accent2);margin-bottom:10px;line-height:1.8;}
+.report-info strong{color:#fff;}
+
+/* ── ADMIN PAGE ── */
+#adminPage{display:none;position:relative;z-index:1;min-height:100vh;}
+#adminPage.active{display:block;}
+.admin-wrap{max-width:460px;margin:0 auto;padding:20px;}
+.admin-head{text-align:center;padding:16px 0 14px;}
+.admin-head h2{font-size:18px;font-weight:900;color:var(--accent);margin-bottom:3px;}
+.admin-head p{font-size:11px;color:var(--muted);}
+.admin-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
+.admin-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.6;}
+.admin-card h3{font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.logo-prev{width:50px;height:50px;border-radius:9px;object-fit:contain;border:1px solid var(--border);background:var(--surface);padding:4px;display:none;margin-top:7px;}
+.logo-prev.show{display:block;}
+
+/* ── FROZEN ── */
+#frozenPage{min-height:100vh;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;background:radial-gradient(ellipse at center,#0d1b2a,#0a0f1e);position:fixed;inset:0;z-index:500;}
+#frozenPage.show{display:flex;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+
+/* ── OWNER MODAL ── */
+.owner-modal{background:var(--card);border:1px solid rgba(255,107,53,.3);border-radius:18px;padding:24px;width:90%;max-width:400px;position:relative;max-height:90vh;overflow-y:auto;}
+.owner-modal h3{font-size:14px;font-weight:700;color:var(--accent3);margin-bottom:14px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;}
+.toggle{position:relative;width:42px;height:21px;}
+.toggle input{opacity:0;width:0;height:0;}
+.slider{position:absolute;inset:0;background:var(--border);border-radius:11px;cursor:pointer;transition:.3s;}
+.slider:before{content:'';position:absolute;height:15px;width:15px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+input:checked+.slider{background:var(--accent3);}
+input:checked+.slider:before{transform:translateX(21px);}
+.msec{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;}
+.msec h4{font-size:11px;color:var(--accent2);margin-bottom:8px;}
+.stat-chip{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;background:rgba(0,255,136,.1);color:var(--accent2);border:1px solid rgba(0,255,136,.2);margin:2px;}
+.stat-chip.warn{background:rgba(255,200,0,.1);color:#ffc800;border-color:rgba(255,200,0,.3);}
+.back-btn{background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.3);padding:5px 14px;border-radius:7px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:10px;transition:all .3s;margin-top:5px;}
+
+/* ── GIS RESULT TABLE ── */
+.gis-result-wrap{max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;margin-top:8px;display:none;}
+.gis-result-wrap.show{display:block;}
+.gis-result-table{width:100%;border-collapse:collapse;font-size:11px;}
+.gis-result-table th{background:rgba(167,139,250,.15);color:var(--violet);padding:5px 7px;text-align:right;font-weight:700;}
+.gis-result-table td{padding:4px 7px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text);font-family:monospace;font-size:10px;}
+.crs-bar{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:7px 12px;display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:10px;}
+.crs-item{display:flex;align-items:center;gap:4px;color:var(--muted);}
+.crs-item strong{color:var(--accent2);}
+.app-footer{text-align:center;padding:14px 0;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:14px;}
+
+/* ── ONBOARDING ── */
+#onboarding{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);padding:20px;}
+#onboarding.show{display:flex;}
+.ob-box{background:var(--card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:420px;overflow:hidden;}
+.ob-header{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,255,136,.1));padding:24px 24px 16px;text-align:center;border-bottom:1px solid var(--border);}
+.ob-header h2{font-size:18px;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+.ob-header p{font-size:12px;color:var(--muted);}
+.ob-steps{padding:20px;}
+.ob-step{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;}
+.ob-step-num{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#0a0f1e;flex-shrink:0;}
+.ob-step-txt h4{font-size:13px;font-weight:700;margin-bottom:3px;}
+.ob-step-txt p{font-size:11px;color:var(--muted);line-height:1.6;}
+.ob-footer{padding:0 20px 20px;display:flex;gap:8px;}
+.ob-start{flex:1;padding:12px;background:linear-gradient(135deg,#00d4ff,#0099cc);color:#0a0f1e;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:900;cursor:pointer;}
+.ob-skip{padding:12px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;}
+/* ── MAP TAB HINT ── */
+.map-hint{background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(0,255,136,.04));border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);}
+.map-hint strong{color:var(--accent);}
+.map-hint-icon{font-size:22px;flex-shrink:0;}
+/* ── VALIDATION ── */
+.input-err{border-color:#ff6b35!important;box-shadow:0 0 0 3px rgba(255,107,53,.15)!important;}
+.input-ok{border-color:var(--accent2)!important;}
+.val-banner{background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.3);border-radius:9px;padding:10px 13px;font-size:12px;color:#ff6b35;margin-bottom:10px;display:none;line-height:1.7;}
+.val-banner.show{display:flex;align-items:flex-start;gap:8px;}
+/* ── POINT LABEL (divIcon) ── */
+.pt-label{
+  position:absolute;
+  transform:translateX(-50%) translateY(calc(-100% - 4px));
+  background:#0a0f1e;
+  border:1px solid #00ff88;
+  color:#00ff88;
+  font-family:'Tajawal',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  padding:1px 5px;
+  border-radius:4px;
+  white-space:nowrap;
+  pointer-events:none;
+  box-shadow:0 1px 4px rgba(0,255,136,.3);
+  line-height:1.5;
+}
+/* ── GIS TOOLTIP ── */
+.gis-tooltip{background:#0a0f1e!important;border:1px solid #00ff88!important;color:#00ff88!important;font-family:'Tajawal',sans-serif!important;font-size:12px!important;font-weight:700!important;padding:3px 8px!important;border-radius:6px!important;white-space:nowrap!important;box-shadow:0 2px 8px rgba(0,255,136,.3)!important;}
+.gis-tooltip.leaflet-tooltip-top::before{border-top-color:#00ff88!important;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ ONBOARDING ═══════════ -->
+<div id="onboarding">
+  <div class="ob-box">
+    <div class="ob-header">
+      <div style="font-size:40px;margin-bottom:8px;">🗺️</div>
+      <h2>مرحباً بك في GIS Area Calculator</h2>
+      <p>منصة متكاملة للمساحة وتوليد التقارير الاحترافية</p>
+    </div>
+    <div class="ob-steps">
+      <div class="ob-step">
+        <div class="ob-step-num">1</div>
+        <div class="ob-step-txt"><h4>📋 أدخل بيانات المشروع</h4><p>اسم المشروع، رقم القطعة، والمنطقة — ستظهر في التقرير النهائي.</p></div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-num">2</div>
+        <div class="ob-step-txt"><h4>📍 أدخل الإحداثيات</h4><p>يدوياً أو ارفع ملف Excel/CSV أو استخدم أدوات GIS المدمجة (ترافيرس، شبكة، UTM).</p></div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-num">3</div>
+        <div class="ob-step-txt"><h4>⚡ اضغط احسب</h4><p>ستُعرض المساحة فوراً على الخريطة مع جدول الأضلاع والانحرافات.</p></div>
+      </div>
+      <div class="ob-step" style="margin-bottom:0;">
+        <div class="ob-step-num">4</div>
+        <div class="ob-step-txt"><h4>📄 صدّر التقرير</h4><p>احصل على تقرير PDF احترافي جاهز للتسليم أو صدّره بصيغة Excel/CSV.</p></div>
+      </div>
+    </div>
+    <div class="ob-footer">
+      <button class="ob-start" onclick="closeOnboarding()">🚀 ابدأ الآن</button>
+      <button class="ob-skip" onclick="closeOnboarding()">تخطي</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div id="homePage">
+  <div class="home-inner">
+    <img id="homeLogo" src="" alt="logo">
+    <div class="home-label">حاسبة البيانات الجيومكانية</div>
+    <div id="homeCompanyName">GIS Area Calculator</div>
+    <div class="home-tagline">منصة متكاملة للمساحة والـ GIS وتوليد التقارير</div>
+    <div class="home-btns">
+      <button class="btn-enter" onclick="openEnterModal()">🗺️ دخول</button>
+      <button class="btn-wa" onclick="openWhatsapp()">💬 تواصل عبر واتساب</button>
+      <button class="btn-case" onclick="showPage('casePage')">📋 قصة النجاح — Case Study</button>
+      <div class="home-divider"></div>
+      <button class="btn-admin-vis" onclick="openAdminLogin()">⚙️ المدير</button>
+      <button class="owner-ghost" onclick="openOwnerLogin()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN APP ═══════════ -->
+<div id="mainApp">
+<div class="container">
+
+  <div class="app-header">
+    <img id="appLogo" src="" alt="logo">
+    <div id="appName">GIS Area Calculator</div>
+    <div class="app-sub">مساحة • GIS • خرائط • تقارير</div>
+  </div>
+
+  <div class="crs-bar">
+    <div class="crs-item">📡 <strong>WGS84</strong></div>
+    <div class="crs-item">🔢 <strong>EPSG:4326</strong></div>
+    <div class="crs-item" id="modeChip">📐 <strong>وضع: مضلع</strong></div>
+    <div class="crs-item" id="gridChip" style="display:none">🔲 <strong id="gridDim">—</strong></div>
+  </div>
+
+  <!-- ═══ WORKFLOW TABS ═══ -->
+  <div class="workflow-tabs">
+    <button class="wf-tab active" onclick="switchWf('input')">📥 الإدخال</button>
+    <button class="wf-tab" onclick="switchWf('map')">🗺️ الخريطة</button>
+    <button class="wf-tab" onclick="switchWf('utm')">🔄 UTM</button>
+    <button class="wf-tab" onclick="switchWf('report')">📄 التقرير</button>
+  </div>
+
+  <!-- ══════════ TAB 1: INPUT ══════════ -->
+  <div class="wf-panel active" id="wfInput">
+
+    <!-- بيانات المشروع -->
+    <div class="card">
+      <div class="card-title"><div class="card-icon">📋</div> بيانات المشروع</div>
+      <div class="two-col">
+        <div class="ig"><label class="il">اسم المشروع</label><input type="text" id="projectName" placeholder="مشروع الرياض"></div>
+        <div class="ig"><label class="il">رقم القطعة</label><input type="text" id="parcelNo" placeholder="P-2026-001"></div>
+        <div class="ig"><label class="il">المنطقة</label><input type="text" id="region" placeholder="الرياض"></div>
+        <div class="ig"><label class="il">المُعِد</label><input type="text" id="preparedBy" value="Hossam Hussein"></div>
+        <div class="ig"><label class="il">ملاحظات / وصف (اختياري)</label><textarea id="reportNotes" placeholder="أدخل أي ملاحظات أو وصف للمشروع..." style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;resize:vertical;min-height:80px;direction:auto;"></textarea></div>
+        <div class="ig"><label class="il">نوع العمل</label>
+          <select id="workType" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:12px;">
+            <option value="Area Calculation">حساب مساحة</option>
+            <option value="Grid / Subdivision">شبكية / تقسيم</option>
+            <option value="Topographic Survey">رفع طبوغرافي</option>
+            <option value="Control Network">شبكة ضبط</option>
+          </select>
+        </div>
+        <div class="ig"><label class="il">نظام الإحداثيات</label>
+          <select id="crsType" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:12px;">
+            <option value="wgs84">WGS84 / EPSG:4326</option>
+            <option value="utm">UTM (سيتم تحويله)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- رفع ملف -->
+    <div class="card">
+      <div class="card-title"><div class="card-icon">📂</div> رفع ملف إحداثيات</div>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon">📊</div>
+        <div class="upload-text">اسحب ملف أو <strong>اضغط للاختيار</strong></div>
+        <div class="upload-text" style="font-size:9px;margin-top:2px;">CSV / Excel — يقبل: Lon/Lat أو E/N (UTM) أو Point_ID</div>
+      </div>
+      <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none">
+      <div class="file-info" id="fileInfo"></div>
+    </div>
+
+    <!-- إدخال يدوي + أدوات GIS -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-icon">📍</div> الإحداثيات
+        <button class="sample-btn" onclick="loadSample()" style="margin-right:auto;">📂 تجريبي</button>
+        <button class="sample-btn" onclick="clearAll()" style="background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.3);color:#ff6b35;">🗑️ مسح</button>
+      </div>
+
+      <!-- أدوات GIS لتوليد الإحداثيات -->
+      <div class="gis-tools-wrap">
+        <div style="font-size:10px;color:var(--violet);margin-bottom:7px;font-weight:700;">🛠️ توليد إحداثيات بأدوات GIS</div>
+        <div class="gis-tool-tabs">
+          <button class="gt-tab active" onclick="switchGt('manual')">✏️ يدوي</button>
+          <button class="gt-tab" onclick="switchGt('gridPts')">🔲 شبكة</button>
+          <button class="gt-tab" onclick="switchGt('traverse')">📏 ترافيرس</button>
+          <button class="gt-tab" onclick="switchGt('survGrid')">🗂️ رفع شبكي</button>
+          <button class="gt-tab" onclick="switchGt('ctrlNet')">🎯 شبكة ضبط</button>
+        </div>
+
+        <!-- يدوي -->
+        <div class="gt-panel active" id="gtManual">
+          <div class="coords-header"><span>#</span><span>Longitude X</span><span>Latitude Y</span><span></span></div>
+          <div class="coords-scroll" id="coordsList"></div>
+          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="addPoint()" style="padding:6px 10px;font-size:11px;">➕ نقطة</button>
+            <button class="btn btn-primary" onclick="calculate()" style="padding:6px 14px;font-size:11px;">⚡ احسب</button>
+          </div>
+        </div>
+
+        <!-- شبكة نقاط -->
+        <div class="gt-panel" id="gtGridPts">
+          <div class="gt-grid">
+            <div class="ig"><label class="il">Lon المركز</label><input type="number" id="gpCenLon" placeholder="46.620" step="0.000001"></div>
+            <div class="ig"><label class="il">Lat المركز</label><input type="number" id="gpCenLat" placeholder="24.780" step="0.000001"></div>
+            <div class="ig"><label class="il">التباعد X (م)</label><input type="number" id="gpDx" value="10" min="0.1" oninput="if(document.getElementById('gpSquare').checked)document.getElementById('gpDy').value=this.value"></div>
+            <div class="ig"><label class="il">التباعد Y (م)</label><input type="number" id="gpDy" value="10" min="0.1" oninput="if(document.getElementById('gpSquare').checked)document.getElementById('gpDx').value=this.value"></div>
+            <div class="ig"><label class="il">أعمدة</label><input type="number" id="gpCols" value="10" min="1" max="100"></div>
+            <div class="ig"><label class="il">صفوف</label><input type="number" id="gpRows" value="10" min="1" max="100"></div>
+            <div class="ig"><label class="il">زاوية (°)</label><input type="number" id="gpAngle" value="0" step="0.01"></div>
+            <div class="ig" style="align-self:flex-end;">
+              <button class="btn btn-violet" onclick="genGridAndCalc()" style="width:100%;justify-content:center;padding:8px;">⚡ ولّد واحسب</button>
+            </div>
+          </div>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text);cursor:pointer;margin-top:5px;">
+            <input type="checkbox" id="gpSquare" style="width:auto;"> شبكة مربعة (X=Y)
+          </label>
+        </div>
+
+        <!-- ترافيرس -->
+        <div class="gt-panel" id="gtTraverse">
+          <div class="gt-grid" style="margin-bottom:8px;">
+            <div class="ig"><label class="il">Lon البداية</label><input type="number" id="travStartLon" placeholder="46.620" step="0.000001"></div>
+            <div class="ig"><label class="il">Lat البداية</label><input type="number" id="travStartLat" placeholder="24.780" step="0.000001"></div>
+          </div>
+          <div style="display:flex;gap:5px;margin-bottom:6px;">
+            <button class="hemi-btn active" id="travOpenBtn" onclick="setTravType('open')">مفتوح</button>
+            <button class="hemi-btn" id="travClosedBtn" onclick="setTravType('closed')">مغلق</button>
+          </div>
+          <div class="trav-hdr"><span>#</span><span>زاوية (°)</span><span>مسافة (م)</span><span>وصف</span><span></span></div>
+          <div class="coords-scroll" id="travList" style="max-height:160px;"></div>
+          <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="addTravLeg()" style="padding:5px 9px;font-size:11px;">➕ ضلع</button>
+            <button class="btn btn-violet" onclick="calcTravAndLoad()" style="padding:5px 12px;font-size:11px;">⚡ احسب الترافيرس</button>
+            <button class="btn btn-danger" onclick="clearTraverse()" style="padding:5px 9px;font-size:11px;">🗑️</button>
+          </div>
+          <div id="travStats" style="margin-top:6px;font-size:11px;display:none;"></div>
+        </div>
+
+        <!-- رفع شبكي -->
+        <div class="gt-panel" id="gtSurvGrid">
+          <div class="gt-grid">
+            <div class="ig"><label class="il">Lon الأصل</label><input type="number" id="sgOriLon" placeholder="46.620" step="0.000001"></div>
+            <div class="ig"><label class="il">Lat الأصل</label><input type="number" id="sgOriLat" placeholder="24.780" step="0.000001"></div>
+            <div class="ig"><label class="il">خلية X (م)</label><input type="number" id="sgCellX" value="20" min="0.5"></div>
+            <div class="ig"><label class="il">خلية Y (م)</label><input type="number" id="sgCellY" value="20" min="0.5"></div>
+            <div class="ig"><label class="il">أعمدة</label><input type="number" id="sgColsN" value="5" min="1" max="30"></div>
+            <div class="ig"><label class="il">صفوف</label><input type="number" id="sgRowsN" value="5" min="1" max="30"></div>
+            <div class="ig"><label class="il">اتجاه (°)</label><input type="number" id="sgBearing" value="0" step="0.01"></div>
+            <div class="ig" style="align-self:flex-end;">
+              <button class="btn btn-violet" onclick="genSurveyAndLoad()" style="width:100%;justify-content:center;padding:8px;">⚡ ولّد واحسب</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- شبكة ضبط -->
+        <div class="gt-panel" id="gtCtrlNet">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:7px;">أدخل نقاط الضبط — سيحسب المسافات والانحرافات تلقائياً</div>
+          <div class="ctrl-hdr"><span>#</span><span>Longitude</span><span>Latitude</span><span></span></div>
+          <div class="coords-scroll" id="ctrlList" style="max-height:160px;"></div>
+          <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="addCtrlPt()" style="padding:5px 9px;font-size:11px;">➕ نقطة</button>
+            <button class="btn btn-violet" onclick="calcCtrlAndLoad()" style="padding:5px 12px;font-size:11px;">⚡ احسب الشبكة</button>
+            <button class="btn btn-danger" onclick="clearCtrl()" style="padding:5px 9px;font-size:11px;">🗑️</button>
+          </div>
+          <div id="ctrlSummary" style="margin-top:6px;font-size:11px;display:none;"></div>
+          <div class="gis-result-wrap" id="ctrlResultWrap">
+            <table class="gis-result-table"><thead><tr><th>من→إلى</th><th>المسافة (م)</th><th>الانحراف (°)</th><th>dE</th><th>dN</th></tr></thead><tbody id="ctrlTbody"></tbody></table>
+          </div>
+        </div>
+
+      </div><!-- end gis-tools-wrap -->
+
+      <div class="val-banner" id="valBanner"><span>⚠️</span><span id="valMsg"></span></div>
+      <div class="status-bar show" id="statusBar"><span>👆</span><span id="statusText">أدخل الإحداثيات أو ارفع ملف أو استخدم أدوات GIS</span></div>
+    </div>
+
+  </div><!-- end wfInput -->
+
+  <!-- ══════════ TAB 2: MAP ══════════ -->
+  <div class="wf-panel" id="wfMap">
+    <div class="map-hint">
+      <span class="map-hint-icon">🗺️</span>
+      <span><strong>الخريطة التفاعلية</strong> — اضغط مطوّلاً للتنقل، قرّب وبعّد بأصابعك، انقر على نقطة لرؤية اسمها</span>
+    </div>
+    <div class="card" style="padding:12px;">
+      <div id="map"></div>
+    </div>
+
+    <div class="res-grid" id="resGrid" style="display:none">
+      <div class="res-item hl"><div class="res-label">المساحة</div><div class="res-val" id="areaM2">—</div><div class="res-unit">م²</div></div>
+      <div class="res-item"><div class="res-label">دونم</div><div class="res-val" id="areaDunum">—</div><div class="res-unit">دونم</div></div>
+      <div class="res-item"><div class="res-label">هكتار</div><div class="res-val" id="areaHa">—</div><div class="res-unit">هكتار</div></div>
+      <div class="res-item"><div class="res-label">المحيط</div><div class="res-val" id="perimeter">—</div><div class="res-unit">م</div></div>
+      <div class="res-item"><div class="res-label">النقاط</div><div class="res-val" id="ptCount">—</div><div class="res-unit">نقطة</div></div>
+      <div class="res-item"><div class="res-label">قدم²</div><div class="res-val" id="areaSqFt">—</div><div class="res-unit">ft²</div></div>
+      <div class="res-item hl2" id="gridCellsBox" style="display:none"><div class="res-label">الخلايا</div><div class="res-val green" id="gridCells">—</div><div class="res-unit">خلية</div></div>
+      <div class="res-item" id="gridCellAreaBox" style="display:none"><div class="res-label">مساحة الخلية</div><div class="res-val green" id="gridCellArea">—</div><div class="res-unit">م²</div></div>
+      <div class="res-item" id="gridSpacingBox" style="display:none"><div class="res-label">التباعد</div><div class="res-val green" id="gridSpacing">—</div><div class="res-unit">م</div></div>
+    </div>
+
+    <!-- جدول الأضلاع -->
+    <div id="sidesTableWrap" style="display:none;margin-top:10px;">
+      <div class="card" style="padding:12px;">
+        <div class="card-title" style="font-size:12px;"><div class="card-icon">📏</div> جدول الأضلاع والانحرافات</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;" id="sidesTable">
+            <thead>
+              <tr style="background:rgba(0,212,255,.15);">
+                <th style="padding:6px 8px;color:var(--accent);text-align:right;">الضلع</th>
+                <th style="padding:6px 8px;color:var(--accent);text-align:right;">من</th>
+                <th style="padding:6px 8px;color:var(--accent);text-align:right;">إلى</th>
+                <th style="padding:6px 8px;color:var(--accent);text-align:right;">الطول (م)</th>
+                <th style="padding:6px 8px;color:var(--accent);text-align:right;">الانحراف (°)</th>
+                <th style="padding:6px 8px;color:var(--accent);text-align:right;">الزاوية (°)</th>
+              </tr>
+            </thead>
+            <tbody id="sidesTbody"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-outline" onclick="exportDXF()" style="padding:6px 12px;font-size:11px;border-color:rgba(255,107,53,.4);color:#ff6b35;">📐 تصدير DXF</button>
+          <button class="btn btn-outline" onclick="exportSidesCSV()" style="padding:6px 12px;font-size:11px;">📥 CSV الأضلاع</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:4px;">
+      <button class="btn btn-success" onclick="switchWf('report')" id="goReportBtn" style="display:none;font-size:13px;padding:11px 28px;">📄 إنشاء التقرير</button>
+    </div>
+  </div>
+
+  <!-- ══════════ TAB 3: UTM ══════════ -->
+  <div class="wf-panel" id="wfUtm">
+    <div class="card" style="border-color:rgba(255,107,53,.3);">
+      <div class="card-title" style="color:#ff6b35;"><div class="card-icon" style="background:rgba(255,107,53,.1);">🔄</div> محول الإحداثيات UTM ↔ WGS84</div>
+
+      <div class="utm-tabs">
+        <button class="utm-tab active" onclick="switchUtmTab('toWgs')">UTM → WGS84</button>
+        <button class="utm-tab" onclick="switchUtmTab('toUtm')">WGS84 → UTM</button>
+      </div>
+
+      <div id="utmTabToWgs">
+        <div class="two-col">
+          <div class="ig"><label class="il">Easting (X)</label><input type="number" id="utmE" placeholder="646000" step="0.001"></div>
+          <div class="ig"><label class="il">Northing (Y)</label><input type="number" id="utmN" placeholder="2741000" step="0.001"></div>
+        </div>
+        <div class="ig"><label class="il">Zone (1–60)</label>
+          <div class="utm-zone-row">
+            <div class="ig" style="margin:0;flex:1;"><input type="number" id="utmZone" placeholder="مثلاً: 37" min="1" max="60"></div>
+          </div>
+        </div>
+        <div class="ig"><label class="il">نصف الكرة</label>
+          <div class="hemisphere-toggle">
+            <button class="hemi-btn active" id="hemiN" onclick="setHemi('N')">🌍 شمالي (N)</button>
+            <button class="hemi-btn" id="hemiS" onclick="setHemi('S')">🌏 جنوبي (S)</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="convertUtmToWgs()" style="width:100%;justify-content:center;background:linear-gradient(135deg,#ff6b35,#e05522);box-shadow:0 4px 14px rgba(255,107,53,.3);">⚡ تحويل</button>
+        <div class="utm-err" id="utmToWgsErr"></div>
+        <div class="utm-result-box" id="utmToWgsResult">
+          <div class="utm-result-row"><span class="utm-result-label">Longitude</span><span class="utm-result-val" id="resLon">—</span><button class="utm-copy-btn" onclick="copyVal('resLon')">نسخ</button></div>
+          <div class="utm-result-row"><span class="utm-result-label">Latitude</span><span class="utm-result-val" id="resLat">—</span><button class="utm-copy-btn" onclick="copyVal('resLat')">نسخ</button></div>
+          <div class="utm-result-row"><span class="utm-result-label">Zone</span><span class="utm-result-val" id="resZoneUsed">—</span></div>
+          <div style="margin-top:7px;display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="useUtmAsPoint()" style="padding:5px 10px;font-size:11px;border-color:rgba(0,212,255,.4);color:var(--accent);">➕ أضف للإحداثيات</button>
+            <button class="btn btn-outline" onclick="showUtmOnMap()" style="padding:5px 10px;font-size:11px;">🗺️ خريطة</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="utmTabToUtm" style="display:none;">
+        <div class="two-col">
+          <div class="ig"><label class="il">Longitude</label><input type="number" id="wgsLon" placeholder="46.620" step="0.000001"></div>
+          <div class="ig"><label class="il">Latitude</label><input type="number" id="wgsLat" placeholder="24.780" step="0.000001"></div>
+        </div>
+        <button class="btn btn-primary" onclick="convertWgsToUtm()" style="width:100%;justify-content:center;background:linear-gradient(135deg,#ff6b35,#e05522);box-shadow:0 4px 14px rgba(255,107,53,.3);">⚡ تحويل</button>
+        <div class="utm-err" id="wgsToUtmErr"></div>
+        <div class="utm-result-box" id="wgsToUtmResult">
+          <div class="utm-result-row"><span class="utm-result-label">Easting (X)</span><span class="utm-result-val" id="resEasting">—</span><button class="utm-copy-btn" onclick="copyVal('resEasting')">نسخ</button></div>
+          <div class="utm-result-row"><span class="utm-result-label">Northing (Y)</span><span class="utm-result-val" id="resNorthing">—</span><button class="utm-copy-btn" onclick="copyVal('resNorthing')">نسخ</button></div>
+          <div class="utm-result-row"><span class="utm-result-label">Zone</span><span class="utm-result-val" id="resZone">—</span></div>
+          <div class="utm-result-row"><span class="utm-result-label">نصف الكرة</span><span class="utm-result-val" id="resHemi">—</span></div>
+          <div class="utm-result-row"><span class="utm-result-label">EPSG</span><span class="utm-result-val" id="resEPSG">—</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+        <div style="font-size:10px;color:rgba(255,107,53,.7);margin-bottom:6px;">📂 رفع ملف UTM مباشرة (E/N → WGS84 تلقائياً)</div>
+        <button class="btn btn-outline" onclick="document.getElementById('utmBatchUpload').click()" style="padding:6px 12px;font-size:11px;border-color:rgba(255,107,53,.3);color:#ff6b35;">📂 رفع ملف UTM</button>
+        <input type="file" id="utmBatchUpload" accept=".csv,.xlsx,.xls" style="display:none" onchange="procUtmFile(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ TAB 4: REPORT ══════════ -->
+  <div class="wf-panel" id="wfReport">
+    <div class="card">
+      <div class="card-title"><div class="card-icon">📄</div> تقرير PDF</div>
+      <div class="report-info" id="reportInfo">
+        ⚠️ لم يتم الحساب بعد — ادخل الإحداثيات واضغط ⚡ احسب أولاً.
+      </div>
+      <button class="btn btn-success" onclick="generatePDF()" id="pdfBtn" style="display:none;width:100%;justify-content:center;font-size:14px;padding:13px;">📄 تصدير التقرير</button>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;" id="exportBtns" style="display:none;">
+        <button class="btn btn-outline" onclick="exportCSV()" style="padding:7px 12px;font-size:11px;">📥 CSV</button>
+        <button class="btn btn-outline" onclick="exportXLSX()" style="padding:7px 12px;font-size:11px;">📊 Excel</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:6px;font-size:10px;">
+      <span>📡 WGS84 / EPSG:4326</span>
+      <span>👤 Hossam Hussein</span>
+      <span>📍 Riyadh, KSA</span>
+    </div>
+    <button class="back-btn" onclick="showPage('homePage')">← الرئيسية</button>
+  </footer>
+</div>
+</div>
+
+<!-- ═══════════ ADMIN PAGE ═══════════ -->
+<div id="adminPage">
+<div class="admin-wrap">
+  <div class="admin-head"><h2>⚙️ إعدادات الشركة</h2><p>تحكم في واجهة التطبيق</p></div>
+  <div class="admin-card">
+    <h3>🏢 اسم الشركة</h3>
+    <div class="ig"><input type="text" id="adminCompanyName" placeholder="اسم شركتك" style="direction:rtl;"></div>
+    <button class="btn btn-primary" onclick="saveCompanyName()" style="padding:7px 14px;font-size:12px;">💾 حفظ</button>
+    <div class="msg-ok" id="nameMsg">✅ تم الحفظ</div>
+  </div>
+  <div class="admin-card">
+    <h3>🖼️ شعار الشركة</h3>
+    <input type="file" id="logoInput" accept="image/*" onchange="uploadLogo(this)" style="display:none">
+    <button class="btn btn-outline" onclick="document.getElementById('logoInput').click()" style="width:100%;justify-content:center;padding:7px;font-size:12px;margin-bottom:6px;">📁 اختيار اللوجو</button>
+    <img id="logoPrev" class="logo-prev" src="" alt="">
+    <button class="btn btn-danger" onclick="removeLogo()" style="width:100%;justify-content:center;padding:6px;font-size:11px;margin-top:6px;">🗑️ حذف</button>
+    <div class="msg-ok" id="logoMsg">✅ تم الحفظ</div>
+  </div>
+  <div class="admin-card">
+    <h3>📱 واتساب</h3>
+    <div class="ig"><label class="il">الرقم الدولي بدون +</label><input type="text" id="adminWa" placeholder="966501234567"></div>
+    <button class="btn btn-primary" onclick="saveWa()" style="padding:7px 14px;font-size:12px;">💾 حفظ</button>
+    <div class="msg-ok" id="waMsg">✅ تم الحفظ</div>
+  </div>
+  <div class="admin-card">
+    <h3>🔑 كلمة مرور الموقع</h3>
+    <div class="ig"><input type="password" id="adminNewSitePass" placeholder="كلمة مرور جديدة"></div>
+    <div class="ig"><input type="password" id="adminConfirmSitePass" placeholder="تأكيد"></div>
+    <button class="btn btn-primary" onclick="adminChangeSitePass()" style="padding:7px 14px;font-size:12px;">💾 حفظ</button>
+    <div id="adminSitePassMsg" style="font-size:11px;margin-top:5px;display:none;"></div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="btn btn-outline" onclick="showPage('homePage')" style="flex:1;justify-content:center;">← الرئيسية</button>
+    <button class="btn btn-outline" onclick="showPage('mainApp')" style="flex:1;justify-content:center;">🗺️ التطبيق</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ FROZEN ═══════════ -->
+<div id="frozenPage">
+  <div style="font-size:64px;margin-bottom:12px;animation:pulse 2s infinite;">🔒</div>
+  <div style="font-size:22px;font-weight:900;color:var(--accent3);margin-bottom:8px;">الخدمة غير متاحة حالياً</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:20px;max-width:320px;line-height:1.7;">هذه الخدمة متوقفة مؤقتاً<br>للاستفسار تواصل مع الإدارة</div>
+  <button onclick="unfreezePrompt()" style="position:fixed;bottom:0;left:0;width:40px;height:40px;background:transparent;border:none;outline:none;cursor:default;-webkit-tap-highlight-color:transparent;z-index:999;"></button>
+</div>
+
+<!-- modal فك التجميد -->
+<div class="overlay" id="unfreezeOverlay">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="closeModal('unfreezeOverlay')">✕</button>
+    <h3 style="color:var(--accent3);margin-bottom:14px;">🔓 فك التجميد</h3>
+    <div class="ig" style="text-align:right;margin-bottom:12px;">
+      <label class="il">كلمة مرور المالك</label>
+      <input type="password" id="unfreezePass" placeholder="•••••••" onkeydown="if(event.key==='Enter')checkUnfreeze()" style="text-align:center;">
+    </div>
+    <button class="btn btn-danger" onclick="checkUnfreeze()" style="width:100%;justify-content:center;">فك التجميد</button>
+    <div id="unfreezeErr" style="color:#ff6b35;font-size:11px;margin-top:7px;display:none;">❌ كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<!-- ═══════════ MODALS ═══════════ -->
+<div class="overlay" id="enterOverlay">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="closeModal('enterOverlay')">✕</button>
+    <h3 style="color:var(--accent);margin-bottom:14px;">🗺️ دخول</h3>
+    <div class="ig" style="text-align:right;margin-bottom:12px;">
+      <label class="il">كلمة المرور</label>
+      <input type="password" id="enterPass" placeholder="أدخل كلمة المرور" onkeydown="if(event.key==='Enter')checkEnter()" style="text-align:center;">
+    </div>
+    <button class="btn btn-primary" onclick="checkEnter()" style="width:100%;justify-content:center;">دخول ←</button>
+    <div id="enterErr" style="color:#ff6b35;font-size:11px;margin-top:7px;display:none;">❌ كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<div class="overlay" id="adminLoginOverlay">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="closeModal('adminLoginOverlay')">✕</button>
+    <h3 style="color:var(--accent);margin-bottom:14px;">⚙️ دخول المدير</h3>
+    <div class="ig" style="text-align:right;margin-bottom:12px;">
+      <label class="il">كلمة المرور</label>
+      <input type="password" id="adminPass" placeholder="أدخل كلمة المرور" onkeydown="if(event.key==='Enter')checkAdmin()" style="text-align:center;">
+    </div>
+    <button class="btn btn-primary" onclick="checkAdmin()" style="width:100%;justify-content:center;">دخول ←</button>
+    <div id="adminErr" style="color:#ff6b35;font-size:11px;margin-top:7px;display:none;">❌ كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<div class="overlay" id="ownerLoginOverlay">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="closeModal('ownerLoginOverlay')">✕</button>
+    <h3 style="color:var(--accent3);margin-bottom:14px;">🛡️ دخول المالك</h3>
+    <div class="ig" style="text-align:right;margin-bottom:12px;">
+      <label class="il">كلمة مرور المالك</label>
+      <input type="password" id="ownerPass" placeholder="•••••••" onkeydown="if(event.key==='Enter')checkOwner()" style="text-align:center;">
+    </div>
+    <button class="btn btn-danger" onclick="checkOwner()" style="width:100%;justify-content:center;">دخول</button>
+    <div id="ownerErr" style="color:#ff6b35;font-size:11px;margin-top:7px;display:none;">❌ كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<div class="overlay" id="ownerPanel">
+  <div class="owner-modal">
+    <button class="modal-close" onclick="closeModal('ownerPanel')">✕</button>
+    <h3>🛡️ لوحة المالك</h3>
+    <div class="msec" style="border-color:rgba(0,212,255,.3);">
+      <h4 style="color:var(--accent);">📊 إحصائيات التقارير</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+        <span class="stat-chip">إجمالي: <strong id="ownerReportCount">0</strong></span>
+        <span class="stat-chip">هذا الشهر: <strong id="ownerReportMonth">0</strong></span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="copyReportStats()" style="padding:5px 10px;font-size:10px;">📋 نسخ</button>
+        <button class="btn btn-danger" onclick="resetReportCount()" style="padding:5px 10px;font-size:10px;">🔄 تصفير</button>
+      </div>
+    </div>
+    <div class="msec">
+      <h4>🔒 تجميد الموقع</h4>
+      <div class="toggle-row">
+        <span style="font-size:12px;">تجميد / تفعيل</span>
+        <label class="toggle"><input type="checkbox" id="freezeToggle" onchange="toggleFreeze(this.checked)"><span class="slider"></span></label>
+      </div>
+    </div>
+    <div class="msec">
+      <h4>🔑 كلمة مرور الموقع</h4>
+      <div class="ig"><input type="password" id="ownerSitePass" placeholder="كلمة مرور جديدة"></div>
+      <button class="btn btn-danger" onclick="ownerSetSitePass()" style="padding:6px 12px;font-size:11px;">💾 حفظ</button>
+      <div id="ownerSitePassMsg" style="font-size:11px;margin-top:4px;display:none;"></div>
+    </div>
+    <div class="msec">
+      <h4>⚙️ كلمة مرور المدير</h4>
+      <div class="ig"><input type="password" id="ownerAdminPass" placeholder="كلمة مرور جديدة"></div>
+      <button class="btn btn-danger" onclick="ownerSetAdminPass()" style="padding:6px 12px;font-size:11px;">💾 حفظ</button>
+      <div id="ownerAdminPassMsg" style="font-size:11px;margin-top:4px;display:none;"></div>
+    </div>
+    <button class="btn btn-outline" onclick="closeModal('ownerPanel')" style="width:100%;justify-content:center;margin-top:4px;">إغلاق</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// FIREBASE INIT
+// ════════════════════════════════════════════
+const FB_URL = 'https://gis-calculator-default-rtdb.firebaseio.com';
+const FB_API_KEY = 'AIzaSyDEeGU58rjZk5jLbaU3D9zYplbkAnPyU3E';
+const OWNER_UID = 'Gn5ofIXCHchgrIPCbeavHMJ5YiV2';
+const ownerEmail_ = 'hossamnazer124@gmail.com';
+
+firebase.initializeApp({
+  apiKey: FB_API_KEY,
+  databaseURL: FB_URL,
+  projectId: 'gis-calculator',
+});
+const db = firebase.database();
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+const ST = {
+  adminPass: 'admin123',
+  sitePass:  'admin123',
+  frozen:    false,
+  name:      'GIS Area Calculator',
+  logo:      '',
+  wa:        '',
+  reports:   0,
+};
+let FB_READY = false;
+
+// ── تحميل الإعدادات من Firebase ──
+function fbLoad(){
+  // timeout fallback — لو Firebase ما ردش في 5 ثواني اشتغل بدونه
+  const fallbackTimer = setTimeout(()=>{
+    if(!FB_READY){
+      FB_READY = true;
+      applySettings();
+      showPage('homePage');
+    }
+  }, 5000);
+
+  db.ref('settings').once('value').then(snap=>{
+    clearTimeout(fallbackTimer);
+    const d = snap.val();
+    if(!d){
+      db.ref('settings').set({
+        adminPass: 'admin123',
+        sitePass:  'admin123',
+        frozen:    false,
+        name:      'GIS Area Calculator',
+        logo:      '',
+        wa:        '',
+        reports:   0
+      });
+    } else {
+      ST.adminPass = d.adminPass || 'admin123';
+      ST.sitePass  = d.sitePass  || 'admin123';
+      ST.frozen    = d.frozen    || false;
+      ST.name      = d.name      || 'GIS Area Calculator';
+      ST.logo      = d.logo      || '';
+      ST.wa        = d.wa        || '';
+      ST.reports   = d.reports   || 0;
+    }
+    FB_READY = true;
+    applySettings();
+    if(ST.frozen){ document.getElementById('frozenPage').classList.add('show'); return; }
+    showPage('homePage');
+  }).catch(()=>{
+    clearTimeout(fallbackTimer);
+    FB_READY = true;
+    applySettings();
+    showPage('homePage');
+  });
+}
+
+// ── حفظ إعداد — يشترط تسجيل دخول المالك ──
+function fbSet(key, val){
+  db.ref('settings/'+key).set(val);
+  ST[key] = val;
+}
+
+
+
+// map state
+let map, mapReady=false, polygon=null, markers=[], clusterGroup=null;
+let _gridLines=[], _ctrlLines=[];
+let pc=0, travPc=0, ctrlPc=0, travType='open';
+// last calculated data
+let lastPts=[], lastPids=[], lastGrid=null, lastCalcType='none';
+// gis tool data
+let gpData=[], travData=[], sgData=[], ctrlLinks=[];
+
+// ════════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════════
+window.onload = function(){
+  fbLoad();
+};
+
+function applySettings(){
+  ['homeCompanyName','appName'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent=ST.name;
+  });
+  if(ST.logo){
+    ['homeLogo','appLogo'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.src=ST.logo;el.classList.add('show');}
+    });
+  }
+  const ac=document.getElementById('adminCompanyName');
+  if(ac) ac.value=ST.name;
+  const aw=document.getElementById('adminWa');
+  if(aw) aw.value=ST.wa;
+  const ft=document.getElementById('freezeToggle');
+  if(ft) ft.checked=ST.frozen;
+}
+
+// ════════════════════════════════════════════
+// PAGE NAVIGATION
+// ════════════════════════════════════════════
+function closeOnboarding(){
+  document.getElementById('onboarding').classList.remove('show');
+  try{ localStorage.setItem('gis_ob_seen','1'); }catch(e){}
+}
+function maybeShowOnboarding(){
+  try{
+    if(!localStorage.getItem('gis_ob_seen')){
+      setTimeout(()=>document.getElementById('onboarding').classList.add('show'), 600);
+    }
+  }catch(e){}
+}
+
+function showPage(id){
+  ['homePage','mainApp','adminPage','casePage'].forEach(p=>{
+    const el=document.getElementById(p);
+    if(el){ el.style.display='none'; el.classList.remove('active'); }
+  });
+  const target=document.getElementById(id);
+  if(target){ target.style.display=''; target.classList.add('active'); }
+  if(id==='mainApp' && !mapReady){
+    setTimeout(()=>{ initMap(); initPoints(); initTravLegs(); initCtrlPts(); mapReady=true; },200);
+  }
+}
+
+function switchWf(tab){
+  document.querySelectorAll('.wf-tab').forEach((t,i)=>{
+    const tabs=['input','map','utm','report'];
+    t.classList.toggle('active', tabs[i]===tab);
+  });
+  document.querySelectorAll('.wf-panel').forEach((p,i)=>{
+    const tabs=['wfInput','wfMap','wfUtm','wfReport'];
+    p.classList.toggle('active', p.id===tabs[['input','map','utm','report'].indexOf(tab)]);
+  });
+  if(tab==='map' && mapReady) setTimeout(()=>map.invalidateSize(),100);
+}
+
+function switchGt(tab){
+  document.querySelectorAll('.gt-tab').forEach((t,i)=>{
+    const tabs=['manual','gridPts','traverse','survGrid','ctrlNet'];
+    t.classList.toggle('active', tabs[i]===tab);
+  });
+  ['gtManual','gtGridPts','gtTraverse','gtSurvGrid','gtCtrlNet'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display = el.id==='gt'+tab.charAt(0).toUpperCase()+tab.slice(1)?'block':'none';
+  });
+}
+
+// ════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════
+function openEnterModal(){ document.getElementById('enterOverlay').classList.add('show'); setTimeout(()=>document.getElementById('enterPass').focus(),200); }
+function openAdminLogin(){ document.getElementById('adminLoginOverlay').classList.add('show'); }
+function openOwnerLogin(){ document.getElementById('ownerLoginOverlay').classList.add('show'); }
+function openWhatsapp(){ if(ST.wa) window.open('https://wa.me/'+ST.wa,'_blank'); else alert('رقم الواتساب غير مضبوط'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+function checkEnter(){
+  const p=document.getElementById('enterPass').value;
+  const err=document.getElementById('enterErr');
+  if(p===ST.sitePass){ closeModal('enterOverlay'); showPage('mainApp'); maybeShowOnboarding(); }
+  else{ err.style.display='block'; document.getElementById('enterPass').value=''; }
+}
+function checkAdmin(){
+  const p=document.getElementById('adminPass').value;
+  const err=document.getElementById('adminErr');
+  if(p===ST.adminPass){ closeModal('adminLoginOverlay'); showPage('adminPage'); }
+  else{ err.style.display='block'; document.getElementById('adminPass').value=''; }
+}
+const OWP = 'HOSSAM2580';
+
+function checkOwner(){
+  const p = document.getElementById('ownerPass').value;
+  const err = document.getElementById('ownerErr');
+  err.style.display='none';
+  if(p === OWP){
+    closeModal('ownerLoginOverlay');
+    document.getElementById('ownerPass').value='';
+    updateOwnerStats();
+    document.getElementById('ownerPanel').classList.add('show');
+  } else {
+    err.style.display='block';
+    document.getElementById('ownerPass').value='';
+  }
+}
+
+// ════════════════════════════════════════════
+// OWNER ACTIONS
+// ════════════════════════════════════════════
+function toggleFreeze(f){ fbSet('frozen',f); if(f){ document.getElementById('frozenPage').classList.add('show'); closeModal('ownerPanel'); } }
+function unfreeze(){ fbSet('frozen',false); document.getElementById('frozenPage').classList.remove('show'); showPage('homePage'); }
+function unfreezePrompt(){
+  document.getElementById('unfreezePass').value='';
+  document.getElementById('unfreezeErr').style.display='none';
+  document.getElementById('unfreezeOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('unfreezePass').focus(),200);
+}
+function checkUnfreeze(){
+  const p=document.getElementById('unfreezePass').value;
+  const err=document.getElementById('unfreezeErr');
+  if(p===OWP){
+    closeModal('unfreezeOverlay');
+    unfreeze();
+  } else {
+    err.style.display='block';
+    document.getElementById('unfreezePass').value='';
+  }
+}
+function ownerSetSitePass(){ const p=document.getElementById('ownerSitePass').value; const m=document.getElementById('ownerSitePassMsg'); if(!p){m.style.cssText='display:block;color:#ff6b35';m.textContent='❌ أدخل كلمة المرور';return;} fbSet('sitePass',p);m.style.cssText='display:block;color:#00ff88';m.textContent='✅ تم';document.getElementById('ownerSitePass').value=''; }
+function ownerSetAdminPass(){ const p=document.getElementById('ownerAdminPass').value; const m=document.getElementById('ownerAdminPassMsg'); if(!p){m.style.cssText='display:block;color:#ff6b35';m.textContent='❌ أدخل كلمة المرور';return;} fbSet('adminPass',p);m.style.cssText='display:block;color:#00ff88';m.textContent='✅ تم';document.getElementById('ownerAdminPass').value=''; }
+function updateOwnerStats(){ 
+  db.ref('settings/reports').once('value').then(s=>{ document.getElementById('ownerReportCount').textContent=s.val()||0; });
+  const mk='reports_'+new Date().getFullYear()+'_'+(new Date().getMonth()+1);
+  db.ref('stats/'+mk).once('value').then(s=>{ document.getElementById('ownerReportMonth').textContent=s.val()||0; });
+}
+function resetReportCount(){ if(!confirm('تصفير العداد؟'))return; const mk='reports_'+new Date().getFullYear()+'_'+(new Date().getMonth()+1); db.ref('settings/reports').set(0); db.ref('stats/'+mk).set(0); ST.reports=0; updateOwnerStats(); }
+function copyReportStats(){ 
+  const mk='reports_'+new Date().getFullYear()+'_'+(new Date().getMonth()+1);
+  db.ref('stats/'+mk).once('value').then(s=>{
+    const mc=s.val()||0;
+    navigator.clipboard.writeText(`${ST.name}\nإجمالي: ${ST.reports}\nهذا الشهر: ${mc}\n${new Date().toLocaleDateString('en-GB')}`).then(()=>alert('✅ تم النسخ'));
+  });
+}
+
+// ════════════════════════════════════════════
+// ADMIN ACTIONS
+// ════════════════════════════════════════════
+function saveCompanyName(){ const n=document.getElementById('adminCompanyName').value.trim();if(!n)return; fbSet('name',n);['homeCompanyName','appName'].forEach(id=>document.getElementById(id).textContent=n);flash('nameMsg'); }
+function uploadLogo(input){ const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{ fbSet('logo',e.target.result);['homeLogo','appLogo'].forEach(id=>{const el=document.getElementById(id);el.src=e.target.result;el.classList.add('show');});const p=document.getElementById('logoPrev');p.src=e.target.result;p.classList.add('show');flash('logoMsg');};r.readAsDataURL(f); }
+function removeLogo(){ fbSet('logo','');['homeLogo','appLogo'].forEach(id=>{const el=document.getElementById(id);el.src='';el.classList.remove('show');});const p=document.getElementById('logoPrev');p.src='';p.classList.remove('show'); }
+function saveWa(){ const n=document.getElementById('adminWa').value.trim();if(!n)return; fbSet('wa',n);flash('waMsg'); }
+function adminChangeSitePass(){ const p1=document.getElementById('adminNewSitePass').value,p2=document.getElementById('adminConfirmSitePass').value,m=document.getElementById('adminSitePassMsg');if(!p1){m.style.cssText='display:block;color:#ff6b35';m.textContent='❌ أدخل كلمة المرور';return;}if(p1!==p2){m.style.cssText='display:block;color:#ff6b35';m.textContent='❌ غير متطابقتين';return;} fbSet('sitePass',p1);m.style.cssText='display:block;color:#00ff88';m.textContent='✅ تم';document.getElementById('adminNewSitePass').value='';document.getElementById('adminConfirmSitePass').value=''; }
+function flash(id){ const el=document.getElementById(id);el.style.display='block';setTimeout(()=>el.style.display='none',2500); }
+
+// ════════════════════════════════════════════
+// MAP
+// ════════════════════════════════════════════
+function initMap(){
+  if(map) return;
+  map=L.map('map',{preferCanvas:true,renderer:L.canvas()}).setView([24.7,46.7],6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19,crossOrigin:true}).addTo(map);
+}
+
+function clearMapLayers(){
+  if(polygon){try{map.removeLayer(polygon);}catch(e){} polygon=null;}
+  _gridLines.forEach(l=>{try{map.removeLayer(l);}catch(e){};}); _gridLines=[];
+  _ctrlLines.forEach(l=>{try{map.removeLayer(l);}catch(e){};}); _ctrlLines=[];
+  markers.forEach(m=>{try{map.removeLayer(m);}catch(e){};}); markers=[];
+  if(clusterGroup){try{map.removeLayer(clusterGroup);}catch(e){} clusterGroup=null;}
+}
+
+// ════════════════════════════════════════════
+// POINTS INPUT
+// ════════════════════════════════════════════
+function initPoints(){ if(document.querySelectorAll('.coord-row').length>0)return; for(let i=0;i<4;i++) addPoint(); }
+function addPoint(){
+  pc++;
+  const list=document.getElementById('coordsList');
+  const row=document.createElement('div'); row.className='coord-row'; row.id='row-'+pc;
+  row.innerHTML=`<div class="point-num">${pc}</div><input type="number" step="0.000001" placeholder="46.123" id="lon-${pc}"><input type="number" step="0.000001" placeholder="24.123" id="lat-${pc}"><button class="del-btn" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(row);
+}
+function showSt(msg){ const b=document.getElementById('statusBar');document.getElementById('statusText').textContent=msg;b.classList.add('show'); }
+
+function clearAll(){
+  document.getElementById('coordsList').innerHTML=''; pc=0;
+  clearMapLayers();
+  document.getElementById('resGrid').style.display='none';
+  document.getElementById('pdfBtn').style.display='none';
+  document.getElementById('exportBtns').style.display='none';
+  document.getElementById('fileInfo').style.display='none';
+  document.getElementById('goReportBtn').style.display='none';
+  document.getElementById('gridCellsBox').style.display='none';
+  document.getElementById('gridCellAreaBox').style.display='none';
+  document.getElementById('gridSpacingBox').style.display='none';
+  document.getElementById('modeChip').innerHTML='📐 <strong>وضع: مضلع</strong>';
+  document.getElementById('gridChip').style.display='none';
+  document.getElementById('reportInfo').textContent='⚠️ لم يتم الحساب بعد.';
+  lastPts=[]; lastPids=[]; lastGrid=null; lastCalcType='none';
+  initPoints(); showSt('🗑️ تم المسح');
+}
+
+function loadSample(){
+  document.getElementById('coordsList').innerHTML=''; pc=0;
+  document.getElementById('projectName').value='قطعة - حي النرجس';
+  document.getElementById('parcelNo').value='P-2026-015';
+  document.getElementById('region').value='الرياض';
+  const pts=[[46.620,24.780],[46.625,24.780],[46.625,24.775],[46.620,24.775],[46.618,24.777]];
+  pts.forEach(()=>addPoint());
+  const rows=document.querySelectorAll('.coord-row');
+  pts.forEach((p,i)=>{const r=rows[i];if(r){r.querySelector('input[id^="lon"]').value=p[0];r.querySelector('input[id^="lat"]').value=p[1];}});
+  showSt('✅ بيانات تجريبية — اضغط احسب');
+}
+
+// ════════════════════════════════════════════
+// FILE UPLOAD
+// ════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  const uz=document.getElementById('uploadZone');
+  if(uz){ uz.addEventListener('dragover',e=>e.preventDefault()); uz.addEventListener('drop',e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f)procFile(f);}); }
+  const fi=document.getElementById('fileInput');
+  if(fi) fi.addEventListener('change',function(){if(this.files[0])procFile(this.files[0]);});
+});
+
+function procFile(file){
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){const r=new FileReader();r.onload=e=>parseCSV(e.target.result,file.name);r.readAsText(file,'UTF-8');}
+  else if(['xlsx','xls'].includes(ext)){const r=new FileReader();r.onload=e=>parseXL(e.target.result,file.name);r.readAsArrayBuffer(file);}
+  else showSt('❌ صيغة غير مدعومة');
+}
+
+function detectCols(h){
+  const li=h.findIndex(x=>['longitude','lon','x','long'].includes(x));
+  const ai=h.findIndex(x=>['latitude','lat','y'].includes(x));
+  const ii=h.findIndex(x=>['point_id','id','pointid','no','num','point','pt','pt_id','fid','label'].includes(x));
+  const ei=h.findIndex(x=>['easting','e','utm_e','utm_x','east'].includes(x));
+  const ni=h.findIndex(x=>['northing','n','utm_n','utm_y','north'].includes(x));
+  const zi=h.findIndex(x=>['zone','utm_zone'].includes(x));
+  const hi=h.findIndex(x=>['hemisphere','hemi','ns'].includes(x));
+  return{li,ai,ii,ei,ni,zi,hi};
+}
+
+function parseCSV(text,fname){
+  const lines=text.trim().split('\n');if(lines.length<2){showSt('❌ فاضي');return;}
+  const h=lines[0].split(',').map(x=>x.trim().toLowerCase().replace(/"/g,''));
+  const{li,ai,ii,ei,ni}=detectCols(h);
+  const isUtm=(li<0||ai<0)&&ei>=0&&ni>=0;
+  if(!isUtm&&(li<0||ai<0)){showSt('❌ لم يتم العثور على أعمدة الإحداثيات');return;}
+  const pts=[];
+  for(let i=1;i<lines.length;i++){
+    const c=lines[i].split(',').map(x=>x.trim().replace(/"/g,''));
+    if(isUtm){const e=parseFloat(c[ei]),n=parseFloat(c[ni]);if(!isNaN(e)&&!isNaN(n))pts.push([e,n,ii>=0?c[ii]:null,true]);}
+    else{const lo=parseFloat(c[li]),la=parseFloat(c[ai]);if(!isNaN(lo)&&!isNaN(la))pts.push([lo,la,ii>=0?c[ii]:null,false]);}
+  }
+  loadPts(pts,fname,isUtm);
+}
+
+function parseXL(buf,fname){
+  const wb=XLSX.read(buf,{type:'arraybuffer'});const ws=wb.Sheets[wb.SheetNames[0]];
+  const data=XLSX.utils.sheet_to_json(ws,{header:1});if(data.length<2){showSt('❌ فاضي');return;}
+  const h=data[0].map(x=>String(x).trim().toLowerCase());
+  const{li,ai,ii,ei,ni,zi,hi}=detectCols(h);
+  const isUtm=(li<0||ai<0)&&ei>=0&&ni>=0;
+  if(!isUtm&&(li<0||ai<0)){showSt('❌ لم يتم العثور على أعمدة الإحداثيات');return;}
+  const pts=[];
+
+  // auto-detect zone from file
+  let autoZone=null, autoHemi='N';
+  if(isUtm && zi>=0 && data.length>1){
+    const zVal = String(data[1][zi]||'').trim();
+    autoZone = parseInt(zVal); // يقرأ الرقم فقط من "38N" → 38
+    if(String(zVal).toUpperCase().includes('S')) autoHemi='S';
+  }
+  if(isUtm && hi>=0 && data.length>1){
+    const hVal = String(data[1][hi]||'').trim().toUpperCase();
+    autoHemi = hVal.includes('S') ? 'S' : 'N';
+  }
+
+  // label column — prefer Label over Point_ID if both exist
+  const labelIdx = h.findIndex(x=>x==='label');
+  const pidIdx   = h.findIndex(x=>['point_id','id','pointid','no','num','fid'].includes(x));
+  const useIdx   = labelIdx>=0 ? labelIdx : (pidIdx>=0 ? pidIdx : -1);
+
+  for(let i=1;i<data.length;i++){
+    const r=data[i];
+    if(isUtm){const e=parseFloat(r[ei]),n=parseFloat(r[ni]);if(!isNaN(e)&&!isNaN(n))pts.push([e,n,useIdx>=0?(r[useIdx]??null):null,true]);}
+    else{const lo=parseFloat(r[li]),la=parseFloat(r[ai]);if(!isNaN(lo)&&!isNaN(la))pts.push([lo,la,useIdx>=0?(r[useIdx]??null):null,false]);}
+  }
+  loadPts(pts,fname,isUtm,autoZone,autoHemi);
+}
+
+function loadPts(pts,fname,isUtm=false,autoZone=null,autoHemi='N'){
+  if(pts.length<3){showSt('❌ يجب 3 نقاط على الأقل');return;}
+  if(isUtm){
+    let zone = autoZone;
+    let hemiAns = autoHemi;
+    if(!zone||isNaN(zone)||zone<1||zone>60){
+      zone=parseInt(prompt('أدخل رقم الـ Zone (1–60):'));
+      if(isNaN(zone)||zone<1||zone>60){alert('❌ Zone غير صحيح');return;}
+      hemiAns=confirm('نصف الكرة الشمالي؟')?'N':'S';
+    }
+    pts=pts.map(p=>{const w=utmToWgs84(p[0],p[1],zone,hemiAns);return[w.lon,w.lat,p[2],false];});
+  }
+  document.getElementById('coordsList').innerHTML=''; pc=0;
+  pts.forEach(p=>{
+    addPoint();
+    const rows=document.querySelectorAll('.coord-row');
+    const last=rows[rows.length-1];
+    last.querySelector('input[id^="lon"]').value=p[0];
+    last.querySelector('input[id^="lat"]').value=p[1];
+    // لو الـ pid رقم بس — حوله لـ P1, P2
+    if(p[2]!=null){
+      const pidVal = String(p[2]).trim();
+      last.dataset.pid = /^\d+$/.test(pidVal) ? 'P'+pidVal : pidVal;
+    }
+  });
+  const fi=document.getElementById('fileInfo');fi.style.display='block';fi.textContent=`✅ "${fname}" — ${pts.length} نقطة`;
+  showSt(`📂 ${pts.length} نقطة محمّلة — اضغط ⚡ احسب`);
+  switchGt('manual');
+}
+
+// ════════════════════════════════════════════
+// CALCULATE (unified)
+// ════════════════════════════════════════════
+function detectGrid(pts){
+  if(pts.length<4)return null;
+  const lats=[...new Set(pts.map(p=>Math.round(p[0]*100000)/100000))].sort((a,b)=>a-b);
+  const lons=[...new Set(pts.map(p=>Math.round(p[1]*100000)/100000))].sort((a,b)=>a-b);
+  const nR=lats.length,nC=lons.length;
+  if(nR<2||nC<2||nR*nC!==pts.length)return null;
+  const dLat=lats.slice(1).map((v,i)=>v-lats[i]);
+  const dLon=lons.slice(1).map((v,i)=>v-lons[i]);
+  if(!dLat.every(d=>Math.abs(d-dLat[0])<0.005))return null;
+  if(!dLon.every(d=>Math.abs(d-dLon[0])<0.005))return null;
+  return{nRows:nR,nCols:nC,lats,lons};
+}
+
+function showValError(msg){
+  const b=document.getElementById('valBanner');
+  const m=document.getElementById('valMsg');
+  if(b&&m){b.classList.add('show');m.innerHTML=msg;setTimeout(()=>b.classList.remove('show'),5000);}
+}
+function hideValError(){
+  const b=document.getElementById('valBanner');
+  if(b) b.classList.remove('show');
+}
+
+function calculate(){
+  const rows=document.querySelectorAll('.coord-row'); const pts=[],pids=[];
+  let hasEmpty=false, hasInvalid=false, invalidDetails=[];
+
+  rows.forEach((row,idx)=>{
+    const loEl=row.querySelector('input[id^="lon"]');
+    const laEl=row.querySelector('input[id^="lat"]');
+    const lo=loEl?.value?.trim();
+    const la=laEl?.value?.trim();
+
+    // reset styles
+    loEl?.classList.remove('input-err','input-ok');
+    laEl?.classList.remove('input-err','input-ok');
+
+    if(!lo && !la){ hasEmpty=true; return; }
+
+    if(!lo || !la){
+      hasEmpty=true;
+      if(!lo) loEl?.classList.add('input-err');
+      if(!la) laEl?.classList.add('input-err');
+      return;
+    }
+
+    const lon=parseFloat(lo), lat=parseFloat(la);
+
+    if(isNaN(lon)||isNaN(lat)){
+      hasInvalid=true;
+      loEl?.classList.add('input-err');
+      laEl?.classList.add('input-err');
+      invalidDetails.push(`السطر ${idx+1}: قيمة غير صحيحة`);
+      return;
+    }
+
+    // range validation
+    if(lon<-180||lon>180){
+      hasInvalid=true;
+      loEl?.classList.add('input-err');
+      invalidDetails.push(`السطر ${idx+1}: Longitude خارج النطاق (-180 ~ 180)`);
+      return;
+    }
+    if(lat<-90||lat>90){
+      hasInvalid=true;
+      laEl?.classList.add('input-err');
+      invalidDetails.push(`السطر ${idx+1}: Latitude خارج النطاق (-90 ~ 90)`);
+      return;
+    }
+
+    loEl?.classList.add('input-ok');
+    laEl?.classList.add('input-ok');
+    pts.push([lat,lon]);
+    pids.push(row.dataset.pid||('P'+pts.length));
+  });
+
+  if(hasInvalid){
+    showValError('❌ <strong>إحداثيات غير صحيحة:</strong><br>' + invalidDetails.join('<br>'));
+    return;
+  }
+  if(pts.length<3){
+    showValError('⚠️ <strong>نقاط غير كافية</strong> — يجب إدخال 3 نقاط على الأقل لحساب المساحة. حالياً لديك <strong>'+pts.length+'</strong> نقطة صالحة.');
+    return;
+  }
+
+  hideValError();
+
+  lastPts=pts; lastPids=pids;
+  clearMapLayers();
+
+  const grid=detectGrid(pts);
+  lastGrid=grid;
+
+  if(grid){
+    lastCalcType='grid';
+    drawGrid(grid,pts);
+    showGridStats(grid,pts);
+  } else {
+    lastCalcType='polygon';
+    polygon=L.polygon(pts,{color:'#00d4ff',fillColor:'rgba(0,212,255,.12)',fillOpacity:.3,weight:2}).addTo(map);
+    document.getElementById('gridCellsBox').style.display='none';
+    document.getElementById('gridCellAreaBox').style.display='none';
+    document.getElementById('gridSpacingBox').style.display='none';
+    document.getElementById('modeChip').innerHTML='📐 <strong>وضع: مضلع</strong>';
+    document.getElementById('gridChip').style.display='none';
+  }
+
+  drawMarkers(pts,pids);
+  map.fitBounds(L.latLngBounds(pts),{padding:[28,28]});
+
+  let aM2, per;
+  if(grid){
+    // للشبكة: احسب المساحة الكلية من الحدود الخارجية (bounding rectangle)
+    const {lats, lons} = grid;
+    const cornerPts = [
+      [lats[0], lons[0]],
+      [lats[0], lons[lons.length-1]],
+      [lats[lats.length-1], lons[lons.length-1]],
+      [lats[lats.length-1], lons[0]]
+    ];
+    aM2 = calcA(cornerPts);
+    per = calcP(cornerPts);
+  } else {
+    aM2 = calcA(pts);
+    per = calcP(pts);
+  }
+  document.getElementById('areaM2').textContent=fmt(aM2);
+  document.getElementById('areaDunum').textContent=fmt(aM2/1000,3);
+  document.getElementById('areaHa').textContent=fmt(aM2/10000,4);
+  document.getElementById('areaSqFt').textContent=fmt(aM2*10.764);
+  document.getElementById('perimeter').textContent=fmt(per);
+  document.getElementById('ptCount').textContent=pts.length;
+  document.getElementById('resGrid').style.display='grid';
+  document.getElementById('pdfBtn').style.display='flex';
+  document.getElementById('exportBtns').style.display='flex';
+  document.getElementById('goReportBtn').style.display='inline-flex';
+
+  updateReportInfo(aM2,per,grid,pts);
+  calcSides(pts,pids);
+  showSt(grid?`✅ شبكة ${grid.nRows}×${grid.nCols} | مساحة: ${fmt(aM2)} م²`:`✅ مساحة: ${fmt(aM2)} م² | محيط: ${fmt(per)} م`);
+  switchWf('map');
+}
+
+function drawGrid(grid,pts){
+  const{nRows,nCols,lats,lons}=grid;
+  for(let r=0;r<nRows;r++){
+    const l=L.polyline(lons.map(lon=>[lats[r],lon]),{color:'#00d4ff',weight:1.5,opacity:.75}).addTo(map);
+    _gridLines.push(l);
+  }
+  for(let c=0;c<nCols;c++){
+    const l=L.polyline(lats.map(lat=>[lat,lons[c]]),{color:'#00d4ff',weight:1.5,opacity:.75}).addTo(map);
+    _gridLines.push(l);
+  }
+  const corners=[[lats[0],lons[0]],[lats[0],lons[nCols-1]],[lats[nRows-1],lons[nCols-1]],[lats[nRows-1],lons[0]],[lats[0],lons[0]]];
+  const border=L.polyline(corners,{color:'#00ff88',weight:3}).addTo(map);
+  _gridLines.push(border);
+}
+
+function showGridStats(grid,pts){
+  const{nRows,nCols,lats,lons}=grid;
+  const cells=(nRows-1)*(nCols-1);
+  const dxM=haverDist(lats[0],lons[0],lats[0],lons[1]);
+  const dyM=haverDist(lats[0],lons[0],lats[1],lons[0]);
+  const cellArea=dxM*dyM;
+  document.getElementById('gridCells').textContent=(nRows-1)+'×'+(nCols-1)+'='+cells;
+  document.getElementById('gridCellArea').textContent=fmt(cellArea);
+  document.getElementById('gridSpacing').textContent=fmt(dxM,1)+' × '+fmt(dyM,1);
+  document.getElementById('gridCellsBox').style.display='block';
+  document.getElementById('gridCellAreaBox').style.display='block';
+  document.getElementById('gridSpacingBox').style.display='block';
+  document.getElementById('modeChip').innerHTML='🔲 <strong>وضع: شبكة GIS</strong>';
+  document.getElementById('gridChip').style.display='flex';
+  document.getElementById('gridDim').textContent=nRows+'×'+nCols;
+}
+
+function drawMarkers(pts,pids){
+  const USE_CLUSTER=pts.length>200;
+  if(USE_CLUSTER){
+    clusterGroup=L.markerClusterGroup({maxClusterRadius:40,showCoverageOnHover:false});
+    pts.forEach((p,i)=>{
+      const m=L.circleMarker(p,{radius:5,fillColor:'#00ff88',color:'#fff',weight:1,fillOpacity:1}).bindTooltip(pids[i],{direction:'top',offset:[0,-5],className:'gis-tooltip'});
+      clusterGroup.addLayer(m); markers.push(m);
+    });
+    map.addLayer(clusterGroup);
+  } else {
+    const isMobile = window.innerWidth <= 768;
+    const r = pts.length <= 10 ? (isMobile?11:7)
+             : pts.length <= 30 ? (isMobile?9:6)
+             : pts.length <= 100 ? (isMobile?7:5)
+             : (isMobile?5:4);
+    const showLabel = pts.length <= 50;
+
+    pts.forEach((p,i)=>{
+      // نقطة دائرية
+      const m = L.circleMarker(p,{
+        radius: r,
+        fillColor:'#00ff88',
+        color:'#fff',
+        weight:1.5,
+        fillOpacity:1,
+        interactive:true,
+        bubblingMouseEvents:false
+      });
+      m.addTo(map);
+      markers.push(m);
+
+      if(showLabel){
+        // label بـ divIcon فوق النقطة بالظبط
+        const lbl = L.divIcon({
+          className:'',
+          html:`<span class="pt-label">${pids[i]}</span>`,
+          iconSize:[0,0],
+          iconAnchor:[0, 0]
+        });
+        const lm = L.marker(p,{icon:lbl, interactive:false, keyboard:false, zIndexOffset:500});
+        lm.addTo(map);
+        markers.push(lm);
+      } else {
+        m.bindTooltip(pids[i],{direction:'top',offset:[0,-r],className:'gis-tooltip'});
+        m.on('click tap',function(e){L.DomEvent.stopPropagation(e);this.openTooltip(this.getLatLng());});
+      }
+    });
+  }
+}
+
+function updateReportInfo(aM2,per,grid,pts){
+  const proj=document.getElementById('projectName').value||'—';
+  const parcel=document.getElementById('parcelNo').value||'—';
+  const region=document.getElementById('region').value||'—';
+  const workType=document.getElementById('workType').selectedOptions[0]?.text||'—';
+  let info=`<strong>المشروع:</strong> ${proj} | <strong>القطعة:</strong> ${parcel} | <strong>المنطقة:</strong> ${region}<br>`;
+  info+=`<strong>نوع العمل:</strong> ${workType} | <strong>النقاط:</strong> ${pts.length}<br>`;
+  info+=`<strong>المساحة:</strong> ${fmt(aM2)} م² | <strong>المحيط:</strong> ${fmt(per)} م`;
+  if(grid){
+    const{nRows,nCols,lats,lons}=grid;
+    const dxM=haverDist(lats[0],lons[0],lats[0],lons[1]);
+    const dyM=haverDist(lats[0],lons[0],lats[1],lons[0]);
+    info+=`<br><strong>الشبكة:</strong> ${nRows}×${nCols} | <strong>التباعد:</strong> ${fmt(dxM,1)}م × ${fmt(dyM,1)}م`;
+  }
+  document.getElementById('reportInfo').innerHTML=info;
+  document.getElementById('pdfBtn').style.display='flex';
+}
+
+// ════════════════════════════════════════════
+// GIS TOOLS → CALCULATE
+// ════════════════════════════════════════════
+// helpers
+function mToLat(m){return m/111132.92;}
+function mToLon(m,lat){return m/(111412.84*Math.cos(lat*Math.PI/180));}
+function degToRad(d){return d*Math.PI/180;}
+function radToDeg(r){return r*180/Math.PI;}
+function haverDist(lat1,lon1,lat2,lon2){const R=6371000,dLat=degToRad(lat2-lat1),dLon=degToRad(lon2-lon1);const a=Math.sin(dLat/2)**2+Math.cos(degToRad(lat1))*Math.cos(degToRad(lat2))*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function bearing(lat1,lon1,lat2,lon2){const dLon=degToRad(lon2-lon1);const y=Math.sin(dLon)*Math.cos(degToRad(lat2));const x=Math.cos(degToRad(lat1))*Math.sin(degToRad(lat2))-Math.sin(degToRad(lat1))*Math.cos(degToRad(lat2))*Math.cos(dLon);return(radToDeg(Math.atan2(y,x))+360)%360;}
+function offsetPoint(lat,lon,dx,dy,angleDeg=0){const ar=degToRad(angleDeg);const rdx=dx*Math.cos(ar)-dy*Math.sin(ar);const rdy=dx*Math.sin(ar)+dy*Math.cos(ar);return{lat:lat+mToLat(rdy),lon:lon+mToLon(rdx,lat)};}
+
+// Grid of Points → load to coords → calculate
+function genGridAndCalc(){
+  const cLon=parseFloat(document.getElementById('gpCenLon').value);
+  const cLat=parseFloat(document.getElementById('gpCenLat').value);
+  const dx=parseFloat(document.getElementById('gpDx').value)||10;
+  const dy=parseFloat(document.getElementById('gpDy').value)||10;
+  const cols=parseInt(document.getElementById('gpCols').value)||10;
+  const rows=parseInt(document.getElementById('gpRows').value)||10;
+  const angle=parseFloat(document.getElementById('gpAngle').value)||0;
+  if(isNaN(cLon)||isNaN(cLat)){showSt('❌ أدخل إحداثيات المركز');return;}
+  if(cols*rows>10000){showSt('❌ الحد الأقصى 10,000 نقطة');return;}
+  const ALPHA='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const offX=-(cols-1)/2*dx, offY=-(rows-1)/2*dy;
+  document.getElementById('coordsList').innerHTML=''; pc=0;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const p=offsetPoint(cLat,cLon,offX+c*dx,offY+r*dy,angle);
+      const label=(r<ALPHA.length?ALPHA[r]:('R'+(r+1)))+(c+1);
+      addPoint();
+      const rowEls=document.querySelectorAll('.coord-row');
+      const last=rowEls[rowEls.length-1];
+      last.querySelector('input[id^="lon"]').value=p.lon.toFixed(8);
+      last.querySelector('input[id^="lat"]').value=p.lat.toFixed(8);
+      last.dataset.pid=label;
+    }
+  }
+  showSt(`✅ ${rows*cols} نقطة شبكة — جاري الحساب...`);
+  switchGt('manual');
+  setTimeout(calculate, 100);
+}
+
+// Traverse → load to coords → calculate
+let travType_='open';
+function setTravType(t){travType_=t;document.getElementById('travOpenBtn').classList.toggle('active',t==='open');document.getElementById('travClosedBtn').classList.toggle('active',t==='closed');}
+function initTravLegs(){if(document.querySelectorAll('.trav-row').length>0)return;for(let i=0;i<3;i++)addTravLeg();}
+function addTravLeg(){
+  travPc++;
+  const list=document.getElementById('travList');
+  const row=document.createElement('div');row.className='trav-row';row.id='trav-'+travPc;
+  row.innerHTML=`<div class="point-num">${travPc}</div><input type="number" step="0.0001" placeholder="45.00" id="taz-${travPc}"><input type="number" step="0.001" placeholder="100.00" id="tad-${travPc}"><input type="text" placeholder="وصف" id="tann-${travPc}" style="font-size:10px;"><button class="del-btn" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(row);
+}
+function clearTraverse(){document.getElementById('travList').innerHTML='';travPc=0;document.getElementById('travStats').style.display='none';}
+
+function calcTravAndLoad(){
+  const sLon=parseFloat(document.getElementById('travStartLon').value);
+  const sLat=parseFloat(document.getElementById('travStartLat').value);
+  if(isNaN(sLon)||isNaN(sLat)){showSt('❌ أدخل نقطة البداية');return;}
+  const legs=document.querySelectorAll('.trav-row');
+  if(!legs.length){showSt('❌ أضف ضلعاً على الأقل');return;}
+  const pts=[[sLon,sLat,'P0']];
+  let curLat=sLat, curLon=sLon;
+  legs.forEach((leg,i)=>{
+    const az=parseFloat(leg.querySelector('input[id^="taz"]')?.value);
+    const dist=parseFloat(leg.querySelector('input[id^="tad"]')?.value);
+    const name=leg.querySelector('input[id^="tann"]')?.value||('P'+(i+1));
+    if(isNaN(az)||isNaN(dist))return;
+    const dE=dist*Math.sin(degToRad(az)), dN=dist*Math.cos(degToRad(az));
+    const p=offsetPoint(curLat,curLon,dE,dN,0);
+    pts.push([p.lon,p.lat,name]);
+    curLat=p.lat; curLon=p.lon;
+  });
+  // closure stats
+  if(travType_==='closed'&&pts.length>2){
+    const first=pts[0], last=pts[pts.length-1];
+    const closureDist=haverDist(last[1],last[0],first[1],first[0]);
+    const totalDist=pts.slice(1).reduce((s,p,i)=>s+haverDist(pts[i][1],pts[i][0],p[1],p[0]),0);
+    const ratio=closureDist>0?Math.round(totalDist/closureDist):0;
+    const sd=document.getElementById('travStats');
+    sd.innerHTML=`<span class="stat-chip ${closureDist<0.01?'':'warn'}">خطأ الإغلاق: ${closureDist.toFixed(3)} م</span> <span class="stat-chip">النسبة: 1:${ratio}</span>`;
+    sd.style.display='block';
+  }
+  document.getElementById('coordsList').innerHTML=''; pc=0;
+  pts.forEach(p=>{
+    addPoint();
+    const rows=document.querySelectorAll('.coord-row');
+    const last=rows[rows.length-1];
+    last.querySelector('input[id^="lon"]').value=p[0];
+    last.querySelector('input[id^="lat"]').value=p[1];
+    last.dataset.pid=p[2];
+  });
+  switchGt('manual');
+  setTimeout(calculate,100);
+}
+
+// Survey Grid → load → calculate
+function genSurveyAndLoad(){
+  const oLon=parseFloat(document.getElementById('sgOriLon').value);
+  const oLat=parseFloat(document.getElementById('sgOriLat').value);
+  const cx=parseFloat(document.getElementById('sgCellX').value)||20;
+  const cy=parseFloat(document.getElementById('sgCellY').value)||20;
+  const cols=parseInt(document.getElementById('sgColsN').value)||5;
+  const rows=parseInt(document.getElementById('sgRowsN').value)||5;
+  const bear=parseFloat(document.getElementById('sgBearing').value)||0;
+  if(isNaN(oLon)||isNaN(oLat)){showSt('❌ أدخل إحداثيات نقطة الأصل');return;}
+  const ALPHA='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  document.getElementById('coordsList').innerHTML=''; pc=0;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const p=offsetPoint(oLat,oLon,c*cx,r*cy,bear);
+      const label=(r<ALPHA.length?ALPHA[r]:('R'+(r+1)))+(c+1);
+      addPoint();
+      const rowEls=document.querySelectorAll('.coord-row');
+      const last=rowEls[rowEls.length-1];
+      last.querySelector('input[id^="lon"]').value=p.lon.toFixed(8);
+      last.querySelector('input[id^="lat"]').value=p.lat.toFixed(8);
+      last.dataset.pid=label;
+    }
+  }
+  switchGt('manual');
+  setTimeout(calculate,100);
+}
+
+// Control Network → calc links + load corners → calculate
+function initCtrlPts(){if(document.querySelectorAll('.ctrl-row').length>0)return;for(let i=0;i<3;i++)addCtrlPt();}
+function addCtrlPt(){
+  ctrlPc++;
+  const list=document.getElementById('ctrlList');
+  const row=document.createElement('div');row.className='ctrl-row';row.id='ctrl-'+ctrlPc;
+  row.innerHTML=`<div class="point-num">P${ctrlPc}</div><input type="number" step="0.000001" placeholder="46.620" id="clon-${ctrlPc}"><input type="number" step="0.000001" placeholder="24.780" id="clat-${ctrlPc}"><button class="del-btn" onclick="this.parentElement.remove()">✕</button>`;
+  list.appendChild(row);
+}
+function clearCtrl(){document.getElementById('ctrlList').innerHTML='';ctrlPc=0;document.getElementById('ctrlSummary').style.display='none';document.getElementById('ctrlResultWrap').classList.remove('show');}
+
+function calcCtrlAndLoad(){
+  const rows=document.querySelectorAll('.ctrl-row');
+  const ctrlPts=[];
+  rows.forEach((r,i)=>{
+    const lo=parseFloat(r.querySelector('input[id^="clon"]')?.value);
+    const la=parseFloat(r.querySelector('input[id^="clat"]')?.value);
+    if(!isNaN(lo)&&!isNaN(la)) ctrlPts.push({label:'P'+(i+1),lon:lo,lat:la});
+  });
+  if(ctrlPts.length<2){showSt('❌ يجب على الأقل نقطتان');return;}
+  // calc links
+  const links=[];
+  for(let i=0;i<ctrlPts.length;i++) for(let j=i+1;j<ctrlPts.length;j++){
+    const a=ctrlPts[i],b=ctrlPts[j];
+    const dist=haverDist(a.lat,a.lon,b.lat,b.lon);
+    const brng=bearing(a.lat,a.lon,b.lat,b.lon);
+    links.push({from:a.label,to:b.label,dist,brng,dE:dist*Math.sin(degToRad(brng)),dN:dist*Math.cos(degToRad(brng))});
+  }
+  const tbody=document.getElementById('ctrlTbody');tbody.innerHTML='';
+  links.forEach(l=>{ tbody.innerHTML+=`<tr><td>${l.from}→${l.to}</td><td>${l.dist.toFixed(3)}</td><td>${l.brng.toFixed(4)}</td><td>${l.dE.toFixed(3)}</td><td>${l.dN.toFixed(3)}</td></tr>`; });
+  document.getElementById('ctrlResultWrap').classList.add('show');
+  const total=links.reduce((s,l)=>s+l.dist,0);
+  const sd=document.getElementById('ctrlSummary');
+  sd.innerHTML=`<span class="stat-chip">نقاط: ${ctrlPts.length}</span> <span class="stat-chip">ضلوع: ${links.length}</span> <span class="stat-chip warn">إجمالي: ${fmt(total,2)} م</span>`;
+  sd.style.display='block';
+  // load points to coords
+  document.getElementById('coordsList').innerHTML=''; pc=0;
+  ctrlPts.forEach(p=>{
+    addPoint();
+    const rows=document.querySelectorAll('.coord-row');
+    const last=rows[rows.length-1];
+    last.querySelector('input[id^="lon"]').value=p.lon;
+    last.querySelector('input[id^="lat"]').value=p.lat;
+    last.dataset.pid=p.label;
+  });
+  switchGt('manual');
+  setTimeout(calculate,100);
+}
+
+// ════════════════════════════════════════════
+// MATH
+// ════════════════════════════════════════════
+function calcA(pts){
+  const avg=pts.reduce((s,p)=>s+p[0],0)/pts.length;
+  const lr=avg*Math.PI/180;
+  const mLat=111132.92-559.82*Math.cos(2*lr);
+  const mLon=111412.84*Math.cos(lr);
+  const mp=pts.map(p=>[p[0]*mLat,p[1]*mLon]);
+  let a=0;const n=mp.length;
+  for(let i=0;i<n;i++){const j=(i+1)%n;a+=mp[i][0]*mp[j][1]-mp[j][0]*mp[i][1];}
+  return Math.abs(a/2);
+}
+function calcP(pts){
+  const avg=pts.reduce((s,p)=>s+p[0],0)/pts.length;
+  const lr=avg*Math.PI/180;
+  const mLat=111132.92,mLon=111412.84*Math.cos(lr);
+  let per=0;
+  for(let i=0;i<pts.length;i++){const j=(i+1)%pts.length;const dy=(pts[j][0]-pts[i][0])*mLat;const dx=(pts[j][1]-pts[i][1])*mLon;per+=Math.sqrt(dx*dx+dy*dy);}
+  return per;
+}
+function fmt(n,d=2){if(isNaN(n)||n==null)return'0.00';const f=Number(n).toFixed(d);const p=f.split('.');p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');return p.join('.');}
+
+// ════════════════════════════════════════════
+// UTM
+// ════════════════════════════════════════════
+let utmHemi='N';
+function switchUtmTab(tab){
+  document.querySelectorAll('.utm-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='toWgs'&&i===0)||(tab==='toUtm'&&i===1)));
+  document.getElementById('utmTabToWgs').style.display=tab==='toWgs'?'block':'none';
+  document.getElementById('utmTabToUtm').style.display=tab==='toUtm'?'block':'none';
+}
+function setHemi(h){utmHemi=h;document.getElementById('hemiN').classList.toggle('active',h==='N');document.getElementById('hemiS').classList.toggle('active',h==='S');}
+
+function utmToWgs84(E,N,zone,hemi){
+  const a=6378137,f=1/298.257223563,b=a*(1-f),e2=2*f-f*f,ep2=e2/(1-e2),k0=0.9996,E0=500000,N0=hemi==='S'?10000000:0;
+  const x=E-E0,y=N-N0,M=y/k0;
+  const mu=M/(a*(1-e2/4-3*e2*e2/64-5*e2*e2*e2/256));
+  const e1=(1-Math.sqrt(1-e2))/(1+Math.sqrt(1-e2));
+  const phi1=mu+(3*e1/2-27*e1**3/32)*Math.sin(2*mu)+(21*e1**2/16-55*e1**4/32)*Math.sin(4*mu)+(151*e1**3/96)*Math.sin(6*mu)+(1097*e1**4/512)*Math.sin(8*mu);
+  const N1=a/Math.sqrt(1-e2*Math.sin(phi1)**2),T1=Math.tan(phi1)**2,C1=ep2*Math.cos(phi1)**2,R1=a*(1-e2)/Math.pow(1-e2*Math.sin(phi1)**2,1.5),D=x/(N1*k0);
+  const lat=phi1-(N1*Math.tan(phi1)/R1)*(D**2/2-(5+3*T1+10*C1-4*C1**2-9*ep2)*D**4/24+(61+90*T1+298*C1+45*T1**2-252*ep2-3*C1**2)*D**6/720);
+  const lon0=((zone-1)*6-180+3)*Math.PI/180;
+  const lon=lon0+(1/Math.cos(phi1))*(D-(1+2*T1+C1)*D**3/6+(5-2*C1+28*T1-3*C1**2+8*ep2+24*T1**2)*D**5/120);
+  return{lat:lat*180/Math.PI,lon:lon*180/Math.PI};
+}
+function wgs84ToUtm(lat,lon){
+  const a=6378137,f=1/298.257223563,e2=2*f-f*f,ep2=e2/(1-e2),k0=0.9996,E0=500000;
+  const latR=lat*Math.PI/180,lonR=lon*Math.PI/180;
+  const zone=Math.floor((lon+180)/6)+1,lon0=((zone-1)*6-180+3)*Math.PI/180;
+  const N=a/Math.sqrt(1-e2*Math.sin(latR)**2),T=Math.tan(latR)**2,C=ep2*Math.cos(latR)**2,A=Math.cos(latR)*(lonR-lon0);
+  const M=a*((1-e2/4-3*e2**2/64-5*e2**3/256)*latR-(3*e2/8+3*e2**2/32+45*e2**3/1024)*Math.sin(2*latR)+(15*e2**2/256+45*e2**3/1024)*Math.sin(4*latR)-(35*e2**3/3072)*Math.sin(6*latR));
+  const easting=k0*N*(A+(1-T+C)*A**3/6+(5-18*T+T**2+72*C-58*ep2)*A**5/120)+E0;
+  const northing=k0*(M+N*Math.tan(latR)*(A**2/2+(5-T+9*C+4*C**2)*A**4/24+(61-58*T+T**2+600*C-330*ep2)*A**6/720))+(lat<0?10000000:0);
+  const hemi=lat>=0?'N':'S';
+  return{easting,northing,zone,hemi,epsg:lat>=0?32600+zone:32700+zone};
+}
+function convertUtmToWgs(){
+  const E=parseFloat(document.getElementById('utmE').value),N=parseFloat(document.getElementById('utmN').value);
+  const zone=parseInt(document.getElementById('utmZone').value);
+  const err=document.getElementById('utmToWgsErr');err.style.display='none';
+  if(isNaN(E)||isNaN(N)){err.textContent='❌ أدخل E و N';err.style.display='block';return;}
+  if(isNaN(zone)||zone<1||zone>60){err.textContent='❌ أدخل Zone صحيح';err.style.display='block';return;}
+  try{
+    const r=utmToWgs84(E,N,zone,utmHemi);
+    document.getElementById('resLon').textContent=r.lon.toFixed(8);
+    document.getElementById('resLat').textContent=r.lat.toFixed(8);
+    document.getElementById('resZoneUsed').textContent=zone+utmHemi;
+    document.getElementById('utmToWgsResult').classList.add('show');
+  }catch(e){err.textContent='❌ خطأ في التحويل';err.style.display='block';}
+}
+function convertWgsToUtm(){
+  const lon=parseFloat(document.getElementById('wgsLon').value),lat=parseFloat(document.getElementById('wgsLat').value);
+  const err=document.getElementById('wgsToUtmErr');err.style.display='none';
+  if(isNaN(lon)||isNaN(lat)){err.textContent='❌ أدخل Lon و Lat';err.style.display='block';return;}
+  try{
+    const r=wgs84ToUtm(lat,lon);
+    document.getElementById('resEasting').textContent=r.easting.toFixed(3);
+    document.getElementById('resNorthing').textContent=r.northing.toFixed(3);
+    document.getElementById('resZone').textContent=r.zone;
+    document.getElementById('resHemi').textContent=r.hemi==='N'?'شمالي':'جنوبي';
+    document.getElementById('resEPSG').textContent='EPSG:'+r.epsg;
+    document.getElementById('wgsToUtmResult').classList.add('show');
+  }catch(e){err.textContent='❌ خطأ في التحويل';err.style.display='block';}
+}
+function copyVal(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showSt('✅ تم النسخ'));}
+function useUtmAsPoint(){
+  const lon=document.getElementById('resLon').textContent;
+  const lat=document.getElementById('resLat').textContent;
+  if(!lon||lon==='—')return;
+  addPoint();
+  const rows=document.querySelectorAll('.coord-row');
+  const last=rows[rows.length-1];
+  last.querySelector('input[id^="lon"]').value=parseFloat(lon).toFixed(6);
+  last.querySelector('input[id^="lat"]').value=parseFloat(lat).toFixed(6);
+  switchWf('input');
+  showSt('✅ تم إضافة النقطة');
+}
+function showUtmOnMap(){
+  const lon=parseFloat(document.getElementById('resLon').textContent);
+  const lat=parseFloat(document.getElementById('resLat').textContent);
+  if(isNaN(lon)||isNaN(lat))return;
+  switchWf('map');
+  setTimeout(()=>{
+    map.setView([lat,lon],15);
+    L.circleMarker([lat,lon],{radius:9,fillColor:'#ff6b35',color:'#fff',weight:2,fillOpacity:1}).bindTooltip(`UTM→WGS84<br>${lon.toFixed(6)}, ${lat.toFixed(6)}`,{permanent:true}).addTo(map);
+  },200);
+}
+function procUtmFile(input){
+  const file=input.files[0];if(!file)return;
+  const zone=parseInt(prompt('أدخل رقم الـ Zone (1–60):'));
+  if(isNaN(zone)||zone<1||zone>60){alert('❌ Zone غير صحيح');return;}
+  const hemiAns=confirm('نصف الكرة الشمالي؟')?'N':'S';
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){const r=new FileReader();r.onload=e=>parseCSVUtm(e.target.result,file.name,zone,hemiAns);r.readAsText(file,'UTF-8');}
+  else if(['xlsx','xls'].includes(ext)){const r=new FileReader();r.onload=e=>parseXLUtm(e.target.result,file.name,zone,hemiAns);r.readAsArrayBuffer(file);}
+  input.value='';
+}
+function parseCSVUtm(text,fname,zone,hemi){
+  const lines=text.trim().split('\n');if(lines.length<2)return;
+  const h=lines[0].split(',').map(x=>x.trim().toLowerCase().replace(/"/g,''));
+  const{ei,ni,ii}={ei:h.findIndex(x=>['easting','e','x','utm_e'].includes(x)),ni:h.findIndex(x=>['northing','n','y','utm_n'].includes(x)),ii:h.findIndex(x=>['point_id','id','no'].includes(x))};
+  if(ei<0||ni<0){showSt('❌ لم يُعثر على أعمدة E/N');return;}
+  const pts=[];
+  for(let i=1;i<lines.length;i++){const c=lines[i].split(',').map(x=>x.trim().replace(/"/g,''));const e=parseFloat(c[ei]),n=parseFloat(c[ni]);if(!isNaN(e)&&!isNaN(n)){const w=utmToWgs84(e,n,zone,hemi);pts.push([w.lon,w.lat,ii>=0?c[ii]:null,false]);}}
+  loadPts(pts,fname+' [UTM]');
+}
+function parseXLUtm(buf,fname,zone,hemi){
+  const wb=XLSX.read(buf,{type:'arraybuffer'});const ws=wb.Sheets[wb.SheetNames[0]];
+  const data=XLSX.utils.sheet_to_json(ws,{header:1});if(data.length<2)return;
+  const h=data[0].map(x=>String(x).trim().toLowerCase());
+  const ei=h.findIndex(x=>['easting','e','x','utm_e'].includes(x)),ni=h.findIndex(x=>['northing','n','y','utm_n'].includes(x)),ii=h.findIndex(x=>['point_id','id','no'].includes(x));
+  if(ei<0||ni<0){showSt('❌ لم يُعثر على أعمدة E/N');return;}
+  const pts=[];
+  for(let i=1;i<data.length;i++){const r=data[i];const e=parseFloat(r[ei]),n=parseFloat(r[ni]);if(!isNaN(e)&&!isNaN(n)){const w=utmToWgs84(e,n,zone,hemi);pts.push([w.lon,w.lat,ii>=0?(r[ii]??null):null,false]);}}
+  loadPts(pts,fname+' [UTM]');
+}
+
+// ════════════════════════════════════════════
+// EXPORT
+// ════════════════════════════════════════════
+function exportCSV(){
+  if(!lastPts.length){showSt('❌ لا توجد بيانات');return;}
+  let csv='Point_ID,Longitude,Latitude\n'+lastPts.map((p,i)=>`${lastPids[i]||i+1},${p[1].toFixed(8)},${p[0].toFixed(8)}`).join('\n');
+  dlFile('GIS_Points.csv','text/csv',csv);
+}
+function exportXLSX(){
+  if(!lastPts.length){showSt('❌ لا توجد بيانات');return;}
+  const ws=XLSX.utils.json_to_sheet(lastPts.map((p,i)=>({'Point_ID':lastPids[i]||i+1,Longitude:p[1].toFixed(8),Latitude:p[0].toFixed(8)})));
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Points');
+  XLSX.writeFile(wb,'GIS_Points.xlsx');
+}
+function dlFile(name,mime,content){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:mime}));a.download=name;a.click();}
+
+// ════════════════════════════════════════════
+// PDF REPORT
+// ════════════════════════════════════════════
+// ════════════════════════════════════════════
+// SIDES TABLE
+// ════════════════════════════════════════════
+let lastSides = [];
+
+function calcSides(pts, pids){
+  if(pts.length < 2){ document.getElementById('sidesTableWrap').style.display='none'; return; }
+  lastSides = [];
+  const tbody = document.getElementById('sidesTbody');
+  tbody.innerHTML = '';
+  const n = pts.length;
+
+  for(let i=0; i<n; i++){
+    const j = (i+1) % n;
+    const p1 = pts[i], p2 = pts[j];
+    const dist = haverDist(p1[0],p1[1],p2[0],p2[1]);
+    const brng = bearing(p1[0],p1[1],p2[0],p2[1]);
+
+    // الزاوية الداخلية في النقطة i
+    const prev = pts[(i-1+n)%n];
+    const brng_in  = bearing(prev[0],prev[1],p1[0],p1[1]);
+    const brng_out = bearing(p1[0],p1[1],p2[0],p2[1]);
+    let angle = brng_out - brng_in;
+    if(angle < 0) angle += 360;
+    // زاوية داخلية
+    const innerAngle = 180 - angle;
+    const innerAngleAdj = ((innerAngle % 360) + 360) % 360;
+
+    lastSides.push({
+      side: i+1,
+      from: pids[i]||('P'+(i+1)),
+      to:   pids[j]||('P'+(j+1)),
+      dist, brng, angle: innerAngleAdj
+    });
+
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid rgba(255,255,255,.05)';
+    tr.innerHTML = `
+      <td style="padding:5px 8px;color:var(--accent);font-weight:700;">${i+1}</td>
+      <td style="padding:5px 8px;font-family:monospace;">${pids[i]||'P'+(i+1)}</td>
+      <td style="padding:5px 8px;font-family:monospace;">${pids[j]||'P'+(j+1)}</td>
+      <td style="padding:5px 8px;color:var(--accent2);font-weight:700;">${dist.toFixed(3)}</td>
+      <td style="padding:5px 8px;color:var(--violet);">${brng.toFixed(4)}°</td>
+      <td style="padding:5px 8px;color:#fbbf24;">${innerAngleAdj.toFixed(4)}°</td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  document.getElementById('sidesTableWrap').style.display = 'block';
+}
+
+function exportSidesCSV(){
+  if(!lastSides.length){showSt('❌ احسب أولاً');return;}
+  let csv = 'الضلع,من,إلى,الطول(م),الانحراف(°),الزاوية(°)\n';
+  lastSides.forEach(s=>{
+    csv += `${s.side},${s.from},${s.to},${s.dist.toFixed(3)},${s.brng.toFixed(4)},${s.angle.toFixed(4)}\n`;
+  });
+  dlFile('Sides_Table.csv','text/csv',csv);
+}
+
+function exportDXF(){
+  if(!lastPts.length){showSt('❌ احسب أولاً');return;}
+  const projName = document.getElementById('projectName').value||'GIS_Project';
+
+  let dxf = '0\nSECTION\n2\nHEADER\n0\nENDSEC\n';
+  dxf += '0\nSECTION\n2\nENTITIES\n';
+
+  // رسم المضلع
+  dxf += '0\nLWPOLYLINE\n8\nBOUNDARY\n70\n1\n';
+  dxf += `90\n${lastPts.length}\n`;
+  lastPts.forEach(p=>{
+    dxf += `10\n${p[1].toFixed(6)}\n20\n${p[0].toFixed(6)}\n`;
+  });
+
+  // النقاط مع التسميات
+  lastPts.forEach((p,i)=>{
+    dxf += `0\nPOINT\n8\nPOINTS\n10\n${p[1].toFixed(6)}\n20\n${p[0].toFixed(6)}\n30\n0.0\n`;
+    dxf += `0\nTEXT\n8\nLABELS\n10\n${p[1].toFixed(6)}\n20\n${p[0].toFixed(6)}\n30\n0.0\n40\n0.00005\n1\n${lastPids[i]||'P'+(i+1)}\n`;
+  });
+
+  dxf += '0\nENDSEC\n0\nEOF\n';
+  dlFile(projName.replace(/\s/g,'_')+'.dxf','application/dxf',dxf);
+  showSt('✅ تم تصدير ملف DXF');
+}
+
+// ════════════════════════════════════════════
+async function generatePDF(){
+  if(!lastPts.length){showSt('❌ احسب أولاً');return;}
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,H=297,ds=new Date().toLocaleDateString('en-GB');
+  const prepBy=document.getElementById('preparedBy').value||'Hossam Hussein';
+  const projName=document.getElementById('projectName').value||'N/A';
+  const parcel=document.getElementById('parcelNo').value||'N/A';
+  const region=document.getElementById('region').value||'N/A';
+  const workType=document.getElementById('workType').value||'Area Calculation';
+  const aM2=parseFloat(document.getElementById('areaM2').textContent.replace(/,/g,''));
+  const aDun=document.getElementById('areaDunum').textContent;
+  const aHa=document.getElementById('areaHa').textContent;
+  const aFt=document.getElementById('areaSqFt').textContent;
+  const per=document.getElementById('perimeter').textContent;
+  const nPts=document.getElementById('ptCount').textContent;
+
+  doc.setFillColor(255,255,255);doc.rect(0,0,W,H,'F');
+
+  // Header
+  doc.setFillColor(0,102,153);doc.rect(0,0,W,30,'F');
+  if(ST.logo){try{doc.addImage(ST.logo,'PNG',W-34,2,22,22);}catch(e){}}
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(13);doc.setFont('helvetica','bold');doc.text(ST.name,14,12);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text('GIS Area Calculation Report — '+workType,14,22);
+  doc.setFillColor(0,180,100);doc.rect(0,30,W,2,'F');
+
+  // دالة لرسم النص العربي كصورة في PDF
+  function addArabicText(doc, text, x, y, fontSize=8, color=[40,40,40]){
+    if(!text || /^[A-Za-z0-9\s\-\/\.\,\:\#]+$/.test(text)){
+      // نص إنجليزي أو أرقام — استخدم jsPDF مباشرة
+      doc.setFontSize(fontSize);doc.setFont('helvetica','normal');
+      doc.setTextColor(...color);doc.text(text,x,y);
+      return;
+    }
+    // نص عربي — حوله لصورة
+    const canvas=document.createElement('canvas');
+    const scale=3;
+    canvas.width=300*scale; canvas.height=(fontSize+4)*scale;
+    const ctx=canvas.getContext('2d');
+    ctx.scale(scale,scale);
+    ctx.fillStyle=`rgb(${color[0]},${color[1]},${color[2]})`;
+    ctx.font=`${fontSize*1.2}px Tajawal,Arial`;
+    ctx.direction='rtl';
+    ctx.textAlign='right';
+    ctx.fillText(text,295,fontSize+1);
+    const img=canvas.toDataURL('image/png');
+    const w=60, h=(fontSize+2)*0.35;
+    doc.addImage(img,'PNG',x,y-fontSize*0.35,w,h);
+  }
+
+  let y=40;
+  doc.setFontSize(7.5);doc.setTextColor(80,80,80);doc.setFont('helvetica','normal');
+  doc.text('Date: '+ds,14,y);doc.text('CRS: WGS84 / EPSG:4326',W/2,y,{align:'center'});doc.text('Prepared by: '+prepBy,W-14,y,{align:'right'});
+  y+=5;doc.setDrawColor(200,200,200);doc.setLineWidth(0.3);doc.line(14,y,W-14,y);y+=8;
+
+  // Project info
+  doc.setFillColor(245,248,252);doc.roundedRect(14,y-5,W-28,32,2,2,'F');
+  doc.setDrawColor(0,102,153);doc.setLineWidth(0.4);doc.roundedRect(14,y-5,W-28,32,2,2,'S');
+  doc.setFillColor(0,102,153);doc.rect(14,y-5,3,32,'F');
+  doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.setTextColor(0,102,153);doc.text('Project Information',22,y+2);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(40,40,40);
+  doc.text('Project: ',22,y+10); addArabicText(doc,projName,38,y+10,8);
+  doc.text('Parcel No.: ',22,y+18); addArabicText(doc,parcel,42,y+18,8);
+  doc.text('Region: ',115,y+10); addArabicText(doc,region,130,y+10,8);
+  doc.text('Prepared by: ',115,y+18); addArabicText(doc,prepBy,140,y+18,8);
+  y+=38;
+
+  // Results
+  doc.setFillColor(245,252,248);doc.roundedRect(14,y-5,W-28,54,2,2,'F');
+  doc.setDrawColor(0,153,80);doc.setLineWidth(0.4);doc.roundedRect(14,y-5,W-28,54,2,2,'S');
+  doc.setFillColor(0,153,80);doc.rect(14,y-5,3,54,'F');
+  doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.setTextColor(0,120,60);doc.text('Calculation Results',22,y+2);
+  const results=[['Area (m²)',fmt(aM2),'Square Meter'],['Area (Dunum)',aDun,'Dunum'],['Area (Ha)',aHa,'Hectare'],['Area (ft²)',aFt,'Square Foot'],['Perimeter',per,'Meter'],['Points',nPts,'Points']];
+  results.forEach((r,i)=>{
+    const col=i%2===0?22:115,row=y+12+Math.floor(i/2)*13;
+    doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);doc.text(r[0]+':',col,row);
+    doc.setFont('helvetica','bold');doc.setTextColor(0,80,40);doc.text(r[1],col+40,row);
+    doc.setFont('helvetica','normal');doc.setTextColor(120,120,120);doc.setFontSize(7);doc.text(r[2],col+40,row+5);
+  });
+  y+=60;
+
+  // Grid stats if applicable
+  if(lastGrid){
+    const{nRows,nCols,lats,lons}=lastGrid;
+    const dxM=haverDist(lats[0],lons[0],lats[0],lons[1]);
+    const dyM=haverDist(lats[0],lons[0],lats[1],lons[0]);
+    const cells=(nRows-1)*(nCols-1);
+    doc.setFillColor(240,240,255);doc.roundedRect(14,y-5,W-28,34,2,2,'F');
+    doc.setDrawColor(100,100,200);doc.setLineWidth(0.4);doc.roundedRect(14,y-5,W-28,34,2,2,'S');
+    doc.setFillColor(100,100,200);doc.rect(14,y-5,3,34,'F');
+    doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.setTextColor(60,60,180);doc.text('Grid Statistics',22,y+2);
+    doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(40,40,40);
+    doc.text(`Grid: ${nRows}×${nCols} = ${nRows*nCols} points`,22,y+12);
+    doc.text(`Cells: (${nRows-1})×(${nCols-1}) = ${cells} cells`,22,y+20);
+    doc.text(`Spacing X: ${dxM.toFixed(2)} m`,115,y+12);
+    doc.text(`Spacing Y: ${dyM.toFixed(2)} m`,115,y+20);
+    y+=40;
+  }
+
+  // Footer p1
+  doc.setFillColor(0,102,153);doc.rect(0,H-16,W,16,'F');doc.setFillColor(0,180,100);doc.rect(0,H-16,W,2,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(7);doc.setFont('helvetica','normal');
+  doc.text(ST.name+' | GIS & Surveying Portfolio | Hossam Hussein | Riyadh, KSA | '+ds,W/2,H-7,{align:'center'});
+
+  // Map page — صورة حقيقية من Static Map API
+  if(lastPts.length >= 3){
+    doc.addPage();
+    doc.setFillColor(255,255,255);doc.rect(0,0,W,H,'F');
+
+    // Header
+    doc.setFillColor(0,102,153);doc.rect(0,0,W,14,'F');
+    doc.setFillColor(0,180,100);doc.rect(0,14,W,2,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('Map View — '+ds,W/2,10,{align:'center'});
+
+    const mapX=14, mapY=18, mapW=W-28, mapH=180;
+
+    // حساب مركز الخريطة
+    const lats=lastPts.map(p=>p[0]);
+    const lons=lastPts.map(p=>p[1]);
+    const centerLat=((Math.min(...lats)+Math.max(...lats))/2).toFixed(6);
+    const centerLon=((Math.min(...lons)+Math.max(...lons))/2).toFixed(6);
+
+    // Static Map من geoapify — بيدعم CORS
+    const zoom=15;
+    // رسم المضلع كـ polyline
+    const polyCoords=lastPts.map(p=>`${p[1]},${p[0]}`).join(',');
+    const firstPt=`${lastPts[0][1]},${lastPts[0][0]}`;
+    const geoapifyKey='no-key'; // بدون key للاستخدام المحدود
+    
+    // استخدم openstreetmap static tiles مجمعة
+    // حل بديل: ارسم الخريطة على canvas خارجي ثم التقطها
+    const mapCanvas = document.createElement('canvas');
+    mapCanvas.width=600; mapCanvas.height=400;
+    const ctx2=mapCanvas.getContext('2d');
+    
+    // جلب tiles من OSM
+    const lats2=lastPts.map(p=>p[0]);
+    const lons2=lastPts.map(p=>p[1]);
+    const minLat2=Math.min(...lats2),maxLat2=Math.max(...lats2);
+    const minLon2=Math.min(...lons2),maxLon2=Math.max(...lons2);
+    const cLat=(minLat2+maxLat2)/2, cLon=(minLon2+maxLon2)/2;
+    
+    // حساب zoom مناسب
+    const latDiff=maxLat2-minLat2, lonDiff=maxLon2-minLon2;
+    const diff=Math.max(latDiff,lonDiff);
+    let z=15;
+    if(diff>0.1)z=12; else if(diff>0.05)z=13; else if(diff>0.02)z=14; else if(diff>0.005)z=15; else z=16;
+    
+    // تحويل lat/lon → tile
+    function latLonToTile(lat,lon,zoom){
+      const n=Math.pow(2,zoom);
+      const x=Math.floor((lon+180)/360*n);
+      const y=Math.floor((1-Math.log(Math.tan(lat*Math.PI/180)+1/Math.cos(lat*Math.PI/180))/Math.PI)/2*n);
+      return{x,y};
+    }
+    
+    // تحويل tile → pixel على canvas
+    function tileToPixel(tileX,tileY,originX,originY,zoom){
+      return{px:(tileX-originX)*256, py:(tileY-originY)*256};
+    }
+    
+    function latLonToPixel(lat,lon,zoom,originTileX,originTileY){
+      const n=Math.pow(2,zoom);
+      const px=((lon+180)/360*n-originTileX)*256;
+      const py=((1-Math.log(Math.tan(lat*Math.PI/180)+1/Math.cos(lat*Math.PI/180))/Math.PI)/2*n-originTileY)*256;
+      return{px,py};
+    }
+    
+    const centerTile=latLonToTile(cLat,cLon,z);
+    const tilesX=3, tilesY=3;
+    const originTileX=centerTile.x-Math.floor(tilesX/2);
+    const originTileY=centerTile.y-Math.floor(tilesY/2);
+    
+    mapCanvas.width=tilesX*256; mapCanvas.height=tilesY*256;
+    ctx2.fillStyle='#f0f0f0'; ctx2.fillRect(0,0,mapCanvas.width,mapCanvas.height);
+    
+    // جلب الـ tiles
+    const tilePromises=[];
+    for(let tx=0;tx<tilesX;tx++){
+      for(let ty=0;ty<tilesY;ty++){
+        const tileX=originTileX+tx, tileY=originTileY+ty;
+        const url=`https://tile.openstreetmap.org/${z}/${tileX}/${tileY}.png`;
+        tilePromises.push(new Promise(res=>{
+          const img=new Image();
+          img.crossOrigin='anonymous';
+          img.onload=()=>{ctx2.drawImage(img,tx*256,ty*256);res();}
+          img.onerror=()=>res();
+          img.src=url;
+        }));
+      }
+    }
+    
+    await Promise.all(tilePromises);
+    await new Promise(r=>setTimeout(r,500));
+    
+    // رسم المضلع على canvas
+    ctx2.strokeStyle='#0066ff'; ctx2.lineWidth=3; ctx2.fillStyle='rgba(0,102,255,0.15)';
+    ctx2.beginPath();
+    lastPts.forEach((p,i)=>{
+      const{px,py}=latLonToPixel(p[0],p[1],z,originTileX,originTileY);
+      i===0?ctx2.moveTo(px,py):ctx2.lineTo(px,py);
+    });
+    ctx2.closePath(); ctx2.fill(); ctx2.stroke();
+    
+    // رسم النقاط والتسميات
+    lastPts.forEach((p,i)=>{
+      const{px,py}=latLonToPixel(p[0],p[1],z,originTileX,originTileY);
+      ctx2.fillStyle='#00ff88'; ctx2.strokeStyle='#fff'; ctx2.lineWidth=2;
+      ctx2.beginPath(); ctx2.arc(px,py,6,0,2*Math.PI); ctx2.fill(); ctx2.stroke();
+      ctx2.fillStyle='#003366'; ctx2.font='bold 14px Arial';
+      ctx2.fillText(lastPids[i]||'P'+(i+1),px+7,py-4);
+    });
+    
+    try{
+      const imgData=mapCanvas.toDataURL('image/jpeg',0.92);
+      doc.setDrawColor(0,102,153);doc.setLineWidth(0.5);doc.rect(mapX,mapY,mapW,mapH);
+      doc.addImage(imgData,'JPEG',mapX,mapY,mapW,mapH);
+    }catch(e){
+      // fallback vector
+      const pad=0.0005;
+      const latR=(maxLat2-minLat2)||0.001, lonR=(maxLon2-minLon2)||0.001;
+      function tX(lon){return mapX+((lon-minLon2+pad)/(lonR+pad*2))*mapW;}
+      function tY(lat){return mapY+mapH-((lat-minLat2+pad)/(latR+pad*2))*mapH;}
+      doc.setFillColor(240,248,255);doc.rect(mapX,mapY,mapW,mapH,'F');
+      doc.setDrawColor(0,150,200);doc.setLineWidth(1.5);
+      const pts2d=lastPts.map(p=>[tX(p[1]),tY(p[0])]);
+      for(let i=0;i<pts2d.length;i++){
+        const j=(i+1)%pts2d.length;
+        doc.line(pts2d[i][0],pts2d[i][1],pts2d[j][0],pts2d[j][1]);
+      }
+    }
+
+    // Footer
+    doc.setFontSize(6.5);doc.setTextColor(100,100,100);doc.setFont('helvetica','normal');
+    doc.text('CRS: WGS84 / EPSG:4326 | Basemap: © OpenStreetMap contributors',W/2,mapY+mapH+6,{align:'center'});
+    doc.setFillColor(0,102,153);doc.rect(0,H-16,W,16,'F');
+    doc.setFillColor(0,180,100);doc.rect(0,H-16,W,2,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(7);doc.setFont('helvetica','normal');
+    doc.text(ST.name+' | GIS & Surveying Portfolio | Hossam Hussein | Riyadh, KSA | '+ds,W/2,H-7,{align:'center'});
+  }
+
+  // Coordinates table
+  doc.addPage();doc.setFillColor(255,255,255);doc.rect(0,0,W,H,'F');
+  let yt=20;
+  function drawTblHeader(yp){
+    doc.setFillColor(60,60,160);doc.rect(17,yp+5,W-34,7,'F');
+    doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.setTextColor(60,60,160);doc.text('Coordinate Table',22,yp+2);
+    doc.setTextColor(255,255,255);doc.setFontSize(7);
+    doc.text('Point',20,yp+10);doc.text('Longitude (X)',50,yp+10);doc.text('Latitude (Y)',118,yp+10);
+    return yp+13;
+  }
+  function drawFtr(){
+    doc.setFillColor(0,102,153);doc.rect(0,H-16,W,16,'F');doc.setFillColor(0,180,100);doc.rect(0,H-16,W,2,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(7);doc.setFont('helvetica','normal');
+    doc.text(ST.name+' | GIS & Surveying Portfolio | Hossam Hussein | Riyadh, KSA | '+ds,W/2,H-7,{align:'center'});
+  }
+  let rowY=drawTblHeader(yt);
+  lastPts.forEach((p,i)=>{
+    if(rowY+8>H-22){drawFtr();doc.addPage();doc.setFillColor(255,255,255);doc.rect(0,0,W,H,'F');yt=20;rowY=drawTblHeader(yt);}
+    doc.setFillColor(i%2===0?245:255,i%2===0?245:255,i%2===0?255:255);doc.rect(17,rowY,W-34,8,'F');
+    doc.setDrawColor(220,220,235);doc.setLineWidth(0.2);doc.line(17,rowY+8,W-17,rowY+8);
+    doc.setTextColor(60,60,160);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.text(String(lastPids[i]||'P'+(i+1)),20,rowY+5.5);
+    doc.setTextColor(40,40,40);doc.setFont('helvetica','normal');
+    doc.text(p[1].toFixed(6),50,rowY+5.5);doc.text(p[0].toFixed(6),118,rowY+5.5);
+    rowY+=8;
+  });
+  drawFtr();
+
+  // جدول الأضلاع
+  if(lastSides.length > 0){
+    doc.addPage();
+    doc.setFillColor(255,255,255);doc.rect(0,0,W,H,'F');
+    let sy = 20;
+
+    doc.setFillColor(60,60,160);doc.rect(17,sy+5,W-34,7,'F');
+    doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.setTextColor(60,60,160);
+    doc.text('Sides Table', 22, sy+2);
+    doc.setTextColor(255,255,255);doc.setFontSize(7);
+    doc.text('Side', 20, sy+10);
+    doc.text('From', 38, sy+10);
+    doc.text('To', 58, sy+10);
+    doc.text('Length (m)', 75, sy+10);
+    doc.text('Bearing (deg)', 115, sy+10);
+    doc.text('Angle (deg)', 158, sy+10);
+    sy += 13;
+
+    lastSides.forEach((s,i)=>{
+      if(sy+8>H-22){drawFtr();doc.addPage();doc.setFillColor(255,255,255);doc.rect(0,0,W,H,'F');sy=20;}
+      doc.setFillColor(i%2===0?245:255,i%2===0?245:255,i%2===0?255:255);
+      doc.rect(17,sy,W-34,8,'F');
+      doc.setDrawColor(220,220,235);doc.setLineWidth(0.2);doc.line(17,sy+8,W-17,sy+8);
+      doc.setTextColor(60,60,160);doc.setFont('helvetica','bold');doc.setFontSize(7);
+      doc.text(String(s.side),20,sy+5.5);
+      doc.setTextColor(40,40,40);doc.setFont('helvetica','normal');
+      doc.text(s.from,38,sy+5.5);
+      doc.text(s.to,58,sy+5.5);
+      doc.text(s.dist.toFixed(3),75,sy+5.5);
+      doc.text(s.brng.toFixed(4),115,sy+5.5);
+      doc.text(s.angle.toFixed(4),158,sy+5.5);
+      sy+=8;
+    });
+    drawFtr();
+  }
+
+  // صفحة الملاحظات
+  const notes = document.getElementById('reportNotes').value.trim();
+  if(notes){
+    doc.addPage();
+    doc.setFillColor(255,255,255);doc.rect(0,0,W,H,'F');
+
+    // Header
+    doc.setFillColor(0,102,153);doc.rect(0,0,W,14,'F');
+    doc.setFillColor(0,180,100);doc.rect(0,14,W,2,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('Notes & Description',W/2,10,{align:'center'});
+
+    // صندوق الملاحظات
+    let ny=25;
+    doc.setFillColor(250,252,255);doc.roundedRect(14,ny,W-28,H-55,2,2,'F');
+    doc.setDrawColor(0,102,153);doc.setLineWidth(0.4);doc.roundedRect(14,ny,W-28,H-55,2,2,'S');
+    doc.setFillColor(0,102,153);doc.rect(14,ny,3,H-55,'F');
+
+    // رسم النص باستخدام canvas للعربي
+    const notesCanvas=document.createElement('canvas');
+    const scale=2;
+    notesCanvas.width=(W-40)*scale*3.78;
+    notesCanvas.height=(H-70)*scale*3.78;
+    const nCtx=notesCanvas.getContext('2d');
+    nCtx.scale(scale*3.78,scale*3.78);
+    nCtx.fillStyle='#1a1a2e';
+    nCtx.font='14px Tajawal,Arial';
+    nCtx.direction='rtl';
+    nCtx.textAlign='right';
+
+    // تقسيم النص لأسطر
+    const maxWidth=W-50;
+    const words=notes.split('\n');
+    let lineY=15;
+    words.forEach(line=>{
+      if(line.trim()===''){lineY+=8;return;}
+      // تقسيم السطر لو طويل
+      const words2=line.split(' ');
+      let currentLine='';
+      words2.forEach(word=>{
+        const testLine=currentLine+word+' ';
+        const metrics=nCtx.measureText(testLine);
+        if(metrics.width>maxWidth && currentLine!==''){
+          nCtx.fillText(currentLine.trim(),W-40,lineY);
+          currentLine=word+' ';
+          lineY+=8;
+        } else {
+          currentLine=testLine;
+        }
+      });
+      if(currentLine) nCtx.fillText(currentLine.trim(),W-40,lineY);
+      lineY+=8;
+    });
+
+    try{
+      const notesImg=notesCanvas.toDataURL('image/png');
+      doc.addImage(notesImg,'PNG',20,ny+5,W-42,H-65);
+    }catch(e){}
+
+    drawFtr();
+  }
+
+  const fname='GIS_Report_'+parcel.replace(/[^a-zA-Z0-9]/g,'_')+'_'+ds.replace(/\//g,'-')+'.pdf';
+  doc.save(fname);
+  ST.reports++;
+  const mk='reports_'+new Date().getFullYear()+'_'+(new Date().getMonth()+1);
+  db.ref('settings/reports').set(ST.reports);
+  db.ref('stats/'+mk).once('value').then(s=>db.ref('stats/'+mk).set((s.val()||0)+1));
+  showSt('✅ تم تصدير التقرير: '+fname);
+}
+</script>
+</body>
+</html>
