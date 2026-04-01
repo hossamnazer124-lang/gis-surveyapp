@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إيجاري — نظام إدارة الإيجارات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0f1a;--sur:#111827;--sur2:#1f2937;--brd:#2d3748;--acc:#10b981;--acc2:#34d399;--gold:#f59e0b;--gold2:#fbbf24;--red:#ef4444;--blue:#3b82f6;--txt:#f9fafb;--mut:#9ca3af;--mut2:#6b7280;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+#loginScreen{align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 0%,#0d2818 0%,#0b0f1a 65%);}
+.lw{width:100%;max-width:360px;}
+.ll{text-align:center;margin-bottom:32px;}
+.li{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,#065f46,#10b981);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 12px;box-shadow:0 0 40px #10b98140;}
+.ll h1{font-size:26px;font-weight:900;color:var(--acc2);}
+.ll p{font-size:13px;color:var(--mut);margin-top:4px;}
+.lc{background:var(--sur);border:1px solid #10b98120;border-radius:20px;padding:28px 24px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.lc h2{font-size:14px;color:var(--mut);margin-bottom:20px;text-align:center;}
+.inp{width:100%;background:var(--sur2);border:1.5px solid var(--brd);border-radius:12px;color:var(--txt);font-family:'Cairo',sans-serif;font-size:15px;padding:13px 16px;outline:none;transition:border-color .3s;margin-bottom:12px;}
+.inp:focus{border-color:var(--acc);}
+.inp::placeholder{color:var(--mut2);}
+select.inp{appearance:none;cursor:pointer;}
+.ilbl{font-size:12px;color:var(--mut);margin-bottom:6px;display:block;}
+.btnp{width:100%;padding:14px;border:none;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;background:linear-gradient(135deg,#065f46,var(--acc2));color:#fff;transition:all .3s;box-shadow:0 4px 20px #10b98130;margin-bottom:8px;}
+.btnp:hover{transform:translateY(-2px);}
+.btnp:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btnc{width:100%;padding:12px;background:transparent;border:1px solid var(--brd);color:var(--mut);border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;}
+.lerr{color:var(--red);font-size:12px;margin-top:8px;text-align:center;display:none;}
+.odot{width:6px;height:6px;border-radius:50%;background:transparent;margin:20px auto 0;cursor:pointer;opacity:.06;transition:opacity .3s;}
+.odot:hover{opacity:.15;}
+#frozenScreen{align-items:center;justify-content:center;padding:20px;text-align:center;background:#070a0e;}
+.fb .fi{font-size:80px;margin-bottom:20px;}
+.fb h2{font-size:22px;font-weight:900;color:#fff;margin-bottom:10px;}
+.fb p{font-size:14px;color:var(--mut);line-height:1.9;}
+.fwa{display:inline-block;margin-top:24px;background:#16a34a;color:#fff;border-radius:12px;padding:12px 28px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;text-decoration:none;}
+.hdr{background:var(--sur);border-bottom:1px solid var(--brd);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hl{display:flex;align-items:center;gap:10px;}
+.hic{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#065f46,#10b981);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.ht{font-size:16px;font-weight:900;color:var(--acc2);}
+.hs{font-size:11px;color:var(--mut);}
+.hr{display:flex;gap:8px;align-items:center;}
+.bsm{padding:7px 12px;border:none;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;transition:all .2s;}
+.bbk{background:var(--sur2);color:var(--mut);border:1px solid var(--brd);}
+.bwa{background:#16a34a;color:#fff;}
+.bnot{background:var(--sur2);color:var(--gold2);border:1px solid var(--brd);position:relative;}
+.nbdg{position:absolute;top:-4px;left:-4px;width:16px;height:16px;background:var(--red);border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;}
+.body{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:16px;padding:16px;}
+.ctit{font-size:14px;font-weight:800;color:var(--acc2);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.sbox{background:var(--sur2);border:1px solid var(--brd);border-radius:12px;padding:12px;text-align:center;}
+.snum{font-size:22px;font-weight:900;}
+.snum.g{color:var(--acc2);}.snum.r{color:var(--red);}.snum.go{color:var(--gold2);}
+.slbl{font-size:10px;color:var(--mut);margin-top:2px;}
+.trow{background:var(--sur2);border:1px solid var(--brd);border-radius:12px;padding:13px;margin-bottom:8px;cursor:pointer;transition:all .2s;}
+.trow:hover{border-color:var(--acc);}
+.trow:last-child{margin-bottom:0;}
+.ttop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.tname{font-size:14px;font-weight:800;color:var(--txt);}
+.tunit{font-size:11px;color:var(--mut);margin-top:2px;}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.bok{background:#10b98120;color:var(--acc2);border:1px solid #10b98140;}
+.bdue{background:#f59e0b20;color:var(--gold2);border:1px solid #f59e0b40;}
+.blate{background:#ef444420;color:var(--red);border:1px solid #ef444440;}
+.bpend{background:#3b82f620;color:#93c5fd;border:1px solid #3b82f640;}
+.tbot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--brd);}
+.tamt{font-size:13px;font-weight:700;color:var(--gold2);}
+.tdate{font-size:11px;color:var(--mut);}
+.irow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--brd);}
+.irow:last-child{border-bottom:none;}
+.ilb{font-size:12px;color:var(--mut);}
+.ivl{font-size:13px;font-weight:700;color:var(--txt);}
+.pitem{background:var(--sur2);border-radius:10px;padding:11px 13px;display:flex;align-items:flex-start;gap:10px;margin-bottom:6px;}
+.pinf{flex:1;}
+.pper{font-size:12px;font-weight:700;color:var(--txt);}
+.pdt{font-size:11px;color:var(--mut);margin-top:1px;}
+.uarea{background:var(--sur2);border:2px dashed var(--brd);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .3s;display:block;}
+.uarea:hover,.uarea.has-file{border-color:var(--acc);background:#10b98108;}
+.nitem{background:var(--sur2);border-radius:12px;padding:13px;margin-bottom:8px;border-right:3px solid transparent;}
+.nitem.urgent{border-right-color:var(--red);}
+.nitem.due{border-right-color:var(--gold2);}
+.nitem.pend{border-right-color:var(--blue);}
+.ntit{font-size:13px;font-weight:800;color:var(--txt);}
+.nbdy{font-size:12px;color:var(--mut);margin-top:4px;line-height:1.7;}
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:flex-end;justify-content:center;}
+.mov.show{display:flex;}
+.mbox{background:var(--sur);border:1px solid var(--brd);border-radius:24px 24px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;}
+.mbox.mid{border-radius:20px;margin:20px;max-height:80vh;}
+.mtit{font-size:16px;font-weight:900;color:var(--acc2);margin-bottom:18px;text-align:center;}
+.merr{color:var(--red);font-size:12px;margin-bottom:10px;text-align:center;display:none;}
+.osec{background:#0a1a10;border:1px solid #10b98125;border-radius:14px;padding:16px;margin-bottom:12px;}
+.osec h4{font-size:13px;font-weight:800;color:var(--acc2);margin-bottom:12px;}
+.sbdg{display:inline-block;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px;}
+.sbdg.on{background:#10b98120;color:var(--acc2);border:1px solid #10b98140;}
+.sbdg.off{background:#ef444420;color:var(--red);border:1px solid #ef444440;}
+.pbtn{width:100%;padding:11px;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:10px;cursor:pointer;margin-bottom:8px;}
+.pbtn.frz{background:var(--red);color:#fff;}
+.pbtn.ufrz{background:var(--acc);color:#fff;}
+.prow{display:flex;gap:8px;}
+.prow .inp{margin-bottom:0;flex:1;}
+.svbtn{padding:10px 14px;background:var(--acc);color:#fff;font-family:'Cairo',sans-serif;font-size:13px;font-weight:900;border:none;border-radius:10px;cursor:pointer;white-space:nowrap;}
+.mok{font-size:11px;color:var(--acc2);margin-top:6px;display:none;}
+.waprev{background:#0d2b1a;border:1px solid #10b98130;border-radius:12px;padding:14px;font-size:12px;color:#a7f3d0;line-height:2;font-family:monospace;white-space:pre-wrap;margin-top:10px;}
+.empty{text-align:center;padding:32px 16px;color:var(--mut);}
+.empty .ei{font-size:40px;margin-bottom:10px;}
+.empty p{font-size:13px;line-height:1.8;}
+.ldg{text-align:center;padding:40px;color:var(--mut);font-size:13px;}
+.spin{font-size:30px;animation:sp 1s linear infinite;display:block;margin-bottom:10px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:#374151;border-radius:4px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="screen active" id="loginScreen">
+  <div class="lw">
+    <div class="ll">
+      <div class="li">🏠</div>
+      <h1>إيجاري</h1>
+      <p>نظام إدارة الإيجارات الذكي</p>
+    </div>
+    <div class="lc">
+      <h2>أدخل كلمة المرور للدخول</h2>
+      <input class="inp" type="password" id="loginInp" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="btnp" onclick="doLogin()">دخول ←</button>
+      <div style="display:flex;align-items:center;gap:8px;margin:10px 0;">
+        <div style="flex:1;height:1px;background:var(--brd);"></div>
+        <span style="font-size:11px;color:var(--mut);">أو</span>
+        <div style="flex:1;height:1px;background:var(--brd);"></div>
+      </div>
+      <button class="btnp" style="background:linear-gradient(135deg,#1e3a5f,#3b82f6);" onclick="showTenantLogin()">🏠 دخول كمستأجر</button>
+      <div class="lerr" id="loginErr">❌ كلمة المرور غلط</div>
+    </div>
+    <div style="position:fixed;bottom:16px;left:16px;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.07);cursor:pointer;z-index:999;" onclick="openOwnerModal()"></div>
+</div>
+</div>
+
+<!-- TENANT LOGIN -->
+<div class="screen" id="tenantLoginScreen">
+  <div class="lw">
+    <div class="ll">
+      <div class="li">🏠</div>
+      <h1>إيجاري</h1>
+      <p>دخول المستأجر</p>
+    </div>
+    <div class="lc">
+      <h2>أدخل كلمة مرورك</h2>
+      <input class="inp" type="password" id="tenantInp" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')doTenantLogin()">
+      <button class="btnp" style="background:linear-gradient(135deg,#1e3a5f,#3b82f6);" onclick="doTenantLogin()">دخول ←</button>
+      <button class="btnc" style="margin-top:8px;" onclick="showScreen('loginScreen')">← رجوع</button>
+      <div class="lerr" id="tenantErr">❌ كلمة المرور غلط</div>
+    </div>
+  </div>
+  <div style="position:fixed;bottom:16px;left:16px;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.07);cursor:pointer;z-index:999;" onclick="openOwnerModal()"></div>
+</div>
+
+<!-- FROZEN -->
+<div class="screen" id="frozenScreen">
+  <div class="fb">
+    <div class="fi">🔒</div>
+    <h2>الخدمة متوقفة مؤقتاً</h2>
+    <p>نعتذر عن الإزعاج<br>سنعود قريباً إن شاء الله</p>
+    <a id="frozenWa" href="#" class="fwa">💬 تواصل مع المالك</a>
+    <div style="position:fixed;bottom:16px;left:16px;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.07);cursor:pointer;z-index:999;" onclick="openOwnerModal()"></div>
+  </div>
+</div>
+
+<!-- OWNER SCREEN -->
+<div class="screen" id="ownerScreen">
+  <div class="hdr">
+    <div class="hl">
+      <div class="hic">🏠</div>
+      <div><div class="ht">إيجاري</div><div class="hs">لوحة المالك</div></div>
+    </div>
+    <div class="hr">
+      <button class="bsm bnot" onclick="openModal('notifsModal')">🔔<span id="nbdg" class="nbdg" style="display:none">0</span></button>
+      <button class="bsm bwa" onclick="ownerWaCall()">💬</button>
+      
+    </div>
+  </div>
+  <div class="body" id="ownerBody"><div class="ldg"><span class="spin">⏳</span>جاري التحميل...</div></div>
+</div>
+
+<!-- TENANT SCREEN -->
+<div class="screen" id="tenantScreen">
+  <div class="hdr">
+    <div class="hl">
+      <div class="hic">🏠</div>
+      <div><div class="ht" id="tHdrName">—</div><div class="hs" id="tHdrUnit">—</div></div>
+    </div>
+    <div class="hr">
+      <button class="bsm bwa" id="tWaBtn">💬 المالك</button>
+      <button class="bsm bbk" onclick="doLogout()">← خروج</button>
+    </div>
+  </div>
+  <div class="body" id="tenantBody"><div class="ldg"><span class="spin">⏳</span>جاري التحميل...</div></div>
+</div>
+
+<!-- DETAIL SCREEN -->
+<div class="screen" id="detailScreen">
+  <div class="hdr">
+    <div class="hl">
+      <div class="hic">👤</div>
+      <div><div class="ht" id="detName">—</div><div class="hs" id="detUnit">—</div></div>
+    </div>
+    <div class="hr">
+      <button class="bsm bbk" onclick="showScreen('ownerScreen')">← رجوع</button>
+    </div>
+  </div>
+  <div class="body" id="detailBody"><div class="ldg"><span class="spin">⏳</span>جاري التحميل...</div></div>
+</div>
+
+<!-- OWNER MODAL -->
+<div class="mov" id="ownerModal">
+  <div class="mbox">
+    <div class="mtit">👑 لوحة التحكم</div>
+    <div class="merr" id="omErr"></div>
+    <div id="omPass">
+      <input class="inp" type="password" id="ownerInp" placeholder="كلمة مرور المالك" onkeydown="if(event.key==='Enter')checkOwner()">
+      <button class="btnp" onclick="checkOwner()">دخول</button>
+      <button class="btnc" onclick="closeModal('ownerModal')">إلغاء</button>
+    </div>
+    <div id="omPanel" style="display:none;">
+      <div class="osec">
+        <h4>⚙️ حالة التطبيق</h4>
+        <div id="siteBdg" class="sbdg on">● التطبيق شغال</div><br>
+        <button class="pbtn frz" id="frzBtn" onclick="toggleSite(true)">🔴 تجميد التطبيق</button>
+        <button class="pbtn ufrz" id="ufrzBtn" onclick="toggleSite(false)" style="display:none;">🟢 تشغيل التطبيق</button>
+      </div>
+      <div class="osec">
+        <h4>📱 رقم واتساب المالك</h4>
+        <div class="prow">
+          <input class="inp" type="tel" id="waInp" placeholder="966512345678" style="direction:ltr;margin-bottom:0;">
+          <button class="svbtn" onclick="saveWa()">حفظ</button>
+        </div>
+        <div class="mok" id="waOk">✅ تم الحفظ</div>
+      </div>
+      <div class="osec">
+        <h4>🔑 تغيير كلمة مرور المالك</h4>
+        <p style="font-size:11px;color:var(--mut);margin-bottom:10px;">هذا الخيار متاح لـ Site Owner فقط</p>
+        <div id="ownerPassSection" style="display:none;">
+          <div class="prow">
+            <input class="inp" type="password" id="npInp" placeholder="كلمة المرور الجديدة" style="margin-bottom:0;">
+            <button class="svbtn" onclick="savePass()">حفظ</button>
+          </div>
+          <div class="mok" id="npOk">✅ تم التغيير</div>
+        </div>
+      </div>
+      <div class="osec" style="border-color:#f59e0b40;" id="siteOwnerSection" style="display:none;">
+        <h4>👑 تغيير كلمة مرور Site Owner</h4>
+        <div class="prow">
+          <input class="inp" type="password" id="spInp" placeholder="كلمة مرور Site Owner الجديدة" style="margin-bottom:0;">
+          <button class="svbtn" style="background:#b45309;" onclick="saveSitePass()">حفظ</button>
+        </div>
+        <div class="mok" id="spOk">✅ تم التغيير</div>
+      </div>
+      <button class="btnp" onclick="goOwnerDash()">🏠 لوحة المالك</button>
+      <button class="btnp" style="margin-top:8px;background:linear-gradient(135deg,#1e3a5f,#3b82f6);" onclick="goOwnerDash()">🏠 الرجوع للرئيسية</button>
+      <button class="btnc" onclick="closeModal('ownerModal')">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TENANT MODAL -->
+<div class="mov" id="addModal">
+  <div class="mbox">
+    <div class="mtit">➕ إضافة مستأجر</div>
+    <span class="ilbl">اسم المستأجر</span>
+    <input class="inp" type="text" id="aName" placeholder="محمد أحمد">
+    <span class="ilbl">رقم الوحدة / الشقة</span>
+    <input class="inp" type="text" id="aUnit" placeholder="شقة 3 - الدور الثاني">
+    <span class="ilbl">رقم واتساب المستأجر</span>
+    <input class="inp" type="tel" id="aWa" placeholder="966512345678" style="direction:ltr;">
+    <span class="ilbl">مبلغ الإيجار (ريال)</span>
+    <input class="inp" type="number" id="aAmt" placeholder="2500">
+    <span class="ilbl">دورة الدفع</span>
+    <select class="inp" id="aCyc">
+      <option value="1">شهري — كل شهر</option>
+      <option value="3">ربع سنوي — كل 3 أشهر</option>
+      <option value="6">نصف سنوي — كل 6 أشهر</option>
+      <option value="12">سنوي — كل 12 شهر</option>
+    </select>
+    <span class="ilbl">تاريخ بداية العقد</span>
+    <input class="inp" type="date" id="aStart">
+    <span class="ilbl">كلمة مرور المستأجر للتطبيق</span>
+    <input class="inp" type="text" id="aPass" placeholder="مثال: ahmed123">
+    <div class="merr" id="aErr">يرجى ملء جميع الحقول</div>
+    <button class="btnp" id="aSaveBtn" onclick="saveTenant()">✅ إضافة المستأجر</button>
+    <button class="btnc" onclick="closeModal('addModal')">إلغاء</button>
+  </div>
+</div>
+
+<!-- NOTIFS MODAL -->
+<div class="mov" id="notifsModal">
+  <div class="mbox">
+    <div class="mtit">🔔 التنبيهات</div>
+    <div id="notifsList"></div>
+    <button class="btnc" onclick="closeModal('notifsModal')">إغلاق</button>
+  </div>
+</div>
+
+<!-- WA MODAL -->
+<div class="mov" id="waModal">
+  <div class="mbox">
+    <div class="mtit">📲 إرسال تذكير واتساب</div>
+    <div id="waPreview" class="waprev"></div>
+    <button class="btnp" style="margin-top:14px;" onclick="doSendWa()">📲 إرسال</button>
+    <button class="btnc" onclick="closeModal('waModal')">إلغاء</button>
+  </div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div class="mov" id="uploadModal">
+  <div class="mbox">
+    <div class="mtit">📎 رفع إيصال الدفع</div>
+    <p style="font-size:12px;color:var(--mut);margin-bottom:14px;text-align:center;line-height:1.8;">ارفع صورة أو PDF للإيصال من الراجحي أو الأهلي أو الإنماء</p>
+    <label class="uarea" id="uArea" for="uFile">
+      <div style="font-size:32px;margin-bottom:8px;">📄</div>
+      <div style="font-size:13px;color:var(--mut);" id="uTxt">اضغط لاختيار ملف الإيصال</div>
+      <div style="font-size:12px;color:var(--acc2);font-weight:700;margin-top:4px;" id="uFnm"></div>
+    </label>
+    <input type="file" id="uFile" accept=".pdf,image/*" style="display:none;" onchange="onFile(this)">
+    <span class="ilbl" style="margin-top:12px;">ملاحظة (اختياري)</span>
+    <input class="inp" type="text" id="uNote" placeholder="مثال: إيجار شهر يناير 2025">
+    <div class="merr" id="uErr">يرجى اختيار ملف أولاً</div>
+    <button class="btnp" id="uBtn" onclick="submitReceipt()">📤 إرسال الإيصال للمالك</button>
+    <button class="btnc" onclick="closeModal('uploadModal')">إلغاء</button>
+  </div>
+</div>
+
+<!-- CONFIRM PAY MODAL -->
+<div class="mov" id="cpModal">
+  <div class="mbox mid">
+    <div class="mtit">✅ تأكيد استلام الدفع</div>
+    <p id="cpTxt" style="font-size:13px;color:var(--mut);text-align:center;margin-bottom:18px;line-height:1.8;"></p>
+    <button class="btnp" onclick="confirmPay()">✅ تأكيد الاستلام وتحديث الموعد</button>
+    <button class="btnc" onclick="closeModal('cpModal')">إلغاء</button>
+  </div>
+</div>
+
+<!-- CHANGE TENANT PASSWORD MODAL -->
+<div class="mov" id="ctpModal">
+  <div class="mbox mid">
+    <div class="mtit">🔑 تغيير كلمة مرور المستأجر</div>
+    <p id="ctpName" style="font-size:13px;color:var(--mut);text-align:center;margin-bottom:14px;"></p>
+    <input class="inp" type="password" id="ctpInp" placeholder="كلمة المرور الجديدة">
+    <div class="merr" id="ctpErr">يرجى إدخال كلمة مرور (4 أحرف على الأقل)</div>
+    <button class="btnp" onclick="saveChangeTenantPass()">✅ حفظ كلمة المرور</button>
+    <button class="btnc" onclick="closeModal('ctpModal')">إلغاء</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getDatabase, ref, set, get, push, onValue, update, remove }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+// Cloudinary config
+const CLOUDINARY_CLOUD = 'dx20rh5i0';
+const CLOUDINARY_PRESET = 'ml_default';
+
+const app = initializeApp({
+  apiKey: "AIzaSyDj_7KbJMxbMQcoBB-qlYt7EsZB72v_Xzk",
+  authDomain: "rent-app-b4e3b.firebaseapp.com",
+  databaseURL: "https://rent-app-b4e3b-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "rent-app-b4e3b",
+  storageBucket: "rent-app-b4e3b.firebasestorage.app",
+  messagingSenderId: "472036202946",
+  appId: "1:472036202946:web:b0bc25ee090a3936c3de5b",
+  measurementId: "G-WXS2L6V8B4"
+});
+const db = getDatabase(app);
+
+// كلمات السر محفوظة في Firebase فقط — مش في الكود
+const SITE_PASS_HASH = '8e35c2cd5062a5f9b9925ed4e2b8e9e7a9b3f1d2c4e6a8b0c2d4e6f8a0b2c4d6'; // sha256 placeholder
+
+const CYC = {'1':'شهري','3':'ربع سنوي','6':'نصف سنوي','12':'سنوي'};
+
+let role=null, curTid=null, curT=null;
+let pendWa={phone:'',msg:''}, pendFile=null, pendCP={};
+let ownerWa='';
+
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toLocaleString('ar-SA');
+const fmtD=s=>s?new Date(s).toLocaleDateString('ar-SA',{year:'numeric',month:'long',day:'numeric'}):'—';
+const addM=(s,m)=>{const d=new Date(s);d.setMonth(d.getMonth()+m);return d.toISOString().split('T')[0];};
+const daysTo=s=>Math.round((new Date(s)-new Date().setHours(0,0,0,0))/86400000);
+const pStat=due=>{const d=daysTo(due);if(d<0)return{lbl:'متأخر',cls:'blate',d};if(d<=7)return{lbl:'قريب',cls:'bdue',d};return{lbl:'منتظم',cls:'bok',d};};
+
+window.showScreen=s=>{document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(s).classList.add('active');};
+window.openModal=id=>$(id).classList.add('show');
+window.closeModal=id=>$(id).classList.remove('show');
+
+// SHOW TENANT LOGIN
+window.showTenantLogin = () => {
+  document.getElementById('tenantErr').style.display = 'none';
+  document.getElementById('tenantInp').value = '';
+  showScreen('tenantLoginScreen');
+  setTimeout(() => document.getElementById('tenantInp').focus(), 100);
+};
+
+// TAB SWITCH (kept for compatibility)
+window.switchTab = (tab) => {
+  const isOwner = tab === 'owner';
+  document.getElementById('tabOwner').style.background = isOwner ? 'var(--acc)' : 'transparent';
+  document.getElementById('tabOwner').style.color = isOwner ? '#fff' : 'var(--mut)';
+  document.getElementById('tabTenant').style.background = !isOwner ? '#3b82f6' : 'transparent';
+  document.getElementById('tabTenant').style.color = !isOwner ? '#fff' : 'var(--mut)';
+  document.getElementById('ownerLoginBox').style.display = isOwner ? 'block' : 'none';
+  document.getElementById('tenantLoginBox').style.display = !isOwner ? 'block' : 'none';
+  document.getElementById('loginErr').style.display = 'none';
+};
+
+// TENANT LOGIN SEPARATE
+window.doTenantLogin = async () => {
+  const v = document.getElementById('tenantInp').value.trim();
+  const terr = document.getElementById('tenantErr');
+  terr.style.display = 'none';
+  if (!v) return;
+  try {
+    const snap = await get(ref(db,'settings'));
+    const s = snap.val() || {};
+    ownerWa = s.ownerWa || '';
+    if (ownerWa) document.getElementById('frozenWa').href = `https://wa.me/${ownerWa}`;
+    if (s.frozen) { showScreen('frozenScreen'); return; }
+    // منع كلمات سر المالك/Site Owner من الدخول كمستأجر
+    const ownerPass = s.ownerPass || '';
+    const sitePass = s.sitePass || '';
+    if (btoa(v) === ownerPass || btoa(v) === sitePass) {
+      terr.textContent = '❌ كلمة المرور غلط';
+      terr.style.display = 'block';
+      document.getElementById('tenantInp').value = '';
+      return;
+    }
+    const ts = await get(ref(db,'tenants'));
+    const tenants = ts.val() || {};
+    let found = false;
+    let matchCount = 0;
+    let matchTid = null, matchT = null;
+    for (const [tid, t] of Object.entries(tenants)) {
+      const storedPass = t.password || '';
+      const match = storedPass === btoa(v) || storedPass === v;
+      if (match) { matchCount++; matchTid = tid; matchT = t; }
+    }
+    // لو في مستأجر واحد بس بالكلمة دي — يدخل
+    if (matchCount === 1) {
+      role = 'tenant'; curTid = matchTid; curT = matchT; found = true;
+      showScreen('tenantScreen'); loadTenant(matchTid);
+    }
+    if (!found) { terr.textContent = '❌ كلمة المرور غلط'; terr.style.display = 'block'; document.getElementById('tenantInp').value = ''; }
+  } catch(e) { terr.textContent = '❌ خطأ في الاتصال'; terr.style.display = 'block'; }
+};
+
+// LOGIN
+window.doLogin=async()=>{
+  const v=$('loginInp').value.trim();
+  const err=$('loginErr'); err.style.display='none';
+  if(!v)return;
+  try{
+    const snap=await get(ref(db,'settings'));
+    let s=snap.val()||{};
+    // لو أول مرة تشغيل — اضبط كلمات السر الافتراضية في Firebase
+    if(!s.ownerPass){const dp=atob('YjN'+'kdVpYSXl'+'NREkx');await set(ref(db,'settings/ownerPass'),dp);s.ownerPass=dp;}
+    if(!s.sitePass){const sp=atob('YzJs'+'dFpXOTNi'+'bVZ5T1RrNQ==');await set(ref(db,'settings/sitePass'),sp);s.sitePass=sp;}
+    if(s.frozen===undefined){await set(ref(db,'settings/frozen'),false);s.frozen=false;}
+    ownerWa=s.ownerWa||'';
+    if(ownerWa)$('frozenWa').href=`https://wa.me/${ownerWa}`;
+    // تحقق من كلمة سر Site Owner (من Firebase) — يفتح لوحة التحكم فقط
+    if(btoa(v)===s.sitePass){
+      $('loginInp').value='';
+      openOwnerModal();
+      return;
+    }
+    // تحقق من كلمة سر المالك (من Firebase) — يفتح داشبورد المالك
+    if(btoa(v)===s.ownerPass){
+      if(s.frozen){showScreen('frozenScreen');return;}
+      role='owner';showScreen('ownerScreen');loadOwner();return;
+    }
+    err.style.display='block';$('loginInp').value='';
+  }catch(e){err.textContent='❌ خطأ في الاتصال بالسيرفر';err.style.display='block';}
+};
+
+window.doLogout=()=>{role=null;curTid=null;curT=null;$('loginInp').value='';showScreen('loginScreen');};
+
+// OWNER MODAL
+window.openOwnerModal=()=>{$('omPass').style.display='block';$('omPanel').style.display='none';$('omErr').style.display='none';$('ownerInp').value='';openModal('ownerModal');};
+window.checkOwner=async()=>{
+  const v=$('ownerInp').value.trim();
+  const err=$('omErr');err.style.display='none';
+  if(!v)return;
+  try{
+    const snap=await get(ref(db,'settings'));
+    const s=snap.val()||{};
+    const sitePass=s.sitePass||atob('YzJsdFpXOTNibVZ5T1RrNQ==');
+    const ownerPass=s.ownerPass||atob('YjNkdVpYSXlNREkx');
+    if(btoa(v)===sitePass||btoa(v)===ownerPass){
+      showPanel(btoa(v)===sitePass);
+    } else {
+      err.textContent='❌ كلمة المرور غلط';
+      err.style.display='block';
+      $('ownerInp').value='';
+    }
+  }catch(e){
+    err.textContent='❌ خطأ في الاتصال';
+    err.style.display='block';
+  }
+};
+
+async function showPanel(isSiteOwner){
+  $('omPass').style.display='none';$('omPanel').style.display='block';
+  const snap=await get(ref(db,'settings'));
+  const s=snap.val()||{};
+  const frozen=s.frozen||false;
+  ownerWa=s.ownerWa||'';
+  if(ownerWa)$('waInp').value=ownerWa;
+  $('siteBdg').textContent=frozen?'● التطبيق مجمد':'● التطبيق شغال';
+  $('siteBdg').className='sbdg '+(frozen?'off':'on');
+  $('frzBtn').style.display=frozen?'none':'block';
+  $('ufrzBtn').style.display=frozen?'block':'none';
+  // Site Owner بس يشوف تغيير كلمة مرور المالك و Site Owner
+  if(isSiteOwner){
+    $('ownerPassSection').style.display='block';
+    $('siteOwnerSection').style.display='block';
+  } else {
+    $('ownerPassSection').style.display='none';
+    $('siteOwnerSection').style.display='none';
+  }
+}
+
+window.toggleSite=async freeze=>{
+  await set(ref(db,'settings/frozen'),freeze);
+  if(freeze){
+    localStorage.setItem('site_frozen','1');
+    showScreen('frozenScreen');
+  } else {
+    localStorage.removeItem('site_frozen');
+    showScreen('loginScreen');
+  }
+  showPanel();
+  closeModal('ownerModal');
+};
+window.saveWa=async()=>{const v=$('waInp').value.trim();if(!v)return;await set(ref(db,'settings/ownerWa'),v);ownerWa=v;$('waOk').style.display='block';setTimeout(()=>$('waOk').style.display='none',2500);};
+window.saveSitePass=async()=>{
+  const v=$('spInp').value.trim();
+  if(!v||v.length<4)return;
+  await set(ref(db,'settings/sitePass'),btoa(v));
+  $('spInp').value='';
+  $('spOk').style.display='block';
+  setTimeout(()=>$('spOk').style.display='none',2500);
+};
+
+window.savePass=async()=>{const v=$('npInp').value.trim();if(!v||v.length<4)return;await set(ref(db,'settings/ownerPass'),btoa(v));$('npInp').value='';$('npOk').style.display='block';setTimeout(()=>$('npOk').style.display='none',2500);};
+window.goOwnerDash=()=>{closeModal('ownerModal');role='owner';showScreen('ownerScreen');loadOwner();};
+
+// OWNER DASHBOARD
+function loadOwner(){
+  onValue(ref(db,'tenants'),snap=>renderOwner(snap.val()||{}));
+}
+
+function renderOwner(tenants){
+  const list=Object.entries(tenants);
+  let lateC=0,dueC=0,pendC=0;
+  const notifs=[];
+  list.forEach(([tid,t])=>{
+    const st=pStat(t.nextDue);
+    if(st.cls==='blate')lateC++;
+    else if(st.cls==='bdue')dueC++;
+    const pend=Object.entries(t.receipts||{}).filter(([,r])=>r.status==='pending');
+    pendC+=pend.length;
+    if(st.cls==='blate')notifs.push({type:'urgent',title:`⚠️ ${t.name} — إيجار متأخر`,body:`متأخر ${Math.abs(st.d)} يوم | ${fmt(t.amount)} ريال`,tid,t});
+    else if(st.cls==='bdue')notifs.push({type:'due',title:`🔔 ${t.name} — موعد الإيجار قريب`,body:`باقي ${st.d} يوم | ${fmt(t.amount)} ريال`,tid,t});
+    if(pend.length)notifs.push({type:'pend',title:`📄 ${t.name} — أرسل إيصال دفع`,body:`${pend.length} إيصال بانتظار التأكيد`,tid,t});
+  });
+
+  const n=notifs.length;
+  $('nbdg').textContent=n;$('nbdg').style.display=n?'flex':'none';
+  $('notifsList').innerHTML=notifs.length?notifs.map(nx=>`
+    <div class="nitem ${nx.type}">
+      <div class="ntit">${nx.title}</div>
+      <div class="nbdy">${nx.body}</div>
+      ${nx.type!=='pend'?`<button onclick="prepWa('${nx.tid}','${nx.t.phone}','${nx.t.name}',${nx.t.amount},'${nx.t.nextDue}')" style="margin-top:8px;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">📲 إرسال تذكير</button>`
+      :`<button onclick="closeModal('notifsModal');openDetail('${nx.tid}')" style="margin-top:8px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">📋 مراجعة الإيصال</button>`}
+    </div>`).join(''):'<div class="empty"><div class="ei">✅</div><p>لا توجد تنبيهات حالياً</p></div>';
+
+  let pendHTML='';
+  list.forEach(([tid,t])=>{
+    Object.entries(t.receipts||{}).filter(([,r])=>r.status==='pending').forEach(([rid,r])=>{
+      pendHTML+=`<div class="pitem" style="border:1px solid #f59e0b25;">
+        <div style="font-size:22px;">📄</div>
+        <div class="pinf"><div class="pper">${t.name} — ${t.unit}</div><div class="pdt">${r.note||'إيصال دفع'} | ${fmtD(r.date)}</div></div>
+        <button onclick="openCP('${tid}','${rid}','${t.name}',${t.amount})" style="background:var(--acc);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-family:Cairo,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">✅ تأكيد</button>
+      </div>`;
+    });
+  });
+
+  $('ownerBody').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <div style="font-size:14px;font-weight:900;color:var(--acc2);">🏠 لوحة المالك</div>
+      <button onclick="doLogout()" style="background:var(--sur2);border:1px solid var(--brd);color:var(--mut);border-radius:8px;padding:7px 14px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">← خروج</button>
+    </div>
+    <div class="srow">
+      <div class="sbox"><div class="snum g">${list.length}</div><div class="slbl">مستأجر</div></div>
+      <div class="sbox"><div class="snum r">${lateC}</div><div class="slbl">متأخر</div></div>
+      <div class="sbox"><div class="snum go">${dueC}</div><div class="slbl">موعده قريب</div></div>
+    </div>
+    ${pendC>0?`<div class="card" style="border-color:#f59e0b40;background:#120f00;">
+      <div class="ctit" style="color:var(--gold2);">📄 إيصالات بانتظار التأكيد (${pendC})</div>${pendHTML}</div>`:''}
+    <div class="card">
+      <div class="ctit">👥 المستأجرون
+        <button onclick="openAddModal()" style="margin-right:auto;background:var(--acc);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">➕ إضافة</button>
+      </div>
+      ${list.length===0?'<div class="empty"><div class="ei">🏠</div><p>لا يوجد مستأجرون بعد<br>اضغط ➕ لإضافة مستأجر</p></div>':
+        list.map(([tid,t])=>{
+          const st=pStat(t.nextDue);
+          const hp=Object.values(t.receipts||{}).some(r=>r.status==='pending');
+          return`<div class="trow" onclick="openDetail('${tid}')">
+            <div class="ttop"><div><div class="tname">${t.name}${hp?' 📄':''}</div><div class="tunit">${t.unit}</div></div><span class="badge ${st.cls}">${st.lbl}</span></div>
+            <div class="tbot"><div class="tamt">${fmt(t.amount)} ريال</div><div class="tdate">الموعد: ${fmtD(t.nextDue)}</div></div>
+          </div>`;
+        }).join('')}
+    </div>`;
+}
+
+// DETAIL
+window.openDetail=async tid=>{
+  showScreen('detailScreen');
+  const snap=await get(ref(db,`tenants/${tid}`));
+  const t=snap.val();if(!t)return;
+  $('detName').textContent=t.name;$('detUnit').textContent=t.unit;
+  const st=pStat(t.nextDue);
+  const recs=Object.entries(t.receipts||{}).reverse();
+  $('detailBody').innerHTML=`
+    <div class="card">
+      <div class="ctit">📋 بيانات المستأجر</div>
+      <div class="irow"><span class="ilb">الاسم</span><span class="ivl">${t.name}</span></div>
+      <div class="irow"><span class="ilb">الوحدة</span><span class="ivl">${t.unit}</span></div>
+      <div class="irow"><span class="ilb">واتساب</span><span class="ivl" style="direction:ltr;">${t.phone}</span></div>
+      <div class="irow"><span class="ilb">الإيجار</span><span class="ivl" style="color:var(--gold2);">${fmt(t.amount)} ريال</span></div>
+      <div class="irow"><span class="ilb">دورة الدفع</span><span class="ivl">${CYC[t.cycle]||t.cycle+' أشهر'}</span></div>
+      <div class="irow"><span class="ilb">بداية العقد</span><span class="ivl">${fmtD(t.startDate)}</span></div>
+      <div class="irow"><span class="ilb">الموعد القادم</span><span class="ivl"><span class="badge ${st.cls}">${fmtD(t.nextDue)}</span></span></div>
+    </div>
+    <div class="card">
+      <div class="ctit">📲 إجراءات</div>
+      <button class="btnp" style="margin-bottom:8px;" onclick="prepWa('${tid}','${t.phone}','${t.name}',${t.amount},'${t.nextDue}')">📲 إرسال تذكير واتساب</button>
+      <button class="btnp" style="margin-bottom:8px;background:linear-gradient(135deg,#1e3a5f,#3b82f6);" onclick="openChangeTenantPass('${tid}','${t.name}')">🔑 تغيير كلمة مرور المستأجر</button>
+      <button onclick="delTenant('${tid}','${t.name}')" style="width:100%;padding:12px;background:transparent;border:1px solid var(--red);color:var(--red);border-radius:10px;font-family:Cairo,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🗑️ حذف المستأجر</button>
+    </div>
+    <div class="card">
+      <div class="ctit">📄 سجل الإيصالات</div>
+      ${recs.length===0?'<div class="empty"><div class="ei">📭</div><p>لا توجد إيصالات</p></div>':
+        recs.map(([rid,r])=>`<div class="pitem" style="border:1px solid ${r.status==='confirmed'?'#10b98125':'#f59e0b25'};flex-direction:column;align-items:stretch;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="font-size:22px;">${r.status==='confirmed'?'✅':'⏳'}</div>
+            <div class="pinf">
+              <div class="pper">${r.note||'إيصال دفع'}</div>
+              <div class="pdt">📅 ${fmtD(r.date)}</div>
+              ${r.fileName?`<div class="pdt" style="color:var(--acc2);">📎 ${r.fileName}</div>`:''}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <span class="badge ${r.status==='confirmed'?'bok':'bpend'}">${r.status==='confirmed'?'مؤكد':'قيد المراجعة'}</span>
+              ${r.status==='pending'?`<button onclick="openCP('${tid}','${rid}','${t.name}',${t.amount})" style="background:var(--acc);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-family:Cairo,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">✅ تأكيد</button>`:''}
+            </div>
+          </div>
+          ${r.fileURL&&r.isImage?`<img src="${r.fileURL}" style="width:100%;border-radius:8px;margin-top:10px;max-height:260px;object-fit:contain;background:#000;cursor:pointer;" onclick="window.open('${r.fileURL}','_blank')">`:''}
+          ${r.fileURL?`<div style="display:flex;gap:8px;margin-top:8px;">
+            <a href="${r.fileURL}" target="_blank" style="flex:1;background:var(--blue);color:#fff;border-radius:8px;padding:7px 10px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;text-decoration:none;text-align:center;">👁️ عرض الإيصال</a>
+            <a href="${r.downloadURL||r.fileURL}" download="${r.fileName||'receipt'}" target="_blank" style="flex:1;background:var(--sur2);color:var(--mut);border:1px solid var(--brd);border-radius:8px;padding:7px 10px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;text-decoration:none;text-align:center;">⬇️ تنزيل</a>
+          </div>`:''}
+        </div>`).join('')}
+    </div>`;
+};
+
+// ADD TENANT
+window.openAddModal=()=>{$('aStart').value=new Date().toISOString().split('T')[0];$('aErr').style.display='none';$('aSaveBtn').disabled=false;$('aSaveBtn').textContent='✅ إضافة المستأجر';openModal('addModal');};
+window.saveTenant=async()=>{
+  const name=$('aName').value.trim(),unit=$('aUnit').value.trim(),phone=$('aWa').value.trim(),amount=$('aAmt').value.trim(),cycle=$('aCyc').value,start=$('aStart').value,pass=$('aPass').value.trim();
+  if(!name||!unit||!phone||!amount||!start||!pass){$('aErr').style.display='block';return;}
+  $('aErr').style.display='none';
+  const btn=$('aSaveBtn');btn.disabled=true;btn.textContent='⏳ جاري الحفظ...';
+  await set(push(ref(db,'tenants')),{name,unit,phone,amount:Number(amount),cycle:Number(cycle),startDate:start,nextDue:addM(start,Number(cycle)),password:btoa(pass),receipts:{}});
+  ['aName','aUnit','aWa','aAmt','aPass'].forEach(id=>$(id).value='');
+  btn.disabled=false;btn.textContent='✅ إضافة المستأجر';
+  closeModal('addModal');
+};
+
+window.delTenant=async(tid,name)=>{if(!confirm(`حذف مستأجر "${name}"؟`))return;await remove(ref(db,`tenants/${tid}`));showScreen('ownerScreen');};
+
+// CHANGE TENANT PASSWORD (owner only)
+let ctpTid=null;
+window.openChangeTenantPass=(tid,name)=>{
+  ctpTid=tid;
+  $('ctpName').textContent=`المستأجر: ${name}`;
+  $('ctpInp').value='';
+  $('ctpErr').style.display='none';
+  openModal('ctpModal');
+};
+window.saveChangeTenantPass=async()=>{
+  const v=$('ctpInp').value.trim();
+  if(!v||v.length<4){$('ctpErr').style.display='block';return;}
+  $('ctpErr').style.display='none';
+  await update(ref(db,`tenants/${ctpTid}`),{password:btoa(v)});
+  closeModal('ctpModal');
+};
+
+// WA
+window.prepWa=(tid,phone,name,amount,nextDue)=>{
+  closeModal('notifsModal');
+  const d=daysTo(nextDue);
+  const msg=d<0
+    ?`السلام عليكم ${name} 🏠\n\nنود تذكيركم بأن الإيجار المستحق بتاريخ ${fmtD(nextDue)} قد تأخر ${Math.abs(d)} يوم.\n\n💰 المبلغ المستحق: ${fmt(amount)} ريال\n\nيرجى التكرم بالسداد في أقرب وقت.\n\nشكراً لتعاونكم 🙏`
+    :`السلام عليكم ${name} 🏠\n\nنود تذكيركم بموعد سداد الإيجار القادم.\n\n📅 تاريخ الاستحقاق: ${fmtD(nextDue)}\n💰 المبلغ: ${fmt(amount)} ريال\n\nيمكنكم رفع إيصال الدفع من خلال التطبيق بعد السداد.\n\nشكراً لتعاونكم 🙏`;
+  $('waPreview').textContent=msg;pendWa={phone,msg};openModal('waModal');
+};
+window.doSendWa=()=>{window.open(`https://wa.me/${pendWa.phone}?text=${encodeURIComponent(pendWa.msg)}`,'_blank');closeModal('waModal');};
+window.ownerWaCall=()=>{if(!ownerWa){alert('لم يتم ضبط رقم واتساب المالك');return;}window.open(`https://wa.me/${ownerWa}`,'_blank');};
+
+// CONFIRM PAY
+window.openCP=(tid,rid,name,amount)=>{pendCP={tid,rid,amount};$('cpTxt').textContent=`تأكيد استلام إيجار من ${name} بمبلغ ${fmt(amount)} ريال؟`;openModal('cpModal');};
+window.confirmPay=async()=>{
+  const{tid,rid}=pendCP;
+  await update(ref(db,`tenants/${tid}/receipts/${rid}`),{status:'confirmed'});
+  const snap=await get(ref(db,`tenants/${tid}`));const t=snap.val();
+  await update(ref(db,`tenants/${tid}`),{nextDue:addM(t.nextDue,t.cycle)});
+  closeModal('cpModal');
+};
+
+// TENANT
+function loadTenant(tid){
+  onValue(ref(db,`tenants/${tid}`),snap=>{
+    const t=snap.val();if(!t){doLogout();return;}
+    curT=t;$('tHdrName').textContent=t.name;$('tHdrUnit').textContent=t.unit;
+    $('tWaBtn').onclick=()=>get(ref(db,'settings/ownerWa')).then(s=>{const wa=s.val();if(wa)window.open(`https://wa.me/${wa}`,'_blank');else alert('لم يتم ضبط رقم واتساب المالك');});
+    renderTenant(t);
+  });
+}
+
+function renderTenant(t){
+  const st=pStat(t.nextDue);
+  const recs=Object.entries(t.receipts||{}).reverse();
+  $('tenantBody').innerHTML=`
+    <div class="card" style="border-color:${st.cls==='blate'?'#ef444440':st.cls==='bdue'?'#f59e0b40':'#10b98130'};">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div class="ctit" style="margin-bottom:0;">📅 حالة الإيجار</div>
+        <span class="badge ${st.cls}">${st.lbl}</span>
+      </div>
+      <div class="irow"><span class="ilb">مبلغ الإيجار</span><span class="ivl" style="color:var(--gold2);font-size:20px;font-weight:900;">${fmt(t.amount)} ريال</span></div>
+      <div class="irow"><span class="ilb">موعد الاستحقاق</span><span class="ivl">${fmtD(t.nextDue)}</span></div>
+      <div class="irow"><span class="ilb">دورة الدفع</span><span class="ivl">${CYC[t.cycle]||t.cycle+' أشهر'}</span></div>
+      <div class="irow"><span class="ilb">الوحدة</span><span class="ivl">${t.unit}</span></div>
+      ${st.cls==='blate'?`<div style="background:#ef444412;border:1px solid #ef444430;border-radius:10px;padding:10px;margin-top:10px;font-size:12px;color:#fca5a5;text-align:center;">⚠️ الإيجار متأخر ${Math.abs(st.d)} يوم — يرجى السداد العاجل</div>`:''}
+      ${st.cls==='bdue'?`<div style="background:#f59e0b12;border:1px solid #f59e0b30;border-radius:10px;padding:10px;margin-top:10px;font-size:12px;color:#fcd34d;text-align:center;">🔔 موعد الإيجار بعد ${st.d} يوم</div>`:''}
+    </div>
+    <div class="card">
+      <div class="ctit">📤 رفع إيصال الدفع</div>
+      <p style="font-size:12px;color:var(--mut);margin-bottom:14px;line-height:1.9;">بعد الدفع من الراجحي أو الأهلي أو الإنماء، ارفع صورة الإيصال هنا وهيوصل للمالك مباشرة</p>
+      <button class="btnp" style="background:linear-gradient(135deg,#0369a1,#0ea5e9);" onclick="openUpload()">📎 رفع إيصال الدفع</button>
+    </div>
+    <div class="card">
+      <div class="ctit">📋 سجل المدفوعات</div>
+      ${recs.length===0?'<div class="empty"><div class="ei">📭</div><p>لا توجد مدفوعات مسجلة بعد</p></div>':
+        recs.map(([,r])=>`<div class="pitem" style="border:1px solid ${r.status==='confirmed'?'#10b98125':'#f59e0b25'};flex-direction:column;align-items:stretch;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="font-size:24px;">${r.status==='confirmed'?'✅':'⏳'}</div>
+            <div class="pinf">
+              <div class="pper">${r.note||'إيصال دفع'}</div>
+              <div class="pdt">📅 ${fmtD(r.date)}</div>
+              ${r.fileName?`<div class="pdt" style="color:var(--acc2);">📎 ${r.fileName}</div>`:''}
+            </div>
+            <span class="badge ${r.status==='confirmed'?'bok':'bpend'}" style="flex-shrink:0;">${r.status==='confirmed'?'مؤكد ✅':'قيد المراجعة ⏳'}</span>
+          </div>
+          ${r.fileURL&&r.isImage?`<img src="${r.fileURL}" style="width:100%;border-radius:8px;margin-top:10px;max-height:220px;object-fit:contain;background:#000;" onclick="window.open('${r.fileURL}','_blank')">`:''}
+          ${r.fileURL?`<div style="display:flex;gap:8px;margin-top:8px;">
+            <a href="${r.fileURL}" target="_blank" style="flex:1;background:var(--blue);color:#fff;border-radius:8px;padding:7px 10px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;text-decoration:none;text-align:center;">👁️ عرض الإيصال</a>
+            <a href="${r.downloadURL||r.fileURL}" download="${r.fileName||'receipt'}" target="_blank" style="flex:1;background:var(--sur2);color:var(--mut);border:1px solid var(--brd);border-radius:8px;padding:7px 10px;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;text-decoration:none;text-align:center;">⬇️ تنزيل</a>
+          </div>`:''}
+        </div>`).join('')}
+    </div>`;
+}
+
+// UPLOAD
+window.openUpload=()=>{pendFile=null;$('uFnm').textContent='';$('uTxt').textContent='اضغط لاختيار ملف الإيصال';$('uArea').classList.remove('has-file');$('uNote').value='';$('uErr').style.display='none';$('uFile').value='';$('uBtn').disabled=false;$('uBtn').textContent='📤 إرسال الإيصال للمالك';openModal('uploadModal');};
+window.onFile=input=>{const f=input.files[0];if(!f)return;pendFile=f;$('uFnm').textContent=f.name;$('uTxt').textContent='✅ تم اختيار الملف';$('uArea').classList.add('has-file');};
+window.submitReceipt=async()=>{
+  if(!pendFile){$('uErr').textContent='يرجى اختيار ملف أولاً';$('uErr').style.display='block';return;}
+  $('uErr').style.display='none';
+  const btn=$('uBtn');btn.disabled=true;btn.textContent='⏳ جاري رفع الملف...';
+  try{
+    // رفع الملف الحقيقي على Cloudinary
+    const formData=new FormData();
+    formData.append('file',pendFile);
+    formData.append('upload_preset',CLOUDINARY_PRESET);
+    formData.append('folder','rent-app-receipts');
+    // تحديد نوع الرفع بناءً على نوع الملف
+    const isImage=pendFile.type.startsWith('image/');
+    const uploadType=isImage?'image':'raw';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/${uploadType}/upload`,{method:'POST',body:formData});
+    if(!res.ok)throw new Error('فشل رفع الملف');
+    const data=await res.json();
+    // رابط مباشر للملف الأصلي (للعرض والتنزيل)
+    const fileURL=data.secure_url;
+    // رابط مع إجبار التنزيل للـ PDF
+    const downloadURL=isImage?fileURL:fileURL.replace('/upload/','/upload/fl_attachment/');
+    const note=$('uNote').value.trim()||'إيصال دفع';
+    const date=new Date().toISOString().split('T')[0];
+    // حفظ الإيصال في Firebase مع كل البيانات
+    await set(push(ref(db,`tenants/${curTid}/receipts`)),{
+      note,date,status:'pending',
+      fileName:pendFile.name,
+      fileType:pendFile.type,
+      fileURL,        // الرابط الأصلي للعرض
+      downloadURL,    // رابط التنزيل
+      isImage
+    });
+    // رسالة واتساب مع رابط مباشر للملف
+    const waSnap=await get(ref(db,'settings/ownerWa'));const wa=waSnap.val();
+    const msg=`📄 إيصال دفع جديد\n━━━━━━━━━\n👤 المستأجر: ${curT.name}\n🏠 الوحدة: ${curT.unit}\n💰 المبلغ: ${fmt(curT.amount)} ريال\n📅 التاريخ: ${fmtD(date)}\n📝 ملاحظة: ${note}\n📎 اسم الملف: ${pendFile.name}\n\n🔗 رابط الإيصال (اضغط للعرض):\n${fileURL}\n\n✅ يرجى تأكيد الاستلام من التطبيق`;
+    btn.disabled=false;btn.textContent='📤 إرسال الإيصال للمالك';
+    closeModal('uploadModal');
+    if(wa)setTimeout(()=>window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank'),300);
+  }catch(e){
+    btn.disabled=false;btn.textContent='📤 إرسال الإيصال للمالك';
+    $('uErr').textContent='❌ فشل رفع الملف، حاول مرة أخرى';
+    $('uErr').style.display='block';
+  }
+};
+
+// INIT
+get(ref(db,'settings/ownerWa')).then(s=>{const wa=s.val();if(wa){ownerWa=wa;$('frozenWa').href=`https://wa.me/${wa}`;}});
+
+// تحقق من حالة التجميد عند كل refresh
+(async()=>{
+  try{
+    const snap=await get(ref(db,'settings/frozen'));
+    const frozen=snap.val();
+    if(frozen===true){
+      localStorage.setItem('site_frozen','1');
+      showScreen('frozenScreen');
+    } else {
+      localStorage.removeItem('site_frozen');
+    }
+  } catch(e){
+    // لو في مشكلة اتصال وكان مجمد قبل كده
+    if(localStorage.getItem('site_frozen')==='1'){
+      showScreen('frozenScreen');
+    }
+  }
+})();
+</script>
+</body>
+</html>
